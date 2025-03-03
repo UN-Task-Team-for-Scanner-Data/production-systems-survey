@@ -799,3 +799,189 @@ dat <- data.frame(
 
 ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity")
 ```
+
+```{r}
+#| label: fig-joint-sys-team-chord
+#| layout-ncol: 2
+#| echo: false
+#| message: false
+#| out-width: "100%"
+#| fig-cap:
+#| - System Group Steps where Corporate IT is the **only** maintainer
+#| - System Group Steps where Domain-Aligned IT is the **only** maintainer
+#| - System Group Steps where Domain-Aligned Analysts are the **only** maintainers
+#| - System Group Steps where Elsewhere Analysts are the **only** maintainers
+#| - System Group Steps where Contractors are the **only** maintainer
+
+library(networkD3)
+
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+df[is.na(df)] <- 0
+
+# Starting with 1 answer to think through how to visualize
+# TODO: might be useful to use the code below to work through some examples
+obs1 <- df[5,]
+
+q1 <- matrix(nrow=5, ncol=5)
+
+q1[1,] <- as.numeric(obs1[,1:5])
+q1[2,] <- as.numeric(obs1[,6:10])
+q1[3,] <- as.numeric(obs1[,11:15])
+q1[4,] <- as.numeric(obs1[,16:20])
+q1[5,] <- as.numeric(obs1[,21:25])
+
+
+q2 <- matrix(nrow=5, ncol=5)
+
+q2[1,] <- as.numeric(obs1[,26:30])
+q2[2,] <- as.numeric(obs1[,31:35])
+q2[3,] <- as.numeric(obs1[,36:40])
+q2[4,] <- as.numeric(obs1[,41:45])
+q2[5,] <- as.numeric(obs1[,46:50])
+
+nodes <- data.frame(
+  name = c(
+    "Ingestion 1",
+    "Processing 1",
+    "Elementary 1",
+    "Aggregation 1",
+    "Finalization 1",
+    "Ingestion 2",
+    "Processing 2",
+    "Elementary 2",
+    "Aggregation 2",
+    "Finalization 2",
+    "Ingestion 3",
+    "Processing 3",
+    "Elementary 3",
+    "Aggregation 3",
+    "Finalization 3"
+  )
+)
+
+links <- data.frame(
+  source = c(
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3,
+    4,
+    5,
+    5,
+    6,
+    6,
+    7,
+    7,
+    8,
+    8,
+    9
+  ),
+  target = c(
+    1,
+    5,
+    2,
+    6,
+    3,
+    7,
+    4,
+    8,
+    9,
+    6,
+    10,
+    7,
+    11,
+    8,
+    12,
+    9,
+    13,
+    14
+  ),
+  value = c(
+    sum(as.numeric(df$sg1_ing & df$sg1_proc)),
+    sum(as.numeric(df$sg1_ing & df$sg2_ing)),
+    sum(as.numeric(df$sg1_proc & df$sg1_elem)),
+    sum(as.numeric(df$sg1_proc & df$sg2_proc)),
+    sum(as.numeric(df$sg1_elem & df$sg1_agg)),
+    sum(as.numeric(df$sg1_elem & df$sg2_elem)),
+    sum(as.numeric(df$sg1_agg & df$sg1_fin)),
+    sum(as.numeric(df$sg1_agg & df$sg2_agg)),
+    sum(as.numeric(df$sg1_fin & df$sg2_fin)),
+    sum(as.numeric(df$sg2_ing & df$sg2_proc)),
+    sum(as.numeric(df$sg2_ing & df$sg3_ing)),
+    sum(as.numeric(df$sg2_proc & df$sg3_elem)),
+    sum(as.numeric(df$sg2_proc & df$sg3_proc)),
+    sum(as.numeric(df$sg2_elem & df$sg3_agg)),
+    sum(as.numeric(df$sg2_elem & df$sg3_elem)),
+    sum(as.numeric(df$sg2_agg & df$sg2_fin)),
+    sum(as.numeric(df$sg2_agg & df$sg3_agg)),
+    sum(as.numeric(df$sg2_fin & df$sg3_fin))
+  )
+)
+
+p <- sankeyNetwork(Links = links, Nodes = nodes, Source = "source",
+              Target = "target", Value = "value", NodeID = "name",
+              units = "No. Systems", fontSize = 10, nodeWidth = 20)
+p
+
+```
