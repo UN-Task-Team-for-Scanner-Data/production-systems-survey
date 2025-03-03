@@ -802,16 +802,12 @@ ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity")
 
 ```{r}
 #| label: fig-joint-sys-team-chord
-#| layout-ncol: 2
+#| layout-ncol: 1
 #| echo: false
 #| message: false
 #| out-width: "100%"
 #| fig-cap:
-#| - System Group Steps where Corporate IT is the **only** maintainer
-#| - System Group Steps where Domain-Aligned IT is the **only** maintainer
-#| - System Group Steps where Domain-Aligned Analysts are the **only** maintainers
-#| - System Group Steps where Elsewhere Analysts are the **only** maintainers
-#| - System Group Steps where Contractors are the **only** maintainer
+#| - System Group Transition Diagram
 
 library(networkD3)
 
@@ -912,7 +908,17 @@ nodes <- data.frame(
     "Processing 3",
     "Elementary 3",
     "Aggregation 3",
-    "Finalization 3"
+    "Finalization 3",
+    "Ingestion 4",
+    "Processing 4",
+    "Elementary 4",
+    "Aggregation 4",
+    "Finalization 4",
+    "Ingestion 5",
+    "Processing 5",
+    "Elementary 5",
+    "Aggregation 5",
+    "Finalization 5"
   )
 )
 
@@ -935,7 +941,18 @@ links <- data.frame(
     7,
     8,
     8,
-    9
+    9,
+    10,
+    10,
+    11,
+    11,
+    12,
+    12,
+    13,
+    13,
+    14,
+    15,
+    15
   ),
   target = c(
     1,
@@ -955,7 +972,18 @@ links <- data.frame(
     12,
     9,
     13,
-    14
+    14,
+    11,
+    15,
+    12,
+    16,
+    13,
+    17,
+    14,
+    18,
+    19,
+    16,
+    20
   ),
   value = c(
     sum(as.numeric(df$sg1_ing & df$sg1_proc)),
@@ -975,7 +1003,18 @@ links <- data.frame(
     sum(as.numeric(df$sg2_elem & df$sg3_elem)),
     sum(as.numeric(df$sg2_agg & df$sg2_fin)),
     sum(as.numeric(df$sg2_agg & df$sg3_agg)),
-    sum(as.numeric(df$sg2_fin & df$sg3_fin))
+    sum(as.numeric(df$sg2_fin & df$sg3_fin)),
+    sum(as.numeric(df$sg3_ing & df$sg3_proc)),
+    sum(as.numeric(df$sg3_ing & df$sg4_ing)),
+    sum(as.numeric(df$sg3_proc & df$sg3_elem)),
+    sum(as.numeric(df$sg3_proc & df$sg4_proc)),
+    sum(as.numeric(df$sg3_elem & df$sg3_agg)),
+    sum(as.numeric(df$sg3_elem & df$sg4_elem)),
+    sum(as.numeric(df$sg3_agg & df$sg3_fin)),
+    sum(as.numeric(df$sg3_agg & df$sg4_agg)),
+    sum(as.numeric(df$sg3_fin & df$sg4_fin)),
+    sum(as.numeric(df$sg4_ing & df$sg4_agg)),
+    sum(as.numeric(df$sg4_ing & df$sg5_ing))
   )
 )
 
