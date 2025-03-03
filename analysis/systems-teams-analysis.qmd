@@ -230,3 +230,572 @@ dat[is.na(dat)] = 0
 
 ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity")
 ```
+
+## Joint System-Team Topology
+
+This section shows the distribution of which steps are in representative systems where each team (Corporate IT, Domain IT, Domain Analysts, Elsewhere Analysts, Consultants) is the **only** maintainer involved.
+
+```{r}
+#| label: fig-joint-sys-team
+#| layout-ncol: 2
+#| echo: false
+#| message: false
+#| out-width: "100%"
+#| fig-cap:
+#| - System Group Steps where Corporate IT is the **only** maintainer
+#| - System Group Steps where Domain-Aligned IT is the **only** maintainer
+#| - System Group Steps where Domain-Aligned Analysts are the **only** maintainers
+#| - System Group Steps where Elsewhere Analysts are the **only** maintainers
+#| - System Group Steps where Contractors are the **only** maintainer
+
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+# Starting with 1 answer to think through how to visualize
+# TODO: might be useful to use the code below to work through some examples
+# obs1 <- df[1,]
+# 
+# q1 <- matrix(nrow=5, ncol=5)
+# 
+# q1[1,] <- as.numeric(obs1[,67:71])
+# q1[2,] <- as.numeric(obs1[,72:76])
+# q1[3,] <- as.numeric(obs1[,77:81])
+# q1[4,] <- as.numeric(obs1[,82:86])
+# q1[5,] <- as.numeric(obs1[,87:91])
+# 
+# 
+# q2 <- matrix(nrow=5, ncol=5)
+# 
+# q2[1,] <- as.numeric(obs1[,92:96])
+# q2[2,] <- as.numeric(obs1[,97:101])
+# q2[3,] <- as.numeric(obs1[,102:106])
+# q2[4,] <- as.numeric(obs1[,107:111])
+# q2[5,] <- as.numeric(obs1[,112:116])
+
+# Distribution of system group crossover given a particular maintainer.
+SG1_CIT_ONLY <- df$sg1_cit == 1 & is.na(df$sg1_dit) & is.na(df$sg1_dan) & is.na(df$sg1_ean) & is.na(df$sg1_con)
+SG2_CIT_ONLY <- df$sg2_cit == 1 & is.na(df$sg2_dit) & is.na(df$sg2_dan) & is.na(df$sg2_ean) & is.na(df$sg2_con)
+SG3_CIT_ONLY <- df$sg3_cit == 1 & is.na(df$sg3_dit) & is.na(df$sg3_dan) & is.na(df$sg3_ean) & is.na(df$sg3_con)
+SG4_CIT_ONLY <- df$sg4_cit == 1 & is.na(df$sg4_dit) & is.na(df$sg4_dan) & is.na(df$sg4_ean) & is.na(df$sg4_con)
+SG5_CIT_ONLY <- df$sg5_cit == 1 & is.na(df$sg5_dit) & is.na(df$sg5_dan) & is.na(df$sg5_ean) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_cit_only <- df[SG1_CIT_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_cit_only <- df[SG2_CIT_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_cit_only <- df[SG3_CIT_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_cit_only <- df[SG4_CIT_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_cit_only <- df[SG5_CIT_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_cit_only <- sg1_cit_only[apply(sg1_cit_only, 1, function(y) !all(is.na(y))),]
+sg2_cit_only <- sg2_cit_only[apply(sg2_cit_only, 1, function(y) !all(is.na(y))),]
+sg3_cit_only <- sg3_cit_only[apply(sg3_cit_only, 1, function(y) !all(is.na(y))),]
+sg4_cit_only <- sg4_cit_only[apply(sg4_cit_only, 1, function(y) !all(is.na(y))),]
+sg5_cit_only <- sg5_cit_only[apply(sg5_cit_only, 1, function(y) !all(is.na(y))),]
+
+sg1_cit_only[is.na(sg1_cit_only)] <- 0
+sg2_cit_only[is.na(sg2_cit_only)] <- 0
+sg3_cit_only[is.na(sg3_cit_only)] <- 0
+sg4_cit_only[is.na(sg4_cit_only)] <- 0
+sg5_cit_only[is.na(sg5_cit_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_cit_only$sg1_ing,
+    sg1_cit_only$sg1_proc,
+    sg1_cit_only$sg1_elem,
+    sg1_cit_only$sg1_agg,
+    sg1_cit_only$sg1_fin,
+    sg2_cit_only$sg2_ing,
+    sg2_cit_only$sg2_proc,
+    sg2_cit_only$sg2_elem,
+    sg2_cit_only$sg2_agg,
+    sg2_cit_only$sg2_fin,
+    sg3_cit_only$sg3_ing,
+    sg3_cit_only$sg3_proc,
+    sg3_cit_only$sg3_elem,
+    sg3_cit_only$sg3_agg,
+    sg3_cit_only$sg3_fin,
+    sg4_cit_only$sg4_ing,
+    sg4_cit_only$sg4_proc,
+    sg4_cit_only$sg4_elem,
+    sg4_cit_only$sg4_agg,
+    sg4_cit_only$sg4_fin,
+    sg5_cit_only$sg5_ing,
+    sg5_cit_only$sg5_proc,
+    sg5_cit_only$sg5_elem,
+    sg5_cit_only$sg5_agg,
+    sg5_cit_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_cit_only)),
+    rep("Processing", each=nrow(sg1_cit_only)),
+    rep("Elementary indexes", each=nrow(sg1_cit_only)),
+    rep("Aggregation", each=nrow(sg1_cit_only)),
+    rep("Finalization", each=nrow(sg1_cit_only)),
+    rep("Inegstion", each=nrow(sg2_cit_only)),
+    rep("Processing", each=nrow(sg2_cit_only)),
+    rep("Elementary indexes", each=nrow(sg2_cit_only)),
+    rep("Aggregation", each=nrow(sg2_cit_only)),
+    rep("Finalization", each=nrow(sg2_cit_only)),
+    rep("Inegstion", each=nrow(sg3_cit_only)),
+    rep("Processing", each=nrow(sg3_cit_only)),
+    rep("Elementary indexes", each=nrow(sg3_cit_only)),
+    rep("Aggregation", each=nrow(sg3_cit_only)),
+    rep("Finalization", each=nrow(sg3_cit_only)),
+    rep("Inegstion", each=nrow(sg4_cit_only)),
+    rep("Processing", each=nrow(sg4_cit_only)),
+    rep("Elementary indexes", each=nrow(sg4_cit_only)),
+    rep("Aggregation", each=nrow(sg4_cit_only)),
+    rep("Finalization", each=nrow(sg4_cit_only)),
+    rep("Inegstion", each=nrow(sg5_cit_only)),
+    rep("Processing", each=nrow(sg5_cit_only)),
+    rep("Elementary indexes", each=nrow(sg5_cit_only)),
+    rep("Aggregation", each=nrow(sg5_cit_only)),
+    rep("Finalization", each=nrow(sg5_cit_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_cit_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_cit_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_cit_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_cit_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_cit_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#dae8fc")
+
+# ---
+# Domain IT only
+# ---
+
+SG1_DIT_ONLY <- df$sg1_dit == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dan) & is.na(df$sg1_ean) & is.na(df$sg1_con)
+SG2_DIT_ONLY <- df$sg2_dit == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dan) & is.na(df$sg2_ean) & is.na(df$sg2_con)
+SG3_DIT_ONLY <- df$sg3_dit == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dan) & is.na(df$sg3_ean) & is.na(df$sg3_con)
+SG4_DIT_ONLY <- df$sg4_dit == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dan) & is.na(df$sg4_ean) & is.na(df$sg4_con)
+SG5_DIT_ONLY <- df$sg5_dit == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dan) & is.na(df$sg5_ean) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_dit_only <- df[SG1_DIT_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_dit_only <- df[SG2_DIT_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_dit_only <- df[SG3_DIT_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_dit_only <- df[SG4_DIT_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_dit_only <- df[SG5_DIT_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_dit_only <- sg1_dit_only[apply(sg1_dit_only, 1, function(y) !all(is.na(y))),]
+sg2_dit_only <- sg2_dit_only[apply(sg2_dit_only, 1, function(y) !all(is.na(y))),]
+sg3_dit_only <- sg3_dit_only[apply(sg3_dit_only, 1, function(y) !all(is.na(y))),]
+sg4_dit_only <- sg4_dit_only[apply(sg4_dit_only, 1, function(y) !all(is.na(y))),]
+sg5_dit_only <- sg5_dit_only[apply(sg5_dit_only, 1, function(y) !all(is.na(y))),]
+
+sg1_dit_only[is.na(sg1_dit_only)] <- 0
+sg2_dit_only[is.na(sg2_dit_only)] <- 0
+sg3_dit_only[is.na(sg3_dit_only)] <- 0
+sg4_dit_only[is.na(sg4_dit_only)] <- 0
+sg5_dit_only[is.na(sg5_dit_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_dit_only$sg1_ing,
+    sg1_dit_only$sg1_proc,
+    sg1_dit_only$sg1_elem,
+    sg1_dit_only$sg1_agg,
+    sg1_dit_only$sg1_fin,
+    sg2_dit_only$sg2_ing,
+    sg2_dit_only$sg2_proc,
+    sg2_dit_only$sg2_elem,
+    sg2_dit_only$sg2_agg,
+    sg2_dit_only$sg2_fin,
+    sg3_dit_only$sg3_ing,
+    sg3_dit_only$sg3_proc,
+    sg3_dit_only$sg3_elem,
+    sg3_dit_only$sg3_agg,
+    sg3_dit_only$sg3_fin,
+    sg4_dit_only$sg4_ing,
+    sg4_dit_only$sg4_proc,
+    sg4_dit_only$sg4_elem,
+    sg4_dit_only$sg4_agg,
+    sg4_dit_only$sg4_fin,
+    sg5_dit_only$sg5_ing,
+    sg5_dit_only$sg5_proc,
+    sg5_dit_only$sg5_elem,
+    sg5_dit_only$sg5_agg,
+    sg5_dit_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_dit_only)),
+    rep("Processing", each=nrow(sg1_dit_only)),
+    rep("Elementary indexes", each=nrow(sg1_dit_only)),
+    rep("Aggregation", each=nrow(sg1_dit_only)),
+    rep("Finalization", each=nrow(sg1_dit_only)),
+    rep("Inegstion", each=nrow(sg2_dit_only)),
+    rep("Processing", each=nrow(sg2_dit_only)),
+    rep("Elementary indexes", each=nrow(sg2_dit_only)),
+    rep("Aggregation", each=nrow(sg2_dit_only)),
+    rep("Finalization", each=nrow(sg2_dit_only)),
+    rep("Inegstion", each=nrow(sg3_dit_only)),
+    rep("Processing", each=nrow(sg3_dit_only)),
+    rep("Elementary indexes", each=nrow(sg3_dit_only)),
+    rep("Aggregation", each=nrow(sg3_dit_only)),
+    rep("Finalization", each=nrow(sg3_dit_only)),
+    rep("Inegstion", each=nrow(sg4_dit_only)),
+    rep("Processing", each=nrow(sg4_dit_only)),
+    rep("Elementary indexes", each=nrow(sg4_dit_only)),
+    rep("Aggregation", each=nrow(sg4_dit_only)),
+    rep("Finalization", each=nrow(sg4_dit_only)),
+    rep("Inegstion", each=nrow(sg5_dit_only)),
+    rep("Processing", each=nrow(sg5_dit_only)),
+    rep("Elementary indexes", each=nrow(sg5_dit_only)),
+    rep("Aggregation", each=nrow(sg5_dit_only)),
+    rep("Finalization", each=nrow(sg5_dit_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_dit_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_dit_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_dit_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_dit_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_dit_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#fff2cc")
+
+# ---
+# Domain Analysts only
+# ---
+
+SG1_DAN_ONLY <- df$sg1_dan == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dit) & is.na(df$sg1_ean) & is.na(df$sg1_con)
+SG2_DAN_ONLY <- df$sg2_dan == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dit) & is.na(df$sg2_ean) & is.na(df$sg2_con)
+SG3_DAN_ONLY <- df$sg3_dan == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dit) & is.na(df$sg3_ean) & is.na(df$sg3_con)
+SG4_DAN_ONLY <- df$sg4_dan == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dit) & is.na(df$sg4_ean) & is.na(df$sg4_con)
+SG5_DAN_ONLY <- df$sg5_dan == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dit) & is.na(df$sg5_ean) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_dan_only <- df[SG1_DAN_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_dan_only <- df[SG2_DAN_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_dan_only <- df[SG3_DAN_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_dan_only <- df[SG4_DAN_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_dan_only <- df[SG5_DAN_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_dan_only <- sg1_dan_only[apply(sg1_dan_only, 1, function(y) !all(is.na(y))),]
+sg2_dan_only <- sg2_dan_only[apply(sg2_dan_only, 1, function(y) !all(is.na(y))),]
+sg3_dan_only <- sg3_dan_only[apply(sg3_dan_only, 1, function(y) !all(is.na(y))),]
+sg4_dan_only <- sg4_dan_only[apply(sg4_dan_only, 1, function(y) !all(is.na(y))),]
+sg5_dan_only <- sg5_dan_only[apply(sg5_dan_only, 1, function(y) !all(is.na(y))),]
+
+sg1_dan_only[is.na(sg1_dan_only)] <- 0
+sg2_dan_only[is.na(sg2_dan_only)] <- 0
+sg3_dan_only[is.na(sg3_dan_only)] <- 0
+sg4_dan_only[is.na(sg4_dan_only)] <- 0
+sg5_dan_only[is.na(sg5_dan_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_dan_only$sg1_ing,
+    sg1_dan_only$sg1_proc,
+    sg1_dan_only$sg1_elem,
+    sg1_dan_only$sg1_agg,
+    sg1_dan_only$sg1_fin,
+    sg2_dan_only$sg2_ing,
+    sg2_dan_only$sg2_proc,
+    sg2_dan_only$sg2_elem,
+    sg2_dan_only$sg2_agg,
+    sg2_dan_only$sg2_fin,
+    sg3_dan_only$sg3_ing,
+    sg3_dan_only$sg3_proc,
+    sg3_dan_only$sg3_elem,
+    sg3_dan_only$sg3_agg,
+    sg3_dan_only$sg3_fin,
+    sg4_dan_only$sg4_ing,
+    sg4_dan_only$sg4_proc,
+    sg4_dan_only$sg4_elem,
+    sg4_dan_only$sg4_agg,
+    sg4_dan_only$sg4_fin,
+    sg5_dan_only$sg5_ing,
+    sg5_dan_only$sg5_proc,
+    sg5_dan_only$sg5_elem,
+    sg5_dan_only$sg5_agg,
+    sg5_dan_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_dan_only)),
+    rep("Processing", each=nrow(sg1_dan_only)),
+    rep("Elementary indexes", each=nrow(sg1_dan_only)),
+    rep("Aggregation", each=nrow(sg1_dan_only)),
+    rep("Finalization", each=nrow(sg1_dan_only)),
+    rep("Inegstion", each=nrow(sg2_dan_only)),
+    rep("Processing", each=nrow(sg2_dan_only)),
+    rep("Elementary indexes", each=nrow(sg2_dan_only)),
+    rep("Aggregation", each=nrow(sg2_dan_only)),
+    rep("Finalization", each=nrow(sg2_dan_only)),
+    rep("Inegstion", each=nrow(sg3_dan_only)),
+    rep("Processing", each=nrow(sg3_dan_only)),
+    rep("Elementary indexes", each=nrow(sg3_dan_only)),
+    rep("Aggregation", each=nrow(sg3_dan_only)),
+    rep("Finalization", each=nrow(sg3_dan_only)),
+    rep("Inegstion", each=nrow(sg4_dan_only)),
+    rep("Processing", each=nrow(sg4_dan_only)),
+    rep("Elementary indexes", each=nrow(sg4_dan_only)),
+    rep("Aggregation", each=nrow(sg4_dan_only)),
+    rep("Finalization", each=nrow(sg4_dan_only)),
+    rep("Inegstion", each=nrow(sg5_dan_only)),
+    rep("Processing", each=nrow(sg5_dan_only)),
+    rep("Elementary indexes", each=nrow(sg5_dan_only)),
+    rep("Aggregation", each=nrow(sg5_dan_only)),
+    rep("Finalization", each=nrow(sg5_dan_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_dan_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_dan_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_dan_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_dan_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_dan_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#fff2cc")
+
+# ---
+# Elsewhere Analysts only
+# ---
+
+SG1_EAN_ONLY <- df$sg1_ean == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dit) & is.na(df$sg1_dan) & is.na(df$sg1_con)
+SG2_EAN_ONLY <- df$sg2_ean == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dit) & is.na(df$sg2_dan) & is.na(df$sg2_con)
+SG3_EAN_ONLY <- df$sg3_ean == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dit) & is.na(df$sg3_dan) & is.na(df$sg3_con)
+SG4_EAN_ONLY <- df$sg4_ean == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dit) & is.na(df$sg4_dan) & is.na(df$sg4_con)
+SG5_EAN_ONLY <- df$sg5_ean == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dit) & is.na(df$sg5_dan) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_ean_only <- df[SG1_EAN_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_ean_only <- df[SG2_EAN_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_ean_only <- df[SG3_EAN_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_ean_only <- df[SG4_EAN_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_ean_only <- df[SG5_EAN_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_ean_only <- sg1_ean_only[apply(sg1_ean_only, 1, function(y) !all(is.na(y))),]
+sg2_ean_only <- sg2_ean_only[apply(sg2_ean_only, 1, function(y) !all(is.na(y))),]
+sg3_ean_only <- sg3_ean_only[apply(sg3_ean_only, 1, function(y) !all(is.na(y))),]
+sg4_ean_only <- sg4_ean_only[apply(sg4_ean_only, 1, function(y) !all(is.na(y))),]
+sg5_ean_only <- sg5_ean_only[apply(sg5_ean_only, 1, function(y) !all(is.na(y))),]
+
+sg1_ean_only[is.na(sg1_ean_only)] <- 0
+sg2_ean_only[is.na(sg2_ean_only)] <- 0
+sg3_ean_only[is.na(sg3_ean_only)] <- 0
+sg4_ean_only[is.na(sg4_ean_only)] <- 0
+sg5_ean_only[is.na(sg5_ean_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_ean_only$sg1_ing,
+    sg1_ean_only$sg1_proc,
+    sg1_ean_only$sg1_elem,
+    sg1_ean_only$sg1_agg,
+    sg1_ean_only$sg1_fin,
+    sg2_ean_only$sg2_ing,
+    sg2_ean_only$sg2_proc,
+    sg2_ean_only$sg2_elem,
+    sg2_ean_only$sg2_agg,
+    sg2_ean_only$sg2_fin,
+    sg3_ean_only$sg3_ing,
+    sg3_ean_only$sg3_proc,
+    sg3_ean_only$sg3_elem,
+    sg3_ean_only$sg3_agg,
+    sg3_ean_only$sg3_fin,
+    sg4_ean_only$sg4_ing,
+    sg4_ean_only$sg4_proc,
+    sg4_ean_only$sg4_elem,
+    sg4_ean_only$sg4_agg,
+    sg4_ean_only$sg4_fin,
+    sg5_ean_only$sg5_ing,
+    sg5_ean_only$sg5_proc,
+    sg5_ean_only$sg5_elem,
+    sg5_ean_only$sg5_agg,
+    sg5_ean_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_ean_only)),
+    rep("Processing", each=nrow(sg1_ean_only)),
+    rep("Elementary indexes", each=nrow(sg1_ean_only)),
+    rep("Aggregation", each=nrow(sg1_ean_only)),
+    rep("Finalization", each=nrow(sg1_ean_only)),
+    rep("Inegstion", each=nrow(sg2_ean_only)),
+    rep("Processing", each=nrow(sg2_ean_only)),
+    rep("Elementary indexes", each=nrow(sg2_ean_only)),
+    rep("Aggregation", each=nrow(sg2_ean_only)),
+    rep("Finalization", each=nrow(sg2_ean_only)),
+    rep("Inegstion", each=nrow(sg3_ean_only)),
+    rep("Processing", each=nrow(sg3_ean_only)),
+    rep("Elementary indexes", each=nrow(sg3_ean_only)),
+    rep("Aggregation", each=nrow(sg3_ean_only)),
+    rep("Finalization", each=nrow(sg3_ean_only)),
+    rep("Inegstion", each=nrow(sg4_ean_only)),
+    rep("Processing", each=nrow(sg4_ean_only)),
+    rep("Elementary indexes", each=nrow(sg4_ean_only)),
+    rep("Aggregation", each=nrow(sg4_ean_only)),
+    rep("Finalization", each=nrow(sg4_ean_only)),
+    rep("Inegstion", each=nrow(sg5_ean_only)),
+    rep("Processing", each=nrow(sg5_ean_only)),
+    rep("Elementary indexes", each=nrow(sg5_ean_only)),
+    rep("Aggregation", each=nrow(sg5_ean_only)),
+    rep("Finalization", each=nrow(sg5_ean_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_ean_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_ean_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_ean_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_ean_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_ean_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#dae8fc")
+
+# ---
+# Consultants only
+# ---
+
+SG1_CON_ONLY <- df$sg1_con == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dit) & is.na(df$sg1_dan) & is.na(df$sg1_ean)
+SG2_CON_ONLY <- df$sg2_con == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dit) & is.na(df$sg2_dan) & is.na(df$sg2_ean)
+SG3_CON_ONLY <- df$sg3_con == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dit) & is.na(df$sg3_dan) & is.na(df$sg3_ean)
+SG4_CON_ONLY <- df$sg4_con == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dit) & is.na(df$sg4_dan) & is.na(df$sg4_ean)
+SG5_CON_ONLY <- df$sg5_con == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dit) & is.na(df$sg5_dan) & is.na(df$sg5_ean)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_con_only <- df[SG1_CON_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_con_only <- df[SG2_CON_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_con_only <- df[SG3_CON_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_con_only <- df[SG4_CON_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_con_only <- df[SG5_CON_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_con_only <- sg1_con_only[apply(sg1_con_only, 1, function(y) !all(is.na(y))),]
+sg2_con_only <- sg2_con_only[apply(sg2_con_only, 1, function(y) !all(is.na(y))),]
+sg3_con_only <- sg3_con_only[apply(sg3_con_only, 1, function(y) !all(is.na(y))),]
+sg4_con_only <- sg4_con_only[apply(sg4_con_only, 1, function(y) !all(is.na(y))),]
+sg5_con_only <- sg5_con_only[apply(sg5_con_only, 1, function(y) !all(is.na(y))),]
+
+sg1_con_only[is.na(sg1_con_only)] <- 0
+sg2_con_only[is.na(sg2_con_only)] <- 0
+sg3_con_only[is.na(sg3_con_only)] <- 0
+sg4_con_only[is.na(sg4_con_only)] <- 0
+sg5_con_only[is.na(sg5_con_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_con_only$sg1_ing,
+    sg1_con_only$sg1_proc,
+    sg1_con_only$sg1_elem,
+    sg1_con_only$sg1_agg,
+    sg1_con_only$sg1_fin,
+    sg2_con_only$sg2_ing,
+    sg2_con_only$sg2_proc,
+    sg2_con_only$sg2_elem,
+    sg2_con_only$sg2_agg,
+    sg2_con_only$sg2_fin,
+    sg3_con_only$sg3_ing,
+    sg3_con_only$sg3_proc,
+    sg3_con_only$sg3_elem,
+    sg3_con_only$sg3_agg,
+    sg3_con_only$sg3_fin,
+    sg4_con_only$sg4_ing,
+    sg4_con_only$sg4_proc,
+    sg4_con_only$sg4_elem,
+    sg4_con_only$sg4_agg,
+    sg4_con_only$sg4_fin,
+    sg5_con_only$sg5_ing,
+    sg5_con_only$sg5_proc,
+    sg5_con_only$sg5_elem,
+    sg5_con_only$sg5_agg,
+    sg5_con_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_con_only)),
+    rep("Processing", each=nrow(sg1_con_only)),
+    rep("Elementary indexes", each=nrow(sg1_con_only)),
+    rep("Aggregation", each=nrow(sg1_con_only)),
+    rep("Finalization", each=nrow(sg1_con_only)),
+    rep("Inegstion", each=nrow(sg2_con_only)),
+    rep("Processing", each=nrow(sg2_con_only)),
+    rep("Elementary indexes", each=nrow(sg2_con_only)),
+    rep("Aggregation", each=nrow(sg2_con_only)),
+    rep("Finalization", each=nrow(sg2_con_only)),
+    rep("Inegstion", each=nrow(sg3_con_only)),
+    rep("Processing", each=nrow(sg3_con_only)),
+    rep("Elementary indexes", each=nrow(sg3_con_only)),
+    rep("Aggregation", each=nrow(sg3_con_only)),
+    rep("Finalization", each=nrow(sg3_con_only)),
+    rep("Inegstion", each=nrow(sg4_con_only)),
+    rep("Processing", each=nrow(sg4_con_only)),
+    rep("Elementary indexes", each=nrow(sg4_con_only)),
+    rep("Aggregation", each=nrow(sg4_con_only)),
+    rep("Finalization", each=nrow(sg4_con_only)),
+    rep("Inegstion", each=nrow(sg5_con_only)),
+    rep("Processing", each=nrow(sg5_con_only)),
+    rep("Elementary indexes", each=nrow(sg5_con_only)),
+    rep("Aggregation", each=nrow(sg5_con_only)),
+    rep("Finalization", each=nrow(sg5_con_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_con_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_con_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_con_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_con_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_con_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity")
+```
