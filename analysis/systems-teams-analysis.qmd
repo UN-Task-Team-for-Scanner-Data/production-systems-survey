@@ -1,5 +1,23 @@
 # Systems and Teams {#sec-sys-team}
 
+## Overview
+
+The whole point of this section is to concretely specify a joint team organization **and** system topology.
+
+Since these joint team/system topology labels can be attached to individual records **and** we have business outcomes associated with these same records, we can ask meaningful questions about how team and system organization are related to business outcomes.
+
+**Caveat**: due to the small sample size and limited nature of questions we were able to ask, we are hesitant to make any strong assertions about the causal impact of certain team/system organization decisions. However, we have found some noteworthy correlations that are worth exploring further and we believe our general approach could be re purposed to use cases for other data teams.
+
+**Examples of some questions we can ask**:
+
+- "Do organizations with domain-aligned teams have longer lead times than organizations where maintainers cut across team boundaries?"
+- "What technology stack is used by organizations where Corporate IT maintains ingestion systems and Domain-aligned Analysts maintain data processing systems?"
+
+**TLDR**:
+
+- The main value of this section is quantifying which joint team/system organization an organization exhibits for a representative group of systems.
+- This gives us the tools to make quantitative statements about which organizational properties and business outcomes are associated with certain team/system topologies.
+
 ```{r message=FALSE}
 #| label: fig-num-systems-each-step
 #| layout-ncol: 2
@@ -230,3 +248,1741 @@ dat[is.na(dat)] = 0
 
 ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity")
 ```
+
+## Joint System-Team Topology
+
+This section shows the distribution of which steps are in representative systems where each team (Corporate IT, Domain IT, Domain Analysts, Elsewhere Analysts, Consultants) is the **only** maintainer involved.
+
+```{r}
+#| label: fig-joint-sys-team
+#| layout-ncol: 2
+#| echo: false
+#| message: false
+#| out-width: "100%"
+#| fig-cap:
+#| - System Group Steps where Corporate IT is the **only** maintainer
+#| - System Group Steps where Domain-Aligned IT is the **only** maintainer
+#| - System Group Steps where Domain-Aligned Analysts are the **only** maintainers
+#| - System Group Steps where Elsewhere Analysts are the **only** maintainers
+#| - System Group Steps where Contractors are the **only** maintainer
+
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+# Starting with 1 answer to think through how to visualize
+# TODO: might be useful to use the code below to work through some examples
+# obs1 <- df[1,]
+# 
+# q1 <- matrix(nrow=5, ncol=5)
+# 
+# q1[1,] <- as.numeric(obs1[,67:71])
+# q1[2,] <- as.numeric(obs1[,72:76])
+# q1[3,] <- as.numeric(obs1[,77:81])
+# q1[4,] <- as.numeric(obs1[,82:86])
+# q1[5,] <- as.numeric(obs1[,87:91])
+# 
+# 
+# q2 <- matrix(nrow=5, ncol=5)
+# 
+# q2[1,] <- as.numeric(obs1[,92:96])
+# q2[2,] <- as.numeric(obs1[,97:101])
+# q2[3,] <- as.numeric(obs1[,102:106])
+# q2[4,] <- as.numeric(obs1[,107:111])
+# q2[5,] <- as.numeric(obs1[,112:116])
+
+# Distribution of system group crossover given a particular maintainer.
+SG1_CIT_ONLY <- df$sg1_cit == 1 & is.na(df$sg1_dit) & is.na(df$sg1_dan) & is.na(df$sg1_ean) & is.na(df$sg1_con)
+SG2_CIT_ONLY <- df$sg2_cit == 1 & is.na(df$sg2_dit) & is.na(df$sg2_dan) & is.na(df$sg2_ean) & is.na(df$sg2_con)
+SG3_CIT_ONLY <- df$sg3_cit == 1 & is.na(df$sg3_dit) & is.na(df$sg3_dan) & is.na(df$sg3_ean) & is.na(df$sg3_con)
+SG4_CIT_ONLY <- df$sg4_cit == 1 & is.na(df$sg4_dit) & is.na(df$sg4_dan) & is.na(df$sg4_ean) & is.na(df$sg4_con)
+SG5_CIT_ONLY <- df$sg5_cit == 1 & is.na(df$sg5_dit) & is.na(df$sg5_dan) & is.na(df$sg5_ean) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_cit_only <- df[SG1_CIT_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_cit_only <- df[SG2_CIT_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_cit_only <- df[SG3_CIT_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_cit_only <- df[SG4_CIT_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_cit_only <- df[SG5_CIT_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_cit_only <- sg1_cit_only[apply(sg1_cit_only, 1, function(y) !all(is.na(y))),]
+sg2_cit_only <- sg2_cit_only[apply(sg2_cit_only, 1, function(y) !all(is.na(y))),]
+sg3_cit_only <- sg3_cit_only[apply(sg3_cit_only, 1, function(y) !all(is.na(y))),]
+sg4_cit_only <- sg4_cit_only[apply(sg4_cit_only, 1, function(y) !all(is.na(y))),]
+sg5_cit_only <- sg5_cit_only[apply(sg5_cit_only, 1, function(y) !all(is.na(y))),]
+
+sg1_cit_only[is.na(sg1_cit_only)] <- 0
+sg2_cit_only[is.na(sg2_cit_only)] <- 0
+sg3_cit_only[is.na(sg3_cit_only)] <- 0
+sg4_cit_only[is.na(sg4_cit_only)] <- 0
+sg5_cit_only[is.na(sg5_cit_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_cit_only$sg1_ing,
+    sg1_cit_only$sg1_proc,
+    sg1_cit_only$sg1_elem,
+    sg1_cit_only$sg1_agg,
+    sg1_cit_only$sg1_fin,
+    sg2_cit_only$sg2_ing,
+    sg2_cit_only$sg2_proc,
+    sg2_cit_only$sg2_elem,
+    sg2_cit_only$sg2_agg,
+    sg2_cit_only$sg2_fin,
+    sg3_cit_only$sg3_ing,
+    sg3_cit_only$sg3_proc,
+    sg3_cit_only$sg3_elem,
+    sg3_cit_only$sg3_agg,
+    sg3_cit_only$sg3_fin,
+    sg4_cit_only$sg4_ing,
+    sg4_cit_only$sg4_proc,
+    sg4_cit_only$sg4_elem,
+    sg4_cit_only$sg4_agg,
+    sg4_cit_only$sg4_fin,
+    sg5_cit_only$sg5_ing,
+    sg5_cit_only$sg5_proc,
+    sg5_cit_only$sg5_elem,
+    sg5_cit_only$sg5_agg,
+    sg5_cit_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_cit_only)),
+    rep("Processing", each=nrow(sg1_cit_only)),
+    rep("Elementary indexes", each=nrow(sg1_cit_only)),
+    rep("Aggregation", each=nrow(sg1_cit_only)),
+    rep("Finalization", each=nrow(sg1_cit_only)),
+    rep("Inegstion", each=nrow(sg2_cit_only)),
+    rep("Processing", each=nrow(sg2_cit_only)),
+    rep("Elementary indexes", each=nrow(sg2_cit_only)),
+    rep("Aggregation", each=nrow(sg2_cit_only)),
+    rep("Finalization", each=nrow(sg2_cit_only)),
+    rep("Inegstion", each=nrow(sg3_cit_only)),
+    rep("Processing", each=nrow(sg3_cit_only)),
+    rep("Elementary indexes", each=nrow(sg3_cit_only)),
+    rep("Aggregation", each=nrow(sg3_cit_only)),
+    rep("Finalization", each=nrow(sg3_cit_only)),
+    rep("Inegstion", each=nrow(sg4_cit_only)),
+    rep("Processing", each=nrow(sg4_cit_only)),
+    rep("Elementary indexes", each=nrow(sg4_cit_only)),
+    rep("Aggregation", each=nrow(sg4_cit_only)),
+    rep("Finalization", each=nrow(sg4_cit_only)),
+    rep("Inegstion", each=nrow(sg5_cit_only)),
+    rep("Processing", each=nrow(sg5_cit_only)),
+    rep("Elementary indexes", each=nrow(sg5_cit_only)),
+    rep("Aggregation", each=nrow(sg5_cit_only)),
+    rep("Finalization", each=nrow(sg5_cit_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_cit_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_cit_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_cit_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_cit_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_cit_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#dae8fc")
+
+# ---
+# Domain IT only
+# ---
+
+SG1_DIT_ONLY <- df$sg1_dit == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dan) & is.na(df$sg1_ean) & is.na(df$sg1_con)
+SG2_DIT_ONLY <- df$sg2_dit == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dan) & is.na(df$sg2_ean) & is.na(df$sg2_con)
+SG3_DIT_ONLY <- df$sg3_dit == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dan) & is.na(df$sg3_ean) & is.na(df$sg3_con)
+SG4_DIT_ONLY <- df$sg4_dit == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dan) & is.na(df$sg4_ean) & is.na(df$sg4_con)
+SG5_DIT_ONLY <- df$sg5_dit == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dan) & is.na(df$sg5_ean) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_dit_only <- df[SG1_DIT_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_dit_only <- df[SG2_DIT_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_dit_only <- df[SG3_DIT_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_dit_only <- df[SG4_DIT_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_dit_only <- df[SG5_DIT_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_dit_only <- sg1_dit_only[apply(sg1_dit_only, 1, function(y) !all(is.na(y))),]
+sg2_dit_only <- sg2_dit_only[apply(sg2_dit_only, 1, function(y) !all(is.na(y))),]
+sg3_dit_only <- sg3_dit_only[apply(sg3_dit_only, 1, function(y) !all(is.na(y))),]
+sg4_dit_only <- sg4_dit_only[apply(sg4_dit_only, 1, function(y) !all(is.na(y))),]
+sg5_dit_only <- sg5_dit_only[apply(sg5_dit_only, 1, function(y) !all(is.na(y))),]
+
+sg1_dit_only[is.na(sg1_dit_only)] <- 0
+sg2_dit_only[is.na(sg2_dit_only)] <- 0
+sg3_dit_only[is.na(sg3_dit_only)] <- 0
+sg4_dit_only[is.na(sg4_dit_only)] <- 0
+sg5_dit_only[is.na(sg5_dit_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_dit_only$sg1_ing,
+    sg1_dit_only$sg1_proc,
+    sg1_dit_only$sg1_elem,
+    sg1_dit_only$sg1_agg,
+    sg1_dit_only$sg1_fin,
+    sg2_dit_only$sg2_ing,
+    sg2_dit_only$sg2_proc,
+    sg2_dit_only$sg2_elem,
+    sg2_dit_only$sg2_agg,
+    sg2_dit_only$sg2_fin,
+    sg3_dit_only$sg3_ing,
+    sg3_dit_only$sg3_proc,
+    sg3_dit_only$sg3_elem,
+    sg3_dit_only$sg3_agg,
+    sg3_dit_only$sg3_fin,
+    sg4_dit_only$sg4_ing,
+    sg4_dit_only$sg4_proc,
+    sg4_dit_only$sg4_elem,
+    sg4_dit_only$sg4_agg,
+    sg4_dit_only$sg4_fin,
+    sg5_dit_only$sg5_ing,
+    sg5_dit_only$sg5_proc,
+    sg5_dit_only$sg5_elem,
+    sg5_dit_only$sg5_agg,
+    sg5_dit_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_dit_only)),
+    rep("Processing", each=nrow(sg1_dit_only)),
+    rep("Elementary indexes", each=nrow(sg1_dit_only)),
+    rep("Aggregation", each=nrow(sg1_dit_only)),
+    rep("Finalization", each=nrow(sg1_dit_only)),
+    rep("Inegstion", each=nrow(sg2_dit_only)),
+    rep("Processing", each=nrow(sg2_dit_only)),
+    rep("Elementary indexes", each=nrow(sg2_dit_only)),
+    rep("Aggregation", each=nrow(sg2_dit_only)),
+    rep("Finalization", each=nrow(sg2_dit_only)),
+    rep("Inegstion", each=nrow(sg3_dit_only)),
+    rep("Processing", each=nrow(sg3_dit_only)),
+    rep("Elementary indexes", each=nrow(sg3_dit_only)),
+    rep("Aggregation", each=nrow(sg3_dit_only)),
+    rep("Finalization", each=nrow(sg3_dit_only)),
+    rep("Inegstion", each=nrow(sg4_dit_only)),
+    rep("Processing", each=nrow(sg4_dit_only)),
+    rep("Elementary indexes", each=nrow(sg4_dit_only)),
+    rep("Aggregation", each=nrow(sg4_dit_only)),
+    rep("Finalization", each=nrow(sg4_dit_only)),
+    rep("Inegstion", each=nrow(sg5_dit_only)),
+    rep("Processing", each=nrow(sg5_dit_only)),
+    rep("Elementary indexes", each=nrow(sg5_dit_only)),
+    rep("Aggregation", each=nrow(sg5_dit_only)),
+    rep("Finalization", each=nrow(sg5_dit_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_dit_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_dit_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_dit_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_dit_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_dit_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#fff2cc")
+
+# ---
+# Domain Analysts only
+# ---
+
+SG1_DAN_ONLY <- df$sg1_dan == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dit) & is.na(df$sg1_ean) & is.na(df$sg1_con)
+SG2_DAN_ONLY <- df$sg2_dan == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dit) & is.na(df$sg2_ean) & is.na(df$sg2_con)
+SG3_DAN_ONLY <- df$sg3_dan == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dit) & is.na(df$sg3_ean) & is.na(df$sg3_con)
+SG4_DAN_ONLY <- df$sg4_dan == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dit) & is.na(df$sg4_ean) & is.na(df$sg4_con)
+SG5_DAN_ONLY <- df$sg5_dan == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dit) & is.na(df$sg5_ean) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_dan_only <- df[SG1_DAN_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_dan_only <- df[SG2_DAN_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_dan_only <- df[SG3_DAN_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_dan_only <- df[SG4_DAN_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_dan_only <- df[SG5_DAN_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_dan_only <- sg1_dan_only[apply(sg1_dan_only, 1, function(y) !all(is.na(y))),]
+sg2_dan_only <- sg2_dan_only[apply(sg2_dan_only, 1, function(y) !all(is.na(y))),]
+sg3_dan_only <- sg3_dan_only[apply(sg3_dan_only, 1, function(y) !all(is.na(y))),]
+sg4_dan_only <- sg4_dan_only[apply(sg4_dan_only, 1, function(y) !all(is.na(y))),]
+sg5_dan_only <- sg5_dan_only[apply(sg5_dan_only, 1, function(y) !all(is.na(y))),]
+
+sg1_dan_only[is.na(sg1_dan_only)] <- 0
+sg2_dan_only[is.na(sg2_dan_only)] <- 0
+sg3_dan_only[is.na(sg3_dan_only)] <- 0
+sg4_dan_only[is.na(sg4_dan_only)] <- 0
+sg5_dan_only[is.na(sg5_dan_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_dan_only$sg1_ing,
+    sg1_dan_only$sg1_proc,
+    sg1_dan_only$sg1_elem,
+    sg1_dan_only$sg1_agg,
+    sg1_dan_only$sg1_fin,
+    sg2_dan_only$sg2_ing,
+    sg2_dan_only$sg2_proc,
+    sg2_dan_only$sg2_elem,
+    sg2_dan_only$sg2_agg,
+    sg2_dan_only$sg2_fin,
+    sg3_dan_only$sg3_ing,
+    sg3_dan_only$sg3_proc,
+    sg3_dan_only$sg3_elem,
+    sg3_dan_only$sg3_agg,
+    sg3_dan_only$sg3_fin,
+    sg4_dan_only$sg4_ing,
+    sg4_dan_only$sg4_proc,
+    sg4_dan_only$sg4_elem,
+    sg4_dan_only$sg4_agg,
+    sg4_dan_only$sg4_fin,
+    sg5_dan_only$sg5_ing,
+    sg5_dan_only$sg5_proc,
+    sg5_dan_only$sg5_elem,
+    sg5_dan_only$sg5_agg,
+    sg5_dan_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_dan_only)),
+    rep("Processing", each=nrow(sg1_dan_only)),
+    rep("Elementary indexes", each=nrow(sg1_dan_only)),
+    rep("Aggregation", each=nrow(sg1_dan_only)),
+    rep("Finalization", each=nrow(sg1_dan_only)),
+    rep("Inegstion", each=nrow(sg2_dan_only)),
+    rep("Processing", each=nrow(sg2_dan_only)),
+    rep("Elementary indexes", each=nrow(sg2_dan_only)),
+    rep("Aggregation", each=nrow(sg2_dan_only)),
+    rep("Finalization", each=nrow(sg2_dan_only)),
+    rep("Inegstion", each=nrow(sg3_dan_only)),
+    rep("Processing", each=nrow(sg3_dan_only)),
+    rep("Elementary indexes", each=nrow(sg3_dan_only)),
+    rep("Aggregation", each=nrow(sg3_dan_only)),
+    rep("Finalization", each=nrow(sg3_dan_only)),
+    rep("Inegstion", each=nrow(sg4_dan_only)),
+    rep("Processing", each=nrow(sg4_dan_only)),
+    rep("Elementary indexes", each=nrow(sg4_dan_only)),
+    rep("Aggregation", each=nrow(sg4_dan_only)),
+    rep("Finalization", each=nrow(sg4_dan_only)),
+    rep("Inegstion", each=nrow(sg5_dan_only)),
+    rep("Processing", each=nrow(sg5_dan_only)),
+    rep("Elementary indexes", each=nrow(sg5_dan_only)),
+    rep("Aggregation", each=nrow(sg5_dan_only)),
+    rep("Finalization", each=nrow(sg5_dan_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_dan_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_dan_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_dan_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_dan_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_dan_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#fff2cc")
+
+# ---
+# Elsewhere Analysts only
+# ---
+
+SG1_EAN_ONLY <- df$sg1_ean == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dit) & is.na(df$sg1_dan) & is.na(df$sg1_con)
+SG2_EAN_ONLY <- df$sg2_ean == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dit) & is.na(df$sg2_dan) & is.na(df$sg2_con)
+SG3_EAN_ONLY <- df$sg3_ean == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dit) & is.na(df$sg3_dan) & is.na(df$sg3_con)
+SG4_EAN_ONLY <- df$sg4_ean == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dit) & is.na(df$sg4_dan) & is.na(df$sg4_con)
+SG5_EAN_ONLY <- df$sg5_ean == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dit) & is.na(df$sg5_dan) & is.na(df$sg5_con)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_ean_only <- df[SG1_EAN_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_ean_only <- df[SG2_EAN_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_ean_only <- df[SG3_EAN_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_ean_only <- df[SG4_EAN_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_ean_only <- df[SG5_EAN_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_ean_only <- sg1_ean_only[apply(sg1_ean_only, 1, function(y) !all(is.na(y))),]
+sg2_ean_only <- sg2_ean_only[apply(sg2_ean_only, 1, function(y) !all(is.na(y))),]
+sg3_ean_only <- sg3_ean_only[apply(sg3_ean_only, 1, function(y) !all(is.na(y))),]
+sg4_ean_only <- sg4_ean_only[apply(sg4_ean_only, 1, function(y) !all(is.na(y))),]
+sg5_ean_only <- sg5_ean_only[apply(sg5_ean_only, 1, function(y) !all(is.na(y))),]
+
+sg1_ean_only[is.na(sg1_ean_only)] <- 0
+sg2_ean_only[is.na(sg2_ean_only)] <- 0
+sg3_ean_only[is.na(sg3_ean_only)] <- 0
+sg4_ean_only[is.na(sg4_ean_only)] <- 0
+sg5_ean_only[is.na(sg5_ean_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_ean_only$sg1_ing,
+    sg1_ean_only$sg1_proc,
+    sg1_ean_only$sg1_elem,
+    sg1_ean_only$sg1_agg,
+    sg1_ean_only$sg1_fin,
+    sg2_ean_only$sg2_ing,
+    sg2_ean_only$sg2_proc,
+    sg2_ean_only$sg2_elem,
+    sg2_ean_only$sg2_agg,
+    sg2_ean_only$sg2_fin,
+    sg3_ean_only$sg3_ing,
+    sg3_ean_only$sg3_proc,
+    sg3_ean_only$sg3_elem,
+    sg3_ean_only$sg3_agg,
+    sg3_ean_only$sg3_fin,
+    sg4_ean_only$sg4_ing,
+    sg4_ean_only$sg4_proc,
+    sg4_ean_only$sg4_elem,
+    sg4_ean_only$sg4_agg,
+    sg4_ean_only$sg4_fin,
+    sg5_ean_only$sg5_ing,
+    sg5_ean_only$sg5_proc,
+    sg5_ean_only$sg5_elem,
+    sg5_ean_only$sg5_agg,
+    sg5_ean_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_ean_only)),
+    rep("Processing", each=nrow(sg1_ean_only)),
+    rep("Elementary indexes", each=nrow(sg1_ean_only)),
+    rep("Aggregation", each=nrow(sg1_ean_only)),
+    rep("Finalization", each=nrow(sg1_ean_only)),
+    rep("Inegstion", each=nrow(sg2_ean_only)),
+    rep("Processing", each=nrow(sg2_ean_only)),
+    rep("Elementary indexes", each=nrow(sg2_ean_only)),
+    rep("Aggregation", each=nrow(sg2_ean_only)),
+    rep("Finalization", each=nrow(sg2_ean_only)),
+    rep("Inegstion", each=nrow(sg3_ean_only)),
+    rep("Processing", each=nrow(sg3_ean_only)),
+    rep("Elementary indexes", each=nrow(sg3_ean_only)),
+    rep("Aggregation", each=nrow(sg3_ean_only)),
+    rep("Finalization", each=nrow(sg3_ean_only)),
+    rep("Inegstion", each=nrow(sg4_ean_only)),
+    rep("Processing", each=nrow(sg4_ean_only)),
+    rep("Elementary indexes", each=nrow(sg4_ean_only)),
+    rep("Aggregation", each=nrow(sg4_ean_only)),
+    rep("Finalization", each=nrow(sg4_ean_only)),
+    rep("Inegstion", each=nrow(sg5_ean_only)),
+    rep("Processing", each=nrow(sg5_ean_only)),
+    rep("Elementary indexes", each=nrow(sg5_ean_only)),
+    rep("Aggregation", each=nrow(sg5_ean_only)),
+    rep("Finalization", each=nrow(sg5_ean_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_ean_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_ean_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_ean_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_ean_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_ean_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#dae8fc")
+
+# ---
+# Consultants only
+# ---
+
+SG1_CON_ONLY <- df$sg1_con == 1 & is.na(df$sg1_cit) & is.na(df$sg1_dit) & is.na(df$sg1_dan) & is.na(df$sg1_ean)
+SG2_CON_ONLY <- df$sg2_con == 1 & is.na(df$sg2_cit) & is.na(df$sg2_dit) & is.na(df$sg2_dan) & is.na(df$sg2_ean)
+SG3_CON_ONLY <- df$sg3_con == 1 & is.na(df$sg3_cit) & is.na(df$sg3_dit) & is.na(df$sg3_dan) & is.na(df$sg3_ean)
+SG4_CON_ONLY <- df$sg4_con == 1 & is.na(df$sg4_cit) & is.na(df$sg4_dit) & is.na(df$sg4_dan) & is.na(df$sg4_ean)
+SG5_CON_ONLY <- df$sg5_con == 1 & is.na(df$sg5_cit) & is.na(df$sg5_dit) & is.na(df$sg5_dan) & is.na(df$sg5_ean)
+
+# df where only corporate IT is involved with maintaining system group 1
+sg1_con_only <- df[SG1_CON_ONLY, c('sg1_ing', 'sg1_proc', 'sg1_elem', 'sg1_agg', 'sg1_fin')]
+sg2_con_only <- df[SG2_CON_ONLY, c('sg2_ing', 'sg2_proc', 'sg2_elem', 'sg2_agg', 'sg2_fin')]
+sg3_con_only <- df[SG3_CON_ONLY, c('sg3_ing', 'sg3_proc', 'sg3_elem', 'sg3_agg', 'sg3_fin')]
+sg4_con_only <- df[SG4_CON_ONLY, c('sg4_ing', 'sg4_proc', 'sg4_elem', 'sg4_agg', 'sg4_fin')]
+sg5_con_only <- df[SG5_CON_ONLY, c('sg5_ing', 'sg5_proc', 'sg5_elem', 'sg5_agg', 'sg5_fin')]
+
+sg1_con_only <- sg1_con_only[apply(sg1_con_only, 1, function(y) !all(is.na(y))),]
+sg2_con_only <- sg2_con_only[apply(sg2_con_only, 1, function(y) !all(is.na(y))),]
+sg3_con_only <- sg3_con_only[apply(sg3_con_only, 1, function(y) !all(is.na(y))),]
+sg4_con_only <- sg4_con_only[apply(sg4_con_only, 1, function(y) !all(is.na(y))),]
+sg5_con_only <- sg5_con_only[apply(sg5_con_only, 1, function(y) !all(is.na(y))),]
+
+sg1_con_only[is.na(sg1_con_only)] <- 0
+sg2_con_only[is.na(sg2_con_only)] <- 0
+sg3_con_only[is.na(sg3_con_only)] <- 0
+sg4_con_only[is.na(sg4_con_only)] <- 0
+sg5_con_only[is.na(sg5_con_only)] <- 0
+
+dat <- data.frame(
+  Frequency = c(
+    sg1_con_only$sg1_ing,
+    sg1_con_only$sg1_proc,
+    sg1_con_only$sg1_elem,
+    sg1_con_only$sg1_agg,
+    sg1_con_only$sg1_fin,
+    sg2_con_only$sg2_ing,
+    sg2_con_only$sg2_proc,
+    sg2_con_only$sg2_elem,
+    sg2_con_only$sg2_agg,
+    sg2_con_only$sg2_fin,
+    sg3_con_only$sg3_ing,
+    sg3_con_only$sg3_proc,
+    sg3_con_only$sg3_elem,
+    sg3_con_only$sg3_agg,
+    sg3_con_only$sg3_fin,
+    sg4_con_only$sg4_ing,
+    sg4_con_only$sg4_proc,
+    sg4_con_only$sg4_elem,
+    sg4_con_only$sg4_agg,
+    sg4_con_only$sg4_fin,
+    sg5_con_only$sg5_ing,
+    sg5_con_only$sg5_proc,
+    sg5_con_only$sg5_elem,
+    sg5_con_only$sg5_agg,
+    sg5_con_only$sg5_fin
+  ),
+  Step = c(
+    rep("Inegstion", each=nrow(sg1_con_only)),
+    rep("Processing", each=nrow(sg1_con_only)),
+    rep("Elementary indexes", each=nrow(sg1_con_only)),
+    rep("Aggregation", each=nrow(sg1_con_only)),
+    rep("Finalization", each=nrow(sg1_con_only)),
+    rep("Inegstion", each=nrow(sg2_con_only)),
+    rep("Processing", each=nrow(sg2_con_only)),
+    rep("Elementary indexes", each=nrow(sg2_con_only)),
+    rep("Aggregation", each=nrow(sg2_con_only)),
+    rep("Finalization", each=nrow(sg2_con_only)),
+    rep("Inegstion", each=nrow(sg3_con_only)),
+    rep("Processing", each=nrow(sg3_con_only)),
+    rep("Elementary indexes", each=nrow(sg3_con_only)),
+    rep("Aggregation", each=nrow(sg3_con_only)),
+    rep("Finalization", each=nrow(sg3_con_only)),
+    rep("Inegstion", each=nrow(sg4_con_only)),
+    rep("Processing", each=nrow(sg4_con_only)),
+    rep("Elementary indexes", each=nrow(sg4_con_only)),
+    rep("Aggregation", each=nrow(sg4_con_only)),
+    rep("Finalization", each=nrow(sg4_con_only)),
+    rep("Inegstion", each=nrow(sg5_con_only)),
+    rep("Processing", each=nrow(sg5_con_only)),
+    rep("Elementary indexes", each=nrow(sg5_con_only)),
+    rep("Aggregation", each=nrow(sg5_con_only)),
+    rep("Finalization", each=nrow(sg5_con_only))
+  ),
+  Group = c(
+    rep("Sys Grp 1", each=nrow(sg1_con_only)*5),
+    rep("Sys Grp 2", each=nrow(sg2_con_only)*5),
+    rep("Sys Grp 3", each=nrow(sg3_con_only)*5),
+    rep("Sys Grp 4", each=nrow(sg4_con_only)*5),
+    rep("Sys Grp 5", each=nrow(sg5_con_only)*5)
+  )
+)
+
+ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity")
+```
+
+## For which steps are systems grouped together?
+
+
+```{r}
+#| label: fig-joint-sys-team-chord
+#| layout-ncol: 1
+#| echo: false
+#| message: false
+#| out-width: "100%"
+#| fig-cap:
+#| - System Group Transition Diagram
+
+library(networkD3)
+
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+df[is.na(df)] <- 0
+
+# Starting with 1 answer to think through how to visualize
+# TODO: might be useful to use the code below to work through some examples
+obs1 <- df[5,]
+
+q1 <- matrix(nrow=5, ncol=5)
+
+q1[1,] <- as.numeric(obs1[,1:5])
+q1[2,] <- as.numeric(obs1[,6:10])
+q1[3,] <- as.numeric(obs1[,11:15])
+q1[4,] <- as.numeric(obs1[,16:20])
+q1[5,] <- as.numeric(obs1[,21:25])
+
+
+q2 <- matrix(nrow=5, ncol=5)
+
+q2[1,] <- as.numeric(obs1[,26:30])
+q2[2,] <- as.numeric(obs1[,31:35])
+q2[3,] <- as.numeric(obs1[,36:40])
+q2[4,] <- as.numeric(obs1[,41:45])
+q2[5,] <- as.numeric(obs1[,46:50])
+
+nodes <- data.frame(
+  name = c(
+    "Ingestion 1",
+    "Processing 1",
+    "Elementary 1",
+    "Aggregation 1",
+    "Finalization 1",
+    "Ingestion 2",
+    "Processing 2",
+    "Elementary 2",
+    "Aggregation 2",
+    "Finalization 2",
+    "Ingestion 3",
+    "Processing 3",
+    "Elementary 3",
+    "Aggregation 3",
+    "Finalization 3",
+    "Ingestion 4",
+    "Processing 4",
+    "Elementary 4",
+    "Aggregation 4",
+    "Finalization 4",
+    "Ingestion 5",
+    "Processing 5",
+    "Elementary 5",
+    "Aggregation 5",
+    "Finalization 5"
+  )
+)
+
+links <- data.frame(
+  source = c(
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3,
+    4,
+    5,
+    5,
+    6,
+    6,
+    7,
+    7,
+    8,
+    8,
+    9,
+    10,
+    10,
+    11,
+    11,
+    12,
+    12,
+    13,
+    13,
+    14,
+    15,
+    15,
+    16,
+    16,
+    17,
+    17,
+    18,
+    18,
+    19,
+    20,
+    21,
+    22
+  ),
+  target = c(
+    1,
+    5,
+    2,
+    6,
+    3,
+    7,
+    4,
+    8,
+    9,
+    6,
+    10,
+    7,
+    11,
+    8,
+    12,
+    9,
+    13,
+    14,
+    11,
+    15,
+    12,
+    16,
+    13,
+    17,
+    14,
+    18,
+    19,
+    16,
+    20,
+    17,
+    21,
+    18,
+    22,
+    19,
+    23,
+    20,
+    21,
+    22,
+    23
+  ),
+  value = c(
+    sum(as.numeric(df$sg1_ing & df$sg1_proc)),
+    sum(as.numeric(df$sg1_ing & df$sg2_ing)),
+    sum(as.numeric(df$sg1_proc & df$sg1_elem)),
+    sum(as.numeric(df$sg1_proc & df$sg2_proc)),
+    sum(as.numeric(df$sg1_elem & df$sg1_agg)),
+    sum(as.numeric(df$sg1_elem & df$sg2_elem)),
+    sum(as.numeric(df$sg1_agg & df$sg1_fin)),
+    sum(as.numeric(df$sg1_agg & df$sg2_agg)),
+    sum(as.numeric(df$sg1_fin & df$sg2_fin)),
+    sum(as.numeric(df$sg2_ing & df$sg2_proc)),
+    sum(as.numeric(df$sg2_ing & df$sg3_ing)),
+    sum(as.numeric(df$sg2_proc & df$sg3_elem)),
+    sum(as.numeric(df$sg2_proc & df$sg3_proc)),
+    sum(as.numeric(df$sg2_elem & df$sg3_agg)),
+    sum(as.numeric(df$sg2_elem & df$sg3_elem)),
+    sum(as.numeric(df$sg2_agg & df$sg2_fin)),
+    sum(as.numeric(df$sg2_agg & df$sg3_agg)),
+    sum(as.numeric(df$sg2_fin & df$sg3_fin)),
+    sum(as.numeric(df$sg3_ing & df$sg3_proc)),
+    sum(as.numeric(df$sg3_ing & df$sg4_ing)),
+    sum(as.numeric(df$sg3_proc & df$sg3_elem)),
+    sum(as.numeric(df$sg3_proc & df$sg4_proc)),
+    sum(as.numeric(df$sg3_elem & df$sg3_agg)),
+    sum(as.numeric(df$sg3_elem & df$sg4_elem)),
+    sum(as.numeric(df$sg3_agg & df$sg3_fin)),
+    sum(as.numeric(df$sg3_agg & df$sg4_agg)),
+    sum(as.numeric(df$sg3_fin & df$sg4_fin)),
+    sum(as.numeric(df$sg4_ing & df$sg4_agg)),
+    sum(as.numeric(df$sg4_ing & df$sg5_ing)),
+    sum(as.numeric(df$sg4_proc & df$sg4_elem)),
+    sum(as.numeric(df$sg4_proc & df$sg5_proc)),
+    sum(as.numeric(df$sg4_elem & df$sg4_agg)),
+    sum(as.numeric(df$sg4_elem & df$sg5_elem)),
+    sum(as.numeric(df$sg4_agg & df$sg5_fin)),
+    sum(as.numeric(df$sg4_fin & df$sg5_fin)),
+    sum(as.numeric(df$sg5_ing & df$sg5_proc)),
+    sum(as.numeric(df$sg5_proc & df$sg5_elem)),
+    sum(as.numeric(df$sg5_elem & df$sg5_agg)),
+    sum(as.numeric(df$sg5_agg & df$sg5_fin))
+  )
+)
+
+# Don't visualize nodes with 0 links between them
+links <- links[links$value > 0,]
+
+
+p <- sankeyNetwork(Links = links, Nodes = nodes, Source = "source",
+              Target = "target", Value = "value", NodeID = "name",
+              units = "No. Systems", fontSize = 10, nodeWidth = 20)
+p
+
+```
+
+# What kinds of teams maintain system groups together?
+
+
+```{r}
+#| label: fig-joint-sys-which-teams-work-together
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Which teams maintain systems together?
+
+library(circlize)
+
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+df[is.na(df)] <- 0
+
+# Starting with 1 answer to think through how to visualize
+# TODO: might be useful to use the code below to work through some examples
+
+
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q2 <- matrix(nrow=5, ncol=5)
+
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  
+  cumulative_links = cumulative_links + q2
+}
+
+rownames(cumulative_links) = c("Sys Grp 1", "Sys Grp 2", "Sys Grp 3", "Sys Grp 4", "Sys Grp 5")
+colnames(cumulative_links) = c("Corporate IT", "Domain IT", "Domain Analysts", "E. Analysts", "Consult.")
+
+chordDiagram(cumulative_links)
+
+# Now a chord diagram to keep track of who occurs together
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q2 <- matrix(nrow=5, ncol=5)
+
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  for (j in 1:nrow(q2)) {
+    for (k in 1:ncol(q2)) {
+      for (l in 1:ncol(q2)) {
+        cumulative_links[k, l] = cumulative_links[k, l] + as.numeric(q2[j, k] == q2[j, l] & q2[j, k] != 0) 
+      }
+    }
+  }
+}
+
+rownames(cumulative_links) = c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+colnames(cumulative_links) = c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+chordDiagram(cumulative_links)
+```
+
+# System Distribution by Maintainer Type
+
+## Unconditional
+```{r}
+#| echo: false
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+df[is.na(df)] <- 0
+
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  cumulative_links = cumulative_links + q1
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+The diagram below visualizes this matrix
+
+```{r}
+#| label: unconditional-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Unconditional Maintenance Distribution
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+
+
+## Conditional on various maintainer combinations
+
+```{r}
+#| echo: false
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+df[is.na(df)] <- 0
+
+# # Worked example
+# obs <- df[2,]
+# 
+# q1 <- matrix(nrow=5, ncol=5)
+# 
+# q1[1,] <- as.numeric(obs[,1:5])
+# q1[2,] <- as.numeric(obs[,6:10])
+# q1[3,] <- as.numeric(obs[,11:15])
+# q1[4,] <- as.numeric(obs[,16:20])
+# q1[5,] <- as.numeric(obs[,21:25])
+# 
+# q2 <- matrix(nrow=5, ncol=5)
+# 
+# q2[1,] <- as.numeric(obs[,26:30])
+# q2[2,] <- as.numeric(obs[,31:35])
+# q2[3,] <- as.numeric(obs[,36:40])
+# q2[4,] <- as.numeric(obs[,41:45])
+# q2[5,] <- as.numeric(obs[,46:50])
+
+# rownames(q1) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+# colnames(q1) = c('ing', 'proc', 'elem', 'agg', 'fin')
+# 
+# rownames(q2) =  c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+# colnames(q2) = c("Corporate IT", "Domain IT", "Domain Analysts", "E. Analysts", "Consult.")
+# 
+# CIT_ONLY = q2[,1] == 1 & q2[,2:5] == 0
+
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,1] == 1 & q2[,2] == 0 & q2[,3] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+
+
+
+
+
+Could have a diagram showing what the maintainer distribution looks like for each GSBPM step by generating both matrices for each row.
+
+E.g., for the first one, it's interpreted as "Looking at system groups where Corporate IT is the **only** maintainer, what is the relationship between system groups and GSBPM steps?"
+
+## Interpreting these matrices
+
+This is a rough measure, but as you move from top left to bottom right, you're implicitly moving along the flow of work (the system groups are listed in left-to-right order from ingestion to finalization if there is more than one system group).
+
+If there's a high concentration in one section of the matrix, this can be interpreted as "more of the system groups maintained **only** by Corporate IT tend to be focused on these parts of the GSBPM steps".
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+The diagram below visualizes this matrix
+
+```{r}
+#| label: cit-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Corporate IT being the **only** maintainer
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,2] == 1 & q2[,1] == 0 & q2[,3] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+Next, we have the maintainer distribution where **Domain-Aligned IT** is the only maintainer.
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: dit-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Domain-Aligned IT being the **only** maintainer
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,3] == 1 & q2[,1] == 0 & q2[,2] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+```{r}
+#| label: dan-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Domain-Aligned Analysts being the **only** maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,4] == 1 & q2[,1] == 0 & q2[,2] == 0 & q2[,3] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: ean-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Elsewhere Analysts being the **only** maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,5] == 1 & q2[,1] == 0 & q2[,2] == 0 & q2[,3] == 0 & q2[,4] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: con-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Consultants being the **only** maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+# Systems with Mixed Maintainers
+
+Next, we look at system distributions for systems where more than one kind of team maintains the system.
+
+## Domain-Aligned Maintainers
+
+This first scenario looks at the case when maintenance responsibilities for a system group are split between two **stream-aligned** teams (domain-aligned analysts and domain-aligned IT).
+
+In this situation, we would expect to see a roughly even split across all steps in the flow of work. This is because domain teams own the end-to-end workflow for their product.
+
+Another way to think about this is that domain aligned maintainers **span the required skillset** and are located entirely **within the business domain**.
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # Select the rows of q2 where domain IT and domain analysts are the maintainers
+  # This would correspond to a "stream aligned" team scenario, so we'd expect to
+  # see an even distribution of GSBPM steps since domain IT is present for the
+  # entire flow of work.
+  cit_idx <- q2[,1] == 0 & q2[,2] == 1 & q2[,3] == 1 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+
+
+**Note**: a possible finding from this might be that stream aligned teams (domain it and domain analysts) tend to maintain systems that span the flow of work, while situations where maintenance is split between corporate (non-stream aligned) IT and domain-aligned analysts tend to be partitioned into central IT handling the "ingestion/processing" part and domain-aligned analysts handling the "processing/EA/agg/finalization" part, even though this cuts across the flow of work.
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: domain-it-analyst-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Domain-Aligned Analysts **and** Domain-Aligned IT being the maintainers.
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+Small sample, but this does appear to be the case.
+
+## IT-only maintainers
+
+This section looks at the distribution of systems for cases where the maintainers span Corporate IT and Domain-Aligned IT.
+
+This would suggest that regardless of alignment with the business domain, these systems tend to lend themselves to individuals with an IT skill set.
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # Select the rows of q2 where domain IT and domain analysts are the maintainers
+  # This would correspond to a "stream aligned" team scenario, so we'd expect to
+  # see an even distribution of GSBPM steps since domain IT is present for the
+  # entire flow of work.
+  cit_idx <- q2[,1] == 1 & q2[,2] == 1 & q2[,3] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: it-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on IT (Corporate or Domain) being the maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+
+Sample too small to say anything definitively, but could be worth showing as something interesting for future research.
+
+
+
+# Maintainer Breakdown Conditional on Crossing System Boundaries
+
+You can also ask the inverse question: "what does the breakdown of maintainers look like when systems cut across certain GSBPM boundaries?
+
+## Example 1: The "monolith" topology
+
+This is the case where one system group cuts across **all** GSBPM steps
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # Select the rows of q2 where domain IT and domain analysts are the maintainers
+  # This would correspond to a "stream aligned" team scenario, so we'd expect to
+  # see an even distribution of GSBPM steps since domain IT is present for the
+  # entire flow of work.
+  cit_idx <- q1[,1] == 1 & q1[,2] == 1 & q1[,3] == 1 & q1[,4] == 1 & q1[,5] == 1
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q2[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c("Corporate IT", "Domain IT", "Domain Analysts", "E. Analysts", "Consult.")
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+**Note**: I wonder if this further breaks down into system groups following "classic IT monolith" architecture and "one person with an Excel workbook"?
+
+```{r}
+#| label: monolith-team-distro
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Team Distribution Conditional on Monolith Architecture
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+## System Boundary Change Between Ingestion and Processing
+
+In this section, we're looking for "cut-overs" that look like the following diagram.
+
+     [,1] [,2] [,3] [,4] [,5]
+[i,]    1    0    X    X    X
+[j,]    0    1    X    X    X
+
+In other words, when one system group "ends" at ingestion, and the next one "begins" at data processing.
+
+We can look at what the team distribution looks like for system groups that have the property shown above.
+
+```{r}
+#| echo: false
+library(dplyr)
+
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # 
+  cit_idx <- lag(q1[,1]) == q1[,2] & lag(q1[,1]) & q1[,1] != q1[,2]
+  cit_idx[is.na(cit_idx)] = TRUE
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q2[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c("Corporate IT", "Domain IT", "Domain Analysts", "E. Analysts", "Consult.")
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+I would interpret this as "when we see a cut-over between system groups that happens between the ingestion step and the processing step, it's often a cutover between Corporate IT **or** Domain IT (14/22 occurrences in sg1) **to** a system group maintained by domain aligned analysts (10/14 occurrences).
+
+
+```{r}
+#| label: monolith-team-distro
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Team Distribution Conditional on Monolith Architecture
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
