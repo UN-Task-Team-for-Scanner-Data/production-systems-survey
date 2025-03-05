@@ -1,5 +1,23 @@
 # Systems and Teams {#sec-sys-team}
 
+## Overview
+
+The whole point of this section is to concretely specify a joint team organization **and** system topology.
+
+Since these joint team/system topology labels can be attached to individual records **and** we have business outcomes associated with these same records, we can ask meaningful questions about how team and system organization are related to business outcomes.
+
+**Caveat**: due to the small sample size and limited nature of questions we were able to ask, we are hesitant to make any strong assertions about the causal impact of certain team/system organization decisions. However, we have found some noteworthy correlations that are worth exploring further and we believe our general approach could be re purposed to use cases for other data teams.
+
+**Examples of some questions we can ask**:
+
+- "Do organizations with domain-aligned teams have longer lead times than organizations where maintainers cut across team boundaries?"
+- "What technology stack is used by organizations where Corporate IT maintains ingestion systems and Domain-aligned Analysts maintain data processing systems?"
+
+**TLDR**:
+
+- The main value of this section is quantifying which joint team/system organization an organization exhibits for a representative group of systems.
+- This gives us the tools to make quantitative statements about which organizational properties and business outcomes are associated with certain team/system topologies.
+
 ```{r message=FALSE}
 #| label: fig-num-systems-each-step
 #| layout-ncol: 2
@@ -1188,6 +1206,783 @@ colnames(cumulative_links) = c("Corporate IT", "Domain-Embedded IT", "Domain-Emb
 chordDiagram(cumulative_links)
 ```
 
-## TODO
+# System Distribution by Maintainer Type
+
+## Unconditional
+```{r}
+#| echo: false
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+df[is.na(df)] <- 0
+
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  cumulative_links = cumulative_links + q1
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+The diagram below visualizes this matrix
+
+```{r}
+#| label: unconditional-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Unconditional Maintenance Distribution
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+
+
+## Conditional on various maintainer combinations
+
+```{r}
+#| echo: false
+df <- read.csv("./data/results.csv")  #[,67:116]
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+
+df <- df[,67:116]
+
+df[is.na(df)] <- 0
+
+# # Worked example
+# obs <- df[2,]
+# 
+# q1 <- matrix(nrow=5, ncol=5)
+# 
+# q1[1,] <- as.numeric(obs[,1:5])
+# q1[2,] <- as.numeric(obs[,6:10])
+# q1[3,] <- as.numeric(obs[,11:15])
+# q1[4,] <- as.numeric(obs[,16:20])
+# q1[5,] <- as.numeric(obs[,21:25])
+# 
+# q2 <- matrix(nrow=5, ncol=5)
+# 
+# q2[1,] <- as.numeric(obs[,26:30])
+# q2[2,] <- as.numeric(obs[,31:35])
+# q2[3,] <- as.numeric(obs[,36:40])
+# q2[4,] <- as.numeric(obs[,41:45])
+# q2[5,] <- as.numeric(obs[,46:50])
+
+# rownames(q1) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+# colnames(q1) = c('ing', 'proc', 'elem', 'agg', 'fin')
+# 
+# rownames(q2) =  c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+# colnames(q2) = c("Corporate IT", "Domain IT", "Domain Analysts", "E. Analysts", "Consult.")
+# 
+# CIT_ONLY = q2[,1] == 1 & q2[,2:5] == 0
+
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,1] == 1 & q2[,2] == 0 & q2[,3] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+
+
+
+
 
 Could have a diagram showing what the maintainer distribution looks like for each GSBPM step by generating both matrices for each row.
+
+E.g., for the first one, it's interpreted as "Looking at system groups where Corporate IT is the **only** maintainer, what is the relationship between system groups and GSBPM steps?"
+
+## Interpreting these matrices
+
+This is a rough measure, but as you move from top left to bottom right, you're implicitly moving along the flow of work (the system groups are listed in left-to-right order from ingestion to finalization if there is more than one system group).
+
+If there's a high concentration in one section of the matrix, this can be interpreted as "more of the system groups maintained **only** by Corporate IT tend to be focused on these parts of the GSBPM steps".
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+The diagram below visualizes this matrix
+
+```{r}
+#| label: cit-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Corporate IT being the **only** maintainer
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,2] == 1 & q2[,1] == 0 & q2[,3] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+Next, we have the maintainer distribution where **Domain-Aligned IT** is the only maintainer.
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: dit-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Domain-Aligned IT being the **only** maintainer
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,3] == 1 & q2[,1] == 0 & q2[,2] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+```{r}
+#| label: dan-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Domain-Aligned Analysts being the **only** maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+
+```
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,4] == 1 & q2[,1] == 0 & q2[,2] == 0 & q2[,3] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: ean-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Elsewhere Analysts being the **only** maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  
+  # Select the rows of q2 where **only** Corporate IT is a maintainer,
+  # then use this selection to index into q1. The point of this is to
+  # get the distribution of system groups across GSBPM steps, given that
+  # Corporate IT is the maintainer.
+  cit_idx <- q2[,5] == 1 & q2[,1] == 0 & q2[,2] == 0 & q2[,3] == 0 & q2[,4] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: con-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Consultants being the **only** maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+# Systems with Mixed Maintainers
+
+Next, we look at system distributions for systems where more than one kind of team maintains the system.
+
+## Domain-Aligned Maintainers
+
+This first scenario looks at the case when maintenance responsibilities for a system group are split between two **stream-aligned** teams (domain-aligned analysts and domain-aligned IT).
+
+In this situation, we would expect to see a roughly even split across all steps in the flow of work. This is because domain teams own the end-to-end workflow for their product.
+
+Another way to think about this is that domain aligned maintainers **span the required skillset** and are located entirely **within the business domain**.
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # Select the rows of q2 where domain IT and domain analysts are the maintainers
+  # This would correspond to a "stream aligned" team scenario, so we'd expect to
+  # see an even distribution of GSBPM steps since domain IT is present for the
+  # entire flow of work.
+  cit_idx <- q2[,1] == 0 & q2[,2] == 1 & q2[,3] == 1 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+
+
+**Note**: a possible finding from this might be that stream aligned teams (domain it and domain analysts) tend to maintain systems that span the flow of work, while situations where maintenance is split between corporate (non-stream aligned) IT and domain-aligned analysts tend to be partitioned into central IT handling the "ingestion/processing" part and domain-aligned analysts handling the "processing/EA/agg/finalization" part, even though this cuts across the flow of work.
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: domain-it-analyst-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on Domain-Aligned Analysts **and** Domain-Aligned IT being the maintainers.
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+Small sample, but this does appear to be the case.
+
+## IT-only maintainers
+
+This section looks at the distribution of systems for cases where the maintainers span Corporate IT and Domain-Aligned IT.
+
+This would suggest that regardless of alignment with the business domain, these systems tend to lend themselves to individuals with an IT skill set.
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+  
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # Select the rows of q2 where domain IT and domain analysts are the maintainers
+  # This would correspond to a "stream aligned" team scenario, so we'd expect to
+  # see an even distribution of GSBPM steps since domain IT is present for the
+  # entire flow of work.
+  cit_idx <- q2[,1] == 1 & q2[,2] == 1 & q2[,3] == 0 & q2[,4] == 0 & q2[,5] == 0
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q1[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c('ing', 'proc', 'elem', 'agg', 'fin')
+```
+
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+```{r}
+#| label: it-only-maintenance-distribution
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Maintenance Distribution Conditional on IT (Corporate or Domain) being the maintainers
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+
+Sample too small to say anything definitively, but could be worth showing as something interesting for future research.
+
+
+
+# Maintainer Breakdown Conditional on Crossing System Boundaries
+
+You can also ask the inverse question: "what does the breakdown of maintainers look like when systems cut across certain GSBPM boundaries?
+
+## Example 1: The "monolith" topology
+
+This is the case where one system group cuts across **all** GSBPM steps
+
+```{r}
+#| echo: false
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # Select the rows of q2 where domain IT and domain analysts are the maintainers
+  # This would correspond to a "stream aligned" team scenario, so we'd expect to
+  # see an even distribution of GSBPM steps since domain IT is present for the
+  # entire flow of work.
+  cit_idx <- q1[,1] == 1 & q1[,2] == 1 & q1[,3] == 1 & q1[,4] == 1 & q1[,5] == 1
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q2[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c("Corporate IT", "Domain IT", "Domain Analysts", "E. Analysts", "Consult.")
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+
+**Note**: I wonder if this further breaks down into system groups following "classic IT monolith" architecture and "one person with an Excel workbook"?
+
+```{r}
+#| label: monolith-team-distro
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Team Distribution Conditional on Monolith Architecture
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
+## System Boundary Change Between Ingestion and Processing
+
+In this section, we're looking for "cut-overs" that look like the following diagram.
+
+     [,1] [,2] [,3] [,4] [,5]
+[i,]    1    0    X    X    X
+[j,]    0    1    X    X    X
+
+In other words, when one system group "ends" at ingestion, and the next one "begins" at data processing.
+
+We can look at what the team distribution looks like for system groups that have the property shown above.
+
+```{r}
+#| echo: false
+library(dplyr)
+
+cumulative_links <- matrix(0, nrow=5, ncol=5)
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  q1 <- matrix(nrow=5, ncol=5)
+  
+  q1[1,] <- as.numeric(obs[,1:5])
+  q1[2,] <- as.numeric(obs[,6:10])
+  q1[3,] <- as.numeric(obs[,11:15])
+  q1[4,] <- as.numeric(obs[,16:20])
+  q1[5,] <- as.numeric(obs[,21:25])
+
+  q2 <- matrix(nrow=5, ncol=5)
+  
+  q2[1,] <- as.numeric(obs[,26:30])
+  q2[2,] <- as.numeric(obs[,31:35])
+  q2[3,] <- as.numeric(obs[,36:40])
+  q2[4,] <- as.numeric(obs[,41:45])
+  q2[5,] <- as.numeric(obs[,46:50])
+  # 
+  cit_idx <- lag(q1[,1]) == q1[,2] & lag(q1[,1]) & q1[,1] != q1[,2]
+  cit_idx[is.na(cit_idx)] = TRUE
+  if (any(cit_idx)) {
+    cumulative_links[cit_idx] = cumulative_links[cit_idx] + q2[cit_idx]
+  }
+}
+
+rownames(cumulative_links) = c('sg1', 'sg2', 'sg3', 'sg4', 'sg5')
+colnames(cumulative_links) = c("Corporate IT", "Domain IT", "Domain Analysts", "E. Analysts", "Consult.")
+```
+
+```{r}
+#| echo: false
+
+cumulative_links
+```
+I would interpret this as "when we see a cut-over between system groups that happens between the ingestion step and the processing step, it's often a cutover between Corporate IT **or** Domain IT (14/22 occurrences in sg1) **to** a system group maintained by domain aligned analysts (10/14 occurrences).
+
+
+```{r}
+#| label: monolith-team-distro
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Team Distribution Conditional on Monolith Architecture
+
+library(circlize)
+
+chordDiagram(cumulative_links)
+```
+
