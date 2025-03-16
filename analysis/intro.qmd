@@ -21,7 +21,7 @@ We are trying to characterize how CPI Systems and the teams that own them are or
 
 Our survey asks a series of questions about how software systems and teams are organized with respect to a fairly generic data processing workflow. We then ask several questions related to the various tools and technologies being used by the various teams maintaining CPI Systems. We conclude by asking a series of questions related to business outcomes of interest.
 
-## 	Why Did We Run This Survey?
+## 	Why Did We Run This Survey? {#sec-why-run-this-survey}
 
 In our experience, we've noticed that many teams who produce complicated analytics outputs struggle with managing system complexity.
 
@@ -59,6 +59,8 @@ We also borrow a number of ideas from @forsgren2018accelerate. Particularly, mul
 We believe that multiple ideas presented in @dehghani2022data are highly applicable to the CPI Systems under study. Specifically, we believe that the concept of [Data-as-a-Product](https://www.thoughtworks.com/en-ca/insights/articles/leveraging-data-as-a-product-a-strategic-imperative-for-business-leaders) (and teams organized around these Data Products) provides a useful framework for thinking about how these systems and teams interact with one another. We also contrast domain-oriented decentralized teams with centralized teams.
 
 Although we do not make specific references to it in our survey, we believe the Reproducible Analytical Pipeline (RAP) work by @RAPsite does a good job at explaining how teams can introduce relevant tools and practices to workloads oriented around data processing.
+
+Throughout this write up, we distinguish between software systems and IT professionals being **embedded in domain teams** versus being centralized **outside of domain teams**. Organizing system design around business domains is not a new idea in software engineering (see Domain Driven Design by @evans2004domain). However, we believe this distinction may not be well understood or formalized in the context of the Complex Analytical Systems described in @sec-why-run-this-survey, so we pay special attention to this distinction throughout this write up.
 
 ## How This Report Is Organized
 
