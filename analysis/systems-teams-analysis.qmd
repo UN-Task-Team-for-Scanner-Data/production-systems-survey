@@ -2,7 +2,6 @@
 
 Our first objective in this analysis is to articulate the kinds of team and system organizations we encountered in our survey. We start with an explanation of our methodology, followed by some notable findings.
 
-
 ```{r}
 #| echo: false
 #| warning: false
@@ -334,6 +333,95 @@ analyst_only_df = df[df$has_analyst_only_team,]
 other_mix_df = df[df$has_other_mix_team,]
 ```
 
+## Commonly Occurring System and Team Topologies
+
+We begin by sharing some commonly occurring system and team topologies that occurred in our responses.
+
+```{r}
+#| echo: false
+
+library(dplyr)
+
+# We want the same clusters every run so we can render same results from
+# the data.
+set.seed(1234)
+
+# Helpers.
+is_yes <- function(x) x == "Yes"
+
+as_steps_matrix <- function(x, rows) {
+  dn <- list(rows, c("Ingest", "Process", "Elementals", "Aggregate", "Finalize"))
+  list(matrix(!is.na(x), ncol = 5, byrow = TRUE, dimnames = dn))
+}
+
+# Turn Q3 into a logical matrix.
+crossings_Q3 <- df |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(c_across(sg1_ing:sg5_fin), paste0("System", 1:5)))
+
+# Find 3 cluseters.
+clusters <- crossings_Q3 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+# Partition the Q3 matrices by cluster.
+sys_cluster_split <- split(crossings_Q3$steps, clusters$cluster)
+```
+
+We perform k-means clustering with a cluster size of 3 on each respondent's answer the "system topology" part of the Representative System Group question[^8].
+
+We were not able to find any rule or explanation that perfectly split respondents into some number of clusters for this question.
+
+However, we were able to identify some high-level patterns that were consistent across the 3 groups. We use these patterns to characterize 3 archetypes that are explained below along with some illustrative examples from each cluster.
+
+[^8]: Due to the small sample size, we were hesitant to try and split the sample into more than 3 groups. While there are almost certainly more than 3 meaningful system topologies that describe CPI Production Systems, our concern was that using more than 3 clusters would lead to us picking up idiosyncrasies in this specific sample rather than more general patterns that are likely true in a more general setting.
+
+### One or more System Groups Span the Entire Flow of Change
+
+```{r}
+#| echo: false
+
+# Example of "monolith" cluster
+sys_cluster_split[[1]][[10]]
+```
+
+```{r}
+#| echo: false
+
+# Example of "monolith" cluster
+sys_cluster_split[[1]][[15]]
+```
+
+### There is exactly one "split point" between System Groups
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[3]][[2]]
+```
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[3]][[3]]
+```
+
+### There are two or more split points between system groups
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[2]][[6]]
+```
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[3]][[14]]
+```
+
 
 ## Assigning Architectures to Organizations
 
@@ -390,6 +478,41 @@ There are a couple of important points to note about Hybrid and Modular architec
 
 ## Assigning Team Types to Organizations
 
+```{r}
+#| echo: false
+
+library(dplyr)
+
+# We want the same clusters every run so we can render same results from
+# the data.
+set.seed(1234)
+
+# Helpers.
+is_yes <- function(x) x == "Yes"
+
+as_steps_matrix <- function(x, rows) {
+  dn <- list(rows, c("CIT", "DIT", "DA", "EA", "CON"))
+  list(matrix(!is.na(x), ncol = 5, byrow = TRUE, dimnames = dn))
+}
+
+# Turn Q3 into a logical matrix.
+crossings_Q3 <- df |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(c_across(sg1_cit:sg5_con), paste0("System", 1:5)))
+
+# Find 3 cluseters.
+clusters <- crossings_Q3 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+# Partition the Q3 matrices by cluster.
+team_cluster_split <- split(crossings_Q3$steps, clusters$cluster)
+```
+
+
+
 We assign each organization one or more of the following team types using the following definitions.
 
 - **Stream Aligned team**: A system group is maintained by domain-analysts, domain-IT, or both.
@@ -404,6 +527,7 @@ We assign each organization one or more of the following team types using the fo
 
 For example, an organization could have one system group maintained by a Stream Aligned team, and a second system group maintained by an IT-Only team[^7].
 
+
 ```{r}
 #| echo: false
 
@@ -412,7 +536,7 @@ num_nsos = nrow(df)
 num_teams = sum(df$has_stream_aligned_team) + sum(df$has_it_only_team) + sum(df$has_analyst_only_team)
 ```
 
-[^7]: The rationale for this decision is that we could not think of a sensible way to break ties. For example, if one system group is maintained by a Stream Aligned team and another is maintained by an IT-Only team, is the NSO more appropriately labelled as a Stream Aligned team or as an IT-Only team?
+[^7]: The rationale for this decision is that we could not think of a sensible way to break ties. For example, if one system group is maintained by a Stream Aligned team and another is maintained by an IT-Only team, is the NSO more appropriately labelled as a Stream Aligned team or as an IT-Only team? We take care while presenting results to make clear that some NSOs may be classified in more than one category if more than one team type is present in their representative system description.
 
 ## Are Certain Team Types Correlated with Certain Architectures?
 
@@ -429,3 +553,15 @@ The rationale for this similarity metric is that we care about what fraction of 
 
 team_arch_mat
 ```
+
+There are a few notable observations to point out in the above distribution[^10].
+
+1. IT-Only teams are more likely than average to be present in NSOs with Modular representative systems.
+
+2. Stream-Aligned teams are more likely to be present in NSOs with Monolithic representative systems compared to IT-Only teams.
+
+3. Other Mix teams were **much** more likely to be present in NSOs with Monolithic representative systems compared to all other team types[^11].
+
+[^10]: Here and throughout this report, we do not make any claims about the statistical significance of our results as we could not think of any straightforward or meaningful way to compute confidence intervals over the small sample of data we collected. Moreover, our goal with this report is **more descriptive than prescriptive**. We are aiming to describe the current state of CPI Production Systems and present notable differences that are worth investigating further, rather than claiming what **should** be done using the results of this survey alone.
+
+[^11]: It is important to note that a relatively small fraction of the sample contained Other Mix teams, so this result could be partly or entirely explained by a small number of outliers.
