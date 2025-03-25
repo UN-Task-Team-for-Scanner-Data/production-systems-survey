@@ -10,7 +10,6 @@ book:
     - intro.qmd
     - concepts.qmd
     - systems-teams-analysis.qmd
-    - systems-2.qmd
     - tools-and-technology.qmd
     - challenges.qmd
     - conclusions.qmd

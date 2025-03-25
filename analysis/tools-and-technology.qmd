@@ -1,8 +1,20 @@
 # Tools and Technologies {#sec-tools-tech}
 
+In this section, we look at various tools and technologies in use by NSOs.
+
+## Version Control System Usage {#sec-vcs}
+
+Complex Analytical Systems, such as the systems used in monthly CPI Production, often need to synchronize and integrate multiple versions of related code, data, and documentation. This is especially important for creating reproducible analytical pipelines (@RAPsite), or enabling multiple individuals to work concurrently on the same project.
+
+Version Control Systems (VCS) are tools that systematically manage changes in a codebase over time. At the time of writing, [Git](https://git-scm.com/) is by far the most popular software for this purpose, and platforms such as [Github](https://github.com/) and [GitLab](https://about.gitlab.com/) have built extensive functionality around projects managed with Git[^1].
+
+[^1]: It is worth mentioning that git-adjacent software such as [Data Version Control](https://dvc.org/) and [Git Large File Storage](https://git-lfs.com/) exists to extend the versioning capabilities of Git to files you wouldn't typically commit to a Git repository. However, this is a more advanced topic that we did not investigate in this survey.
+
+
 ```{r message = FALSE}
 #| echo: false
-#| 
+#| label: fig-comm-software
+#| fig-cap: VCS used by survey respondents
 
 library(dplyr)
 library(ggplot2)
@@ -33,6 +45,16 @@ df <- df |> rename(
   pm_share_excel=colnames(df)[148],
   pm_none=colnames(df)[149],
   pm_other=colnames(df)[150],
+  cs_warehouse=colnames(df)[173],
+  cs_sas=colnames(df)[174],
+  cs_stata=colnames(df)[175],
+  cs_matlab=colnames(df)[176],
+  cs_spss=colnames(df)[177],
+  cs_excel=colnames(df)[178],
+  cs_pbi=colnames(df)[179],
+  cs_access=colnames(df)[180],
+  cs_none=colnames(df)[181],
+  cs_other=colnames(df)[182]
 )
 
 # Version control
@@ -52,7 +74,83 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=VCS, y=Frequency)) + geom_bar(stat="identity", fill="#F1502F") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ggplot(dat, aes(x=VCS, y=Frequency)) + geom_bar(stat="identity", fill="#F1502F") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Version Control Systems Used")
+
+NUM_NONE_OR_FILE_NAMING_CONVENTION = sum(df$vc_none == "Yes" | df$vc_naming_convention == "Yes")
+
+GIT_OR_GITHUB = sum(df$vc_git == "Yes" | df$vc_github == "Yes")
+
+```
+
+@fig-vcs shows the VCS used by respondent NSOs.
+
+Surprisingly, the most common response by far was that the respondent did not use version control software at all for their CPI Production Systems. In fact, almost two thirds of the sample claims to use no VCS whatsoever or file-naming conventions[^2].
+
+Our hypothesis here is that (1) some commonly used file formats (e.g., Excel Workbooks) don't lend themselves easily to well-established version control tools like Git and (2) a lack of familiarity with VCS tools in general.
+
+Another interesting observation is that slightly less than one third of the sample uses Git and/or GitHub/GitLab[^3].
+
+A very small fraction of the sample indicated using other version control software such as Mercurial, Subversion, or built-in versioning capabilities of another tool/platform.
+
+Having both worked on non-trivial Complex Analytical Systems ourselves, we suspect that adopting industry standard VCS toolingap may greatly reduce the cognitive load for teams who are not currently using any VCS or are only using file-naming conventions to manage source code and documentation for Complex Analytical Systems[^4].
+
+[^2]: What we mean by file naming conventions is encoding the author, version, and date information into the names of multiple files as the primary system of revision control. E.g., `analysis_collin_v1.py`, `analysis_steve_v2.py`, `analysis_collin_v2_final_2025_03.py`, `analysis_steve_v2_final_FINAL_2025_04.py`, and so on.
+
+[^3]: We were surprised to find a small number of respondents indicated that they use Git but not a developer platform built around Git such as GitHub, GitLab, or BitBucket. We suspect that these individuals may work in an air-gapped network or similar situation without internet access and use Git locally without also using a tool like GitLab/GitHub.
+
+[^4]: We believe that most people working on CPI Production Systems have the aptitude to learn Git. However, we acknowledge that the learning curve for Git is non-trivial. Our recommendation to readers who are interested is to [learn the basics](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository) and immediately put this knowledge into practice in your day-to-day activities. Over time, versioning files with Git will become second nature.
+
+## Commercial Software
+
+The next question we asked was which commercial software (if any) is used in each respondent's CPI Production systems.
+
+```{r}
+#| echo: false
+#| label: fig-vcs
+#| fig-cap: VCS used by survey respondents
+
+
+# Version control
+dat <- data.frame(
+  Frequency = c(df$cs_warehouse, df$cs_sas, df$cs_stata, df$cs_matlab, df$cs_spss, df$cs_excel, df$cs_pbi, df$cs_access, df$cs_none, df$cs_other),
+  Software = c(
+    rep("Data Warehouse", each=nrow(df)),
+    rep("SAS", each=nrow(df)),
+    rep("Stata", each=nrow(df)),
+    rep("MATLAB", each=nrow(df)),
+    rep("SPSS", each=nrow(df)),
+    rep("Excel", each=nrow(df)),
+    rep("Power BI", each=nrow(df)),
+    rep("MS Access", each=nrow(df)),
+    rep("None", each=nrow(df)),
+    rep("Other", each=nrow(df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#1d6f42") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Commercial Software Used")
+```
+We were not overly surprised to learn that over two thirds of the respondents listed that Microsoft Excel was used in their CPI Production Systems.
+
+Microsoft Excel satisfies a number of use cases for beginner-friendly tabular data analysis, however, it is not an ideal tool for expressing business logic in Complex Analytical Systems[^5]. Some of the key reasons for this include:
+
+- Excel Workbooks are stored in a binary format rather than a plain text format, which doesn't integrate well with Version Control Systems.
+
+- There isn't a well-defined entrypoint to an Excel Workbook (i.e., you can't "run" an Excel workbook the same way you can "run" `python main.py`).
+
+- The business logic encoded into an Excel Workbook is often difficult to read and interpret for any non-trivial Workbook, making Excel Workbooks difficult to maintain as a unit of software.
+
+- Excel Workbooks encourage a high degree of coupling between business logic and data[^6].
+
+[^5]: Our criticism here applies to **all spreadsheet software**, not just Microsoft Excel. Our point is that spreadsheet workbooks are not an ideal unit of software for expressing business logic in Complex Analytical Systems.
+
+[^6]: In other words, you can't easily "reuse" a piece of business logic from someone else's Excel Workbook in the way that you can reuse a piece of source code.
+
+In a distant second to Microsoft Excel, we find SAS is the next most commonly used commercial product in CPI Production Systems.
+
+```{r}
+#| echo: false
 
 # Project Management
 dat <- data.frame(
@@ -70,9 +168,7 @@ dat <- data.frame(
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#0052CC") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-
 ```
-
 
 
 ```{r message = FALSE}
@@ -144,3 +240,5 @@ dat <- data.frame(
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
+
+

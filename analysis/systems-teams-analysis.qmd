@@ -562,6 +562,8 @@ There are a few notable observations to point out in the above distribution[^10]
 
 3. Other Mix teams were **much** more likely to be present in NSOs with Monolithic representative systems compared to all other team types[^11].
 
+Throughout the remainder of this report, we look at how various practices and outcomes are associated with the presence of each architecture type and team type.
+
 [^10]: Here and throughout this report, we do not make any claims about the statistical significance of our results as we could not think of any straightforward or meaningful way to compute confidence intervals over the small sample of data we collected. Moreover, our goal with this report is **more descriptive than prescriptive**. We are aiming to describe the current state of CPI Production Systems and present notable differences that are worth investigating further, rather than claiming what **should** be done using the results of this survey alone.
 
 [^11]: It is important to note that a relatively small fraction of the sample contained Other Mix teams, so this result could be partly or entirely explained by a small number of outliers.
