@@ -22,6 +22,322 @@ library(ggplot2)
 df <- read.csv("./data/results.csv")
 df <- df[df[,2] != "",]
 
+# Filter and rename columns used in the analysis for this page
+df <- df |> rename(
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
+)
+# df <- df[,67:116]
+
+# Fill NA values with zero
+# df[,67:116] <- 0
+
+systems_matrix <- function(row) {
+  q1 <- matrix(nrow=5, ncol=5)
+  q1[1,] <- as.numeric(obs[,67:71])
+  q1[2,] <- as.numeric(obs[,72:76])
+  q1[3,] <- as.numeric(obs[,77:81])
+  q1[4,] <- as.numeric(obs[,82:86])
+  q1[5,] <- as.numeric(obs[,87:91])
+  
+  q1[is.na(q1)] = 0
+  
+  q1
+}
+
+maintainer_matrix <- function(row) {
+  q2 <- matrix(nrow=5, ncol=5)
+  q2[1,] <- as.numeric(obs[,92:96])
+  q2[2,] <- as.numeric(obs[,97:101])
+  q2[3,] <- as.numeric(obs[,102:106])
+  q2[4,] <- as.numeric(obs[,107:111])
+  q2[5,] <- as.numeric(obs[,112:116])
+  
+  q2[is.na(q2)] = 0
+  
+  q2
+}
+
+similarity_metric <- function(a, b) {
+  num <- sum(a == TRUE & b == TRUE)
+  denom <- sum(b == TRUE)
+  num / denom
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
+
+df$has_monolith = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
+
+
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
+
+df$has_hybrid_arch = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
+
+df$has_modular = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Any organization that doesn't fit one of the 3 definitions above is excluded
+# because the answers are incomplete. Drop these records from the analysis
+df <- df[df$has_monolith | df$has_hybrid_arch | df$has_modular, ]
+
+# ---------------------
+# Add a column to indicate whether the organization has stream aligned teams
+# maintaining the representative system
+# ---------------------
+
+df$has_stream_aligned_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,3] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,3] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,3] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,3] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,3] == 1)
+  if (idx) {
+    df[i, "has_stream_aligned_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has IT-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_it_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,3] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,1] == 1) |
+         (maintainers[2,3] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,1] == 1) |
+         (maintainers[3,3] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,1] == 1) |
+         (maintainers[4,3] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,1] == 1) |
+         (maintainers[5,3] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,1] == 1)
+  if (idx) {
+    df[i, "has_it_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has analyst-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_analyst_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,2] == 0 & maintainers[1,5] == 0) & (maintainers[1,3] == 1 | maintainers[1,4] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,2] == 0 & maintainers[2,5] == 0) & (maintainers[2,3] == 1 | maintainers[2,4] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,2] == 0 & maintainers[3,5] == 0) & (maintainers[3,3] == 1 | maintainers[3,4] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,2] == 0 & maintainers[4,5] == 0) & (maintainers[4,3] == 1 | maintainers[4,4] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,2] == 0 & maintainers[5,5] == 0) & (maintainers[5,3] == 1 | maintainers[5,4] == 1)
+  if (idx) {
+    df[i, "has_analyst_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has "other" teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_other_mix_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # An "Other" mix is anything that's not stream aligned, IT-only, or analyst-only.
+  # Any organization that doesn't have any of the other team types is "other".
+  if (!df[i, "has_stream_aligned_team"] & !df[i, "has_it_only_team"] & !df[i, "has_analyst_only_team"]) {
+    df[i, "has_other_mix_team"] = TRUE
+  }
+}
+
+team_arch_mat <- matrix(nrow=5, ncol=3)
+
+# mono-stream
+team_arch_mat[1,1] <- similarity_metric(df$has_monolith, df$has_stream_aligned_team)
+# mono-it-only
+team_arch_mat[2,1] <- similarity_metric(df$has_monolith, df$has_it_only_team)
+# mono-analyst-only
+team_arch_mat[3,1] <- similarity_metric(df$has_monolith, df$has_analyst_only_team)
+# Other mix teams
+team_arch_mat[4,1] <- similarity_metric(df$has_monolith, df$has_other_mix_team)
+# Sample average (i.e., all teams)
+team_arch_mat[5,1] <- similarity_metric(df$has_monolith, rep(TRUE, nrow(df)))
+
+# hybrid-stream
+team_arch_mat[1,2] <- similarity_metric(df$has_hybrid_arch, df$has_stream_aligned_team)
+# hybrid-it-only
+team_arch_mat[2,2] <- similarity_metric(df$has_hybrid_arch, df$has_it_only_team)
+# hybrid-analyst-only
+team_arch_mat[3,2] <- similarity_metric(df$has_hybrid_arch, df$has_analyst_only_team)
+# Other mix teams
+team_arch_mat[4,2] <- similarity_metric(df$has_hybrid_arch, df$has_other_mix_team)
+# Sample average (i.e., all teams)
+team_arch_mat[5,2] <- similarity_metric(df$has_hybrid_arch, rep(TRUE, nrow(df)))
+
+# modular-stream
+team_arch_mat[1,3] <- similarity_metric(df$has_modular, df$has_stream_aligned_team)
+# modular-it-only
+team_arch_mat[2,3] <- similarity_metric(df$has_modular, df$has_it_only_team)
+# modular-analyst-only
+team_arch_mat[3,3] <- similarity_metric(df$has_modular, df$has_analyst_only_team)
+# Other mix teams
+team_arch_mat[4,3] <- similarity_metric(df$has_modular, df$has_other_mix_team)
+# Sample average (i.e., all teams)
+team_arch_mat[5,3] <- similarity_metric(df$has_modular, rep(TRUE, nrow(df)))
+
+
+rownames(team_arch_mat) <- c("Stream Aligned Team", "IT-Only Team", "Analyst-Only Team", "Other Mix", "Sample Average")
+colnames(team_arch_mat) <- c("Monolith", "Hybrid", "Modular")
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
+
 df <- df |> rename(
   use_open_source_pkg=colnames(df)[118],
   not_use_not_know=colnames(df)[120],
@@ -149,6 +465,16 @@ Microsoft Excel satisfies a number of use cases for beginner-friendly tabular da
 
 In a distant second to Microsoft Excel, we find SAS is the next most commonly used commercial product in CPI Production Systems.
 
+## Project Management Software
+
+We asked respondents which project management software they use to manage work done on their CPI Production Systems.
+
+The exact set of features provided by project management software differ depending on the specific software used, but in general, this kind of software is used to plan and coordinate tasks, manage timelines, and track progress on work items.
+
+We believe that using some purpose-built project management software for any non-trivial project is generally a good idea because it encourages a structure to the way projects are managed and it offers a way to reduce cognitive burden for project team members[^7].
+
+[^7]: Note that we are not advocating for any specific project management software product. Rather, we are encouraging the use of any purpose-built project management software to facilitate managing non-trivial projects.
+
 ```{r}
 #| echo: false
 
@@ -167,9 +493,32 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#0052CC") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#0052CC") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Project Management Software Used")
 ```
 
+```{r}
+#| echo: false
+
+NUM_EXCEL_WB = sum(df$pm_share_excel == "Yes")
+NUM_NONE = sum(df$pm_none == "Yes")
+NUM_SOMETHING_ELSE = sum(df$pm_gh_proj == "Yes" | df$pm_gitlab_issue == "Yes" | df$pm_jira == "Yes" | df$pm_other == "Yes")
+```
+
+The most common project management software reported was a shared Excel Workbook, with a bit less than half of respondents stating that they used this as their team's primary means of project management.
+
+Shared Excel Workbooks may be sufficient for keeping track of small tasks, but for any endeavour that requires managing code, data, and documentation changes across multiple individuals, this approach will lack a number of key features to facilitate the project management process.
+
+The second most cited answer was not using any project management software whatsoever, with almost one third of respondents indicating this answer.
+
+Given the complexity of CPI Production Systems, we were surprised to see so many individuals not using any project management software. For all but the simplest of initiatives, we believe there is significant value in adopting at least the basic features of some purpose-built project management software[^8].
+
+Finally, just over twenty percent of the sample reported using either GitHub Projects, GitLab Milestones, or Jira as their primary software for project management.
+
+[^8]: By "basic features", we're referring to capabilities such as task tracking, milestone tracking, and the ability to see which tasks each colleague is working on at any given time.
+
+## Programming Languages
+
+We asked respondents which programming languages are used to develop their CPI Production Systems. We found several observations noteworthy.
 
 ```{r message = FALSE}
 #| echo: false
@@ -196,6 +545,42 @@ df <- df |> rename(
   sql=colnames(df)[163],
   none=colnames(df)[164],
   other=colnames(df)[165]
+)
+
+modular_df <- modular_df |> rename(
+  python=colnames(modular_df)[151],
+  r=colnames(modular_df)[152],
+  julia=colnames(modular_df)[153],
+  scala=colnames(modular_df)[154],
+  java=colnames(modular_df)[155],
+  csharp=colnames(modular_df)[156],
+  corcpp=colnames(modular_df)[157],
+  vb=colnames(modular_df)[158],
+  vba=colnames(modular_df)[159],
+  sas=colnames(modular_df)[160],
+  stata=colnames(modular_df)[161],
+  spss=colnames(modular_df)[162],
+  sql=colnames(modular_df)[163],
+  none=colnames(modular_df)[164],
+  other=colnames(modular_df)[165]
+)
+
+monolith_df <- monolith_df |> rename(
+  python=colnames(monolith_df)[151],
+  r=colnames(monolith_df)[152],
+  julia=colnames(monolith_df)[153],
+  scala=colnames(monolith_df)[154],
+  java=colnames(monolith_df)[155],
+  csharp=colnames(monolith_df)[156],
+  corcpp=colnames(monolith_df)[157],
+  vb=colnames(monolith_df)[158],
+  vba=colnames(monolith_df)[159],
+  sas=colnames(monolith_df)[160],
+  stata=colnames(monolith_df)[161],
+  spss=colnames(monolith_df)[162],
+  sql=colnames(monolith_df)[163],
+  none=colnames(monolith_df)[164],
+  other=colnames(monolith_df)[165]
 )
 
 # Version control
@@ -238,7 +623,260 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Programming Languages Used")
+```
+
+```{r}
+#| echo: false
+
+NUM_SQL = sum(df$sql == "Yes")
+
+PYTHON_OR_R_OR_SAS = sum(df$python == "Yes" | df$r == "Yes" | df$sas == "No")
+PYTHON_OR_R_NOT_SAS = sum((df$python == "Yes" | df$r == "Yes") & df$sas == "No")
+
+NONE_LANGUAGE = sum(df$none == "Yes")
+```
+
+First, just under half of the respondents indicated that they use SQL in the development of their CPI Production Systems.
+
+We suspect this answer reflects the fact that SQL still remains a very popular choice of language for expressing tabular data manipulations, as well as the fact that many organizations reported using some kind of database management system (DBMS) in their CPI Production Systems. Our suspicion is that SQL is most commonly used in the ingestion and processing steps in the flow of change[^9].
+
+Second, we notice than more than ninety percent of the sample reported using **at least one of** Python, R, and SAS in their CPI Production Systems. Interestingly, less than one quarter of these users reported using Python and/or R but not SAS. In other words, it is quite common for SAS to be used **in conjunction with** Python and/or R rather than being used **instead of** Python and/or R.
+
+
+```{r}
+#| echo: false
+
+MONOLITH_LANG = sum(monolith_df$csharp == "Yes" | monolith_df$corcpp == "Yes" | monolith_df$java == "Yes" | monolith_df$vb == "Yes" | monolith_df$vba == "Yes")
+
+MONOLITH_R_SAS = sum(monolith_df$r == "Yes" | monolith_df$sas == "Yes")
+
+MODULAR_R_SAS = sum(modular_df$r == "Yes" | modular_df$sas == "Yes")
 ```
 
 
+Third, there are some differences in programming languages used between NSOs with monolithic representative systems and NSOs with modular representative systems.
+
+The most noteworthy observation is that Java, C#, C/C++, Visual Basic, and Visual Basic Applications (VBA) are somewhat commonly used by NSOs with monolithic representative systems (almost two thirds) and almost never used by NSOs with modular representative systems (less than one quarter).
+
+Additionally, we notice that slightly over one third of NSOs with monolithic representative systems report using R or SAS, while almost two thirds of NSOs with modular representative systems report using R or SAS.
+
+[^9]: To minimize response burden, we did not ask respondents to enumerate programming languages used by GSBPM step, so we cannot say for sure in which step(s) SQL is used.
+
+```{r}
+#| echo: false
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    monolith_df$python,
+    monolith_df$r,
+    monolith_df$julia,
+    monolith_df$scala,
+    monolith_df$java,
+    monolith_df$csharp,
+    monolith_df$corcpp,
+    monolith_df$vb,
+    monolith_df$vba,
+    monolith_df$sas,
+    monolith_df$stata,
+    monolith_df$spss,
+    monolith_df$sql,
+    monolith_df$none,
+    monolith_df$other
+  ),
+  Language = c(
+    rep("Python", each=nrow(monolith_df)),
+    rep("R", each=nrow(monolith_df)),
+    rep("Julia", each=nrow(monolith_df)),
+    rep("Scala", each=nrow(monolith_df)),
+    rep("Java", each=nrow(monolith_df)),
+    rep("C#", each=nrow(monolith_df)),
+    rep("C/C++", each=nrow(monolith_df)),
+    rep("Visual Basic", each=nrow(monolith_df)),
+    rep("Visual Basic Applications", each=nrow(monolith_df)),
+    rep("SAS", each=nrow(monolith_df)),
+    rep("Stata", each=nrow(monolith_df)),
+    rep("SPSS", each=nrow(monolith_df)),
+    rep("SQL", each=nrow(monolith_df)),
+    rep("None", each=nrow(monolith_df)),
+    rep("Other", each=nrow(monolith_df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Monolith] Programming Languages Used")
+```
+
+```{r}
+#| echo: false
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    modular_df$python,
+    modular_df$r,
+    modular_df$julia,
+    modular_df$scala,
+    modular_df$java,
+    modular_df$csharp,
+    modular_df$corcpp,
+    modular_df$vb,
+    modular_df$vba,
+    modular_df$sas,
+    modular_df$stata,
+    modular_df$spss,
+    modular_df$sql,
+    modular_df$none,
+    modular_df$other
+  ),
+  Language = c(
+    rep("Python", each=nrow(modular_df)),
+    rep("R", each=nrow(modular_df)),
+    rep("Julia", each=nrow(modular_df)),
+    rep("Scala", each=nrow(modular_df)),
+    rep("Java", each=nrow(modular_df)),
+    rep("C#", each=nrow(modular_df)),
+    rep("C/C++", each=nrow(modular_df)),
+    rep("Visual Basic", each=nrow(modular_df)),
+    rep("Visual Basic Applications", each=nrow(modular_df)),
+    rep("SAS", each=nrow(modular_df)),
+    rep("Stata", each=nrow(modular_df)),
+    rep("SPSS", each=nrow(modular_df)),
+    rep("SQL", each=nrow(modular_df)),
+    rep("None", each=nrow(modular_df)),
+    rep("Other", each=nrow(modular_df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Modular] Programming Languages Used")
+```
+
+## Data Storage Tools
+
+We conclude the Tools and Technology portion of the survey by asking which data storage tools are in use by respondents in their CPI Production Systems.
+
+We were surprised by the following findings.
+
+1. A very small percentage of the respondents reported using analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/) in their CPI Production Systems. There is a small learning curve associated with using these file formats, but they offer many benefits such as columnar storage on disk, data types supported natively by the file format, and a significantly smaller storage footprint due to columnar data compression strategies[^10].
+
+2. There is an approximately equal split between the usage of Database Management Systems (DBMS) and file system storage, which is true across both NSOs with modular representative systems and NSOs with monolithic representative systems.
+
+3. The small number of respondents who reported using something in addition to DBMS or filesystem storage all belonged to NSOs with modular representative systems.
+
+[^10]: While there is a learning curve for some of the concepts involved, reading and writing to analytics-optimized file formats like Parquet is very easy due to the existence of many well-documented third party packages. For example, Python's Pandas can [read parquet files directly](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html) as long as an engine like `pyarrow` or `fastparquet` is also installed.
+
+```{r message = FALSE}
+#| echo: false
+
+library(dplyr)
+library(ggplot2)
+
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  obj_stor=colnames(df)[183],
+  dbms=colnames(df)[184],
+  olap_fmt=colnames(df)[185],
+  fs=colnames(df)[186],
+  other_ds=colnames(df)[187]
+)
+
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    df$obj_stor,
+    df$dbms,
+    df$olap_fmt,
+    df$fs,
+    df$other_ds
+  ),
+  Storage = c(
+    rep("Object Storage", each=nrow(df)),
+    rep("DBMS", each=nrow(df)),
+    rep("Analytics File Format", each=nrow(df)),
+    rep("Filesystem", each=nrow(df)),
+    rep("Other", each=nrow(df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Storage Systems Used")
+```
+
+```{r message = FALSE}
+#| echo: false
+
+library(dplyr)
+library(ggplot2)
+
+monolith_df <- monolith_df |> rename(
+  obj_stor=colnames(monolith_df)[183],
+  dbms=colnames(monolith_df)[184],
+  olap_fmt=colnames(monolith_df)[185],
+  fs=colnames(monolith_df)[186],
+  other_ds=colnames(monolith_df)[187]
+)
+
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    monolith_df$obj_stor,
+    monolith_df$dbms,
+    monolith_df$olap_fmt,
+    monolith_df$fs,
+    monolith_df$other_ds
+  ),
+  Storage = c(
+    rep("Object Storage", each=nrow(monolith_df)),
+    rep("DBMS", each=nrow(monolith_df)),
+    rep("Analytics File Format", each=nrow(monolith_df)),
+    rep("Filesystem", each=nrow(monolith_df)),
+    rep("Other", each=nrow(monolith_df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Monolith] Storage Systems Used")
+```
+
+```{r message = FALSE}
+#| echo: false
+
+library(dplyr)
+library(ggplot2)
+
+modular_df <- modular_df |> rename(
+  obj_stor=colnames(modular_df)[183],
+  dbms=colnames(modular_df)[184],
+  olap_fmt=colnames(modular_df)[185],
+  fs=colnames(modular_df)[186],
+  other_ds=colnames(modular_df)[187]
+)
+
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    modular_df$obj_stor,
+    modular_df$dbms,
+    modular_df$olap_fmt,
+    modular_df$fs,
+    modular_df$other_ds
+  ),
+  Storage = c(
+    rep("Object Storage", each=nrow(modular_df)),
+    rep("DBMS", each=nrow(modular_df)),
+    rep("Analytics File Format", each=nrow(modular_df)),
+    rep("Filesystem", each=nrow(modular_df)),
+    rep("Other", each=nrow(modular_df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Modular] Storage Systems Used")
+```
