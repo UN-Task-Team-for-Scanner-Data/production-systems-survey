@@ -1,4 +1,4 @@
-# Systems and Teams Analysis
+# Systems and Teams Analysis {#sec-sys-teams}
 
 Our first objective in this analysis is to articulate the kinds of team and system organizations we encountered in our survey. We start with an explanation of our methodology, followed by some notable findings.
 
