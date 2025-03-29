@@ -60,7 +60,7 @@ We believe that multiple ideas presented in @dehghani2022data are highly applica
 
 Although we do not make specific references to it in our survey, we believe the Reproducible Analytical Pipeline (RAP) work by @RAPsite does a good job at explaining how teams can introduce relevant tools and practices to workloads oriented around data processing.
 
-Throughout this write up, we distinguish between software systems and IT professionals being **embedded in domain teams** versus being centralized **outside of domain teams**. Organizing system design around business domains is not a new idea in software engineering (see Domain Driven Design by @evans2004domain). However, we believe this distinction may not be well understood or formalized in the context of the Complex Analytical Systems described in @sec-why-run-this-survey, so we pay special attention to this distinction throughout this write up.
+Throughout this write up, we distinguish between software systems and IT professionals being **embedded in domain teams** versus being centralized **outside of domain teams**. Organizing software system design around business domains is not a new idea in software engineering (see Domain Driven Design by @evans2004domain, and more recently Software Architecture: The Hard Parts by @ford2021software and Fundamentals of Software Architecture by @richards2020fundamentals). However, we believe this distinction may not be well understood or formalized in the context of the Complex Analytical Systems described in @sec-why-run-this-survey, so we pay special attention to this distinction throughout this write up.
 
 ## How This Report Is Organized
 
