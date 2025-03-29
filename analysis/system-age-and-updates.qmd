@@ -350,3 +350,72 @@ Our hypothesis for this observation is that teams comprised of individuals with 
 
 ## System Update Frequency
 
+In this section, we ask respondents how often the majority of CPI Production Systems are usually updated.
+
+Unless software is being written in a domain where (1) the problem is "solved" (i.e., requirements never change) and/or (2) the software's correctness can be proved mathematically, routinely updating systems (e.g., fixing errors in source code or enhancing the system with new features) is a practical reality of software development.
+
+Given this practical reality, updating systems at a somewhat high frequency is generally considered to be good practice [^4].
+
+We share below some observations on how frequently respondents update their systems.
+
+[^4]: N.B., having the **ability** to update systems at a high frequency is **unambiguously** good practice.
+
+::: {.callout-note}
+
+For the purposes of this section, we are referring to **non-trivial updates** that affect the functionality of the system.
+
+**Example of non-trivial updates**
+
+- A new price index calculation was introduced to an Excel Workbook used in the system.
+
+- A bug affecting outlier detection in the system was fixed.
+
+- The system's data ingestion code was modified to enable the ingestion of a new upstream data source.
+
+**Example of trivial updates**
+
+- The operating system on the machine running a system was updated.
+
+- Corporate IT has asked everyone to upgrade from Python 3.10 to Python 3.11, which didn't require any updates to the system's codebase or dependencies.
+
+- A new version of Microsoft Excel was made available through your organization's software catalogue, and one of your systems requires an Excel Workbook to run.
+
+:::
+
+NSOs with monolithic representative systems are much more likely to **never update systems** compared to NSOs with Modular representative systems.
+
+We suspect this is once again related to the fact that monolithic systems tend to be complex and involve many inter-connected components. In the most extreme case, it can be too risky to update these systems due to the possibility of a change in one part of a system causing unintended consequences in another (seemingly unrelated) part of the system.
+
+Modular systems, in contrast, tend to be easier to reason about, and involve a lower degree of coupling between system components that are unrelated. Hence, making a change to a system component is less likely to lead to an unintended consequence elsewhere in the system.
+
+More generally, across all respondents, almost one fifth of respondents indicated that the majority of their systems are **never updated**. We are very surprised by this finding. Given the impetus to incorporate alternative data sources in CPI Production Systems, we believe it would be highly undesirable to have CPI Production Systems that are never updated.
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Update Frequency Distribution (Overall)
+#| - Update Frequency Distribution (Monolith)
+#| - Update Frequency Distribution (Modular)
+
+# Order of the factor variable
+update_levels = c("Daily", "Weekly", "Monthly", "Quarterly", "Every six months", "Once per year", "Less than once per year", "Never updated", "No answer")
+
+overall_dat = make_update_freq_table(df)
+overall_dat = factor(overall_dat, levels=update_levels)
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Overall)")
+
+monolith_dat = make_update_freq_table(monolith_df)
+monolith_dat = factor(monolith_dat, levels=update_levels)
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Monolith)")
+
+modular_dat = make_update_freq_table(modular_df)
+modular_dat = factor(modular_dat, levels=update_levels)
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Modular)")
+
+OVERALL_NEVER_UPDATE = sum(overall_dat == "Never updated")
+OVERALL_ROW_COUNT = length(overall_dat)  # Note that some respondents left this one blank, so the row count doesn't match the overall number of people who submitted the survey.
+```
