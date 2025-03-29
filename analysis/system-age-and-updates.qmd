@@ -1,0 +1,352 @@
+# System Age and Updates {#sec-age}
+
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  age_ing=colnames(df)[188],
+  age_proc=colnames(df)[189],
+  age_elem=colnames(df)[190],
+  age_agg=colnames(df)[191],
+  age_fin=colnames(df)[192],
+  share_cpi_sys=colnames(df)[193],
+  update_ing=colnames(df)[194],
+  update_proc=colnames(df)[195],
+  update_elem=colnames(df)[196],
+  update_agg=colnames(df)[197],
+  update_fin=colnames(df)[198]
+)
+
+systems_matrix <- function(row) {
+  q1 <- matrix(nrow=5, ncol=5)
+  q1[1,] <- as.numeric(obs[,67:71])
+  q1[2,] <- as.numeric(obs[,72:76])
+  q1[3,] <- as.numeric(obs[,77:81])
+  q1[4,] <- as.numeric(obs[,82:86])
+  q1[5,] <- as.numeric(obs[,87:91])
+  
+  q1[is.na(q1)] = 0
+  
+  q1
+}
+
+maintainer_matrix <- function(row) {
+  q2 <- matrix(nrow=5, ncol=5)
+  q2[1,] <- as.numeric(obs[,92:96])
+  q2[2,] <- as.numeric(obs[,97:101])
+  q2[3,] <- as.numeric(obs[,102:106])
+  q2[4,] <- as.numeric(obs[,107:111])
+  q2[5,] <- as.numeric(obs[,112:116])
+  
+  q2[is.na(q2)] = 0
+  
+  q2
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
+
+df$has_monolith = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
+
+
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
+
+df$has_hybrid_arch = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
+
+df$has_modular = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Any organization that doesn't fit one of the 3 definitions above is excluded
+# because the answers are incomplete. Drop these records from the analysis
+df <- df[df$has_monolith | df$has_hybrid_arch | df$has_modular, ]
+
+# ---------------------
+# Add a column to indicate whether the organization has stream aligned teams
+# maintaining the representative system
+# ---------------------
+
+df$has_stream_aligned_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,3] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,3] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,3] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,3] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,3] == 1)
+  if (idx) {
+    df[i, "has_stream_aligned_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has IT-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_it_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,3] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,1] == 1) |
+         (maintainers[2,3] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,1] == 1) |
+         (maintainers[3,3] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,1] == 1) |
+         (maintainers[4,3] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,1] == 1) |
+         (maintainers[5,3] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,1] == 1)
+  if (idx) {
+    df[i, "has_it_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has analyst-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_analyst_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,2] == 0 & maintainers[1,5] == 0) & (maintainers[1,3] == 1 | maintainers[1,4] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,2] == 0 & maintainers[2,5] == 0) & (maintainers[2,3] == 1 | maintainers[2,4] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,2] == 0 & maintainers[3,5] == 0) & (maintainers[3,3] == 1 | maintainers[3,4] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,2] == 0 & maintainers[4,5] == 0) & (maintainers[4,3] == 1 | maintainers[4,4] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,2] == 0 & maintainers[5,5] == 0) & (maintainers[5,3] == 1 | maintainers[5,4] == 1)
+  if (idx) {
+    df[i, "has_analyst_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has "other" teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_other_mix_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # An "Other" mix is anything that's not stream aligned, IT-only, or analyst-only.
+  # Any organization that doesn't have any of the other team types is "other".
+  if (!df[i, "has_stream_aligned_team"] & !df[i, "has_it_only_team"] & !df[i, "has_analyst_only_team"]) {
+    df[i, "has_other_mix_team"] = TRUE
+  }
+}
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+make_age_table <- function(df) {
+    factor_df = as.data.frame(lapply(df[, c('age_ing', "age_proc", 'age_elem', 'age_agg', 'age_fin')], factor, levels=age_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+make_update_freq_table <- function(df) {
+      factor_df = as.data.frame(lapply(df[, c('update_ing', "update_proc", 'update_elem', 'update_agg', 'update_fin')], factor, levels=update_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
+
+# Order of the factor variable
+age_levels = c("<1 year", "2-5 years", "6-10 years", "11-20 years", ">20 years", "Don't know", "No answer")
+```
+## System Age
+
+In this question, we aim to understand for how long the **majority** of CPI Production Systems at NSOs have been in operation.
+
+In the context of this question, a system could be long-lived because (1) it was built in an extensible fashion and has been easy to update and maintain over a long time period, (2) the requirements of the system have changed very little over a long time period, or (3) every component of the system has been replaced at some point without ever doing a full "system rewrite" (see [Theseus's Paradox](https://en.wikipedia.org/wiki/Ship_of_Theseus)).
+
+Therefore, without more information about the maintenance history of these systems, we cannot say whether older systems are "good" or "bad". Nevertheless, it is interesting to understand how old the typical CPI Production System is.
+
+We share some notable observations and explanations below.
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - System Age Distribution (Entire Sample)
+#| - System Age Distribution (Monolith)
+#| - System Age Distribution (Modular)
+
+
+overall_dat = make_age_table(df)
+
+overall_dat = factor(overall_dat, levels=age_levels)
+
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Overall)")
+
+monolith_dat = make_age_table(monolith_df)
+
+monolith_dat = factor(monolith_dat, levels=age_levels)
+
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Monolith)")
+
+modular_dat = make_age_table(modular_df)
+
+modular_dat = factor(modular_dat, levels=age_levels)
+
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Modular)")
+```
+
+The system age distribution for NSOs with modular representative systems is approximately uniform, while NSOs with monolithic representative systems are more likely to report that the majority of their systems are between 6-10 years old, and less likely to report that the majority of their systems are more than 20 years old.
+
+One possible explanation for this observation is that monolithic systems are more likely to reach a level of complexity where it becomes too difficult to reliably make changes to the system due to a high degree of coupling (inter-dependency) between components[^1]. If this is true, it could be the case that relatively few monolithic systems reach an age greater than 20 years before a complete system rewrite is necessary.
+
+[^1]: Monolithic architectures are not guaranteed to result in highly coupled systems. However, it requires considerable effort, skill, and knowledge of software architecture patterns to ensure monolithic architectures remain loosely coupled over a long period of time (@ford2021software).
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - System Age Distribution (Stream Aligned)
+#| - System Age Distribution (IT-Only)
+#| - System Age Distribution (Analyst-Only)
+#| - System Age Distribution (Other Mix)
+
+stream_aligned_dat = make_age_table(stream_aligned_df)
+stream_aligned_dat = factor(stream_aligned_dat, levels=age_levels)
+ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Stream Aligned)")
+
+it_only_dat = make_age_table(it_only_df)
+it_only_dat = factor(it_only_dat, levels=age_levels)
+ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (IT-Only)")
+
+analyst_only_dat = make_age_table(analyst_only_df)
+analyst_only_dat = factor(analyst_only_dat, levels=age_levels)
+ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Analyst-Only)")
+
+other_mix_dat = make_age_table(other_mix_df)
+other_mix_dat = factor(other_mix_dat, levels=age_levels)
+ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Other Mix)")
+
+
+NUM_OTHER_MIX_WITH_MONOLITH <- sum(other_mix_df[, c("has_monolith")])
+```
+
+NSOs with IT-Only teams appear relatively less likely to have the majority of systems be less than 20 years old, compared to their Analyst-Only and Stream-Aligned counterparts. One possible explanation is that IT-Only teams are more likely to have the technical skills to perform a full system rewrite when it becomes necessary, although we don't have sufficient data to say for sure.
+
+Another noteworthy observation is that NSOs with Other Mix teams (see @sec-sys-teams) are most likely to have the majority of systems be between 6-10 years old. It is noteworthy that most of the NSOs with Other Mix teams also have Monolithic representative systems, so there is a high degree of overlap between Other Mix teams and Monolithic representative systems.
+
+Our hypothesis for this observation is that teams comprised of individuals with little shared domain context (e.g., a team with individuals from Corporate IT as well as Domain Analysts) are more likely to produce overly complicated and tightly inter-connected systems that are difficult to change[^2]. After 6-10 years, these systems become so difficult to maintain that it becomes necessary to undergo a full system rewrite[^3].
+
+[^3]: This hypothesis is consistent with our professional experience and prior knowledge in software architecture (e.g., @evans2004domain, @ford2021software, @richards2020fundamentals). However, it is important to note that this particular observation is made on a relatively small subset of our survey data, so it could be an anomaly.
+
+[^2]: In our experience, these systems become overly complicated because of the need to introduce new abstractions to bridge the lack of shared context. These abstractions aren't necessary when all parties involved have a common understanding of the domain problem.
+
+## System Update Frequency
+
