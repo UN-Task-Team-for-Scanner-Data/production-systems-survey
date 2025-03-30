@@ -13,6 +13,8 @@ book:
     - tools-and-technology.qmd
     - system-age-and-updates.qmd
     - number-of-individuals.qmd
+    - change-lead-times.qmd
+    - alternative-data.qmd
     - challenges.qmd
     - conclusions.qmd
     - references.qmd
