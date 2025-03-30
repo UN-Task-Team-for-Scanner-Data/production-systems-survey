@@ -526,8 +526,8 @@ We asked respondents which programming languages are used to develop their CPI P
 library(dplyr)
 library(ggplot2)
 
-df <- read.csv("./data/results.csv")
-df <- df[df[,2] != "",]
+# df <- read.csv("./data/results.csv")
+# df <- df[df[,2] != "",]
 
 df <- df |> rename(
   python=colnames(df)[151],
@@ -769,12 +769,20 @@ We were surprised by the following findings.
 
 ```{r message = FALSE}
 #| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Choice of Storage (Overall)
+#| - Choice of Storage (Monolith)
+#| - Choice of Storage (Hybrid)
+#| - Choice of Storage (Modular)
 
 library(dplyr)
 library(ggplot2)
 
-df <- read.csv("./data/results.csv")
-df <- df[df[,2] != "",]
+# df <- read.csv("./data/results.csv")
+# df <- df[df[,2] != "",]
 
 df <- df |> rename(
   obj_stor=colnames(df)[183],
@@ -805,13 +813,6 @@ dat <- data.frame(
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Storage Systems Used")
-```
-
-```{r message = FALSE}
-#| echo: false
-
-library(dplyr)
-library(ggplot2)
 
 monolith_df <- monolith_df |> rename(
   obj_stor=colnames(monolith_df)[183],
@@ -842,13 +843,39 @@ dat <- data.frame(
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Monolith] Storage Systems Used")
-```
 
-```{r message = FALSE}
-#| echo: false
 
-library(dplyr)
-library(ggplot2)
+hybrid_df <- hybrid_df |> rename(
+  obj_stor=colnames(hybrid_df)[183],
+  dbms=colnames(hybrid_df)[184],
+  olap_fmt=colnames(hybrid_df)[185],
+  fs=colnames(hybrid_df)[186],
+  other_ds=colnames(hybrid_df)[187]
+)
+
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    hybrid_df$obj_stor,
+    hybrid_df$dbms,
+    hybrid_df$olap_fmt,
+    hybrid_df$fs,
+    hybrid_df$other_ds
+  ),
+  Storage = c(
+    rep("Object Storage", each=nrow(hybrid_df)),
+    rep("DBMS", each=nrow(hybrid_df)),
+    rep("Analytics File Format", each=nrow(hybrid_df)),
+    rep("Filesystem", each=nrow(hybrid_df)),
+    rep("Other", each=nrow(hybrid_df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Hybrid] Storage Systems Used")
+
+
 
 modular_df <- modular_df |> rename(
   obj_stor=colnames(modular_df)[183],
@@ -879,4 +906,5 @@ dat <- data.frame(
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Modular] Storage Systems Used")
+
 ```
