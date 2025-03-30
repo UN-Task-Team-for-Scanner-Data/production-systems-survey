@@ -351,7 +351,7 @@ Our hypothesis for this observation is that teams comprised of individuals with 
 
 [^3]: This hypothesis is consistent with our professional experience and prior knowledge in software architecture (e.g., @evans2004domain, @ford2021software, @richards2020fundamentals). However, it is important to note that this particular observation is made on a relatively small subset of our survey data, so it could be an anomaly.
 
-[^2]: In our experience, these systems become overly complicated because of the need to introduce new abstractions to bridge the lack of shared context. These abstractions aren't necessary when all parties involved have a common understanding of the domain problem.
+[^2]: In our experience, these systems become overly complicated because of the need to introduce new abstractions to bridge the lack of shared domain context. These abstractions aren't necessary when all parties involved have a common understanding of the domain problem.
 
 ## System Update Frequency
 
