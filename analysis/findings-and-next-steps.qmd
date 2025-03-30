@@ -1,0 +1,14 @@
+# Conclusion {#sec-findings}
+
+As far as we know, this is the first survey to investigate the current state of CPI Production Systems at National Statistics Agencies (NSO)s around the world. By introducing a generic set of concepts around system and team structure, we were able to derive some meaningful information about how CPI Production Systems and the teams that maintain them are organized. We were also able to characterize several important aspects of the teams maintaining these systems, including the tools and technologies they use, the age and update frequency of typical systems, number of collaborators, lead time, and challenges faced.
+
+## Bottom Line Up Front
+
+
+
+## Next Steps
+
+
+## Future Work
+
+While our survey has focused on CPI Production Systems, we believe that our findings have a high degree of external validity for other Complex Analytical Systems.
