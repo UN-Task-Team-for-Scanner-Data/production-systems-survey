@@ -27,7 +27,7 @@ In our experience, we've noticed that many teams who produce complicated analyti
 
 While these teams are often comprised of individuals with strong analytical skills and significant domain knowledge, they often do not have training in software engineering. Therefore, they are often not exposed to the significant body of knowledge that has been developed over decades to deal with the kinds of system complexity problems that software developers are routinely exposed to.
 
-Moreover, the nature of these complex analytical systems differ from traditional software systems in a number of important aspects[^3]:
+Moreover, the nature of these Complex Analytical Systems differ from traditional software systems in a number of important aspects[^3]:
 
 | Complex Analytical Systems | Typical Software System |
 | -------------------------- | ----------------------- |
@@ -38,15 +38,13 @@ Moreover, the nature of these complex analytical systems differ from traditional
 | Batch workloads that are run manually (or semi-manually). | System running continuously in an event loop waiting for user input. |
 | Operate on a large fraction of an entire table quickly. | Search for one specific record in a large table quickly. |
 
-
-Due to differences like those mentioned above, there is not a perfect mapping between best practices from the software engineering world and pain points currently experienced by teams maintaining Complex Analytical Systems. However, there are obviously some best practices from software engineering that are highly appropriate to solve some of problems faced by Complex Analytical Systems.
+Due to differences like those mentioned above, there is not a perfect mapping between best practices from the software engineering world and pain points currently experienced by teams maintaining Complex Analytical Systems. However, there are certainly some best practices from software engineering that are highly appropriate to solve some of the problems faced in the development and maintenance of Complex Analytical Systems.
 
 Therefore, our hope with this survey is to begin bridging the gap between well-understood industry best practices from the world of software engineering, and those aspects of Complex Analytical Systems that could benefit from these best practices.
 
 More specifically, we are trying to understand the current state of Complex Analytical Systems and the teams who maintain them, using CPI Production Systems as a representative use case. Our hope is that the insights gained and the survey methodology may be valuable for other Complex Analytical Systems facing similar challenges.
 
-[^3]: We are not implying that all "other" software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would typically develop and maintain.
-
+[^3]: We are not implying that all "typical" software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would typically develop and maintain.
 
 ## Related Work
 
