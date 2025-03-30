@@ -1,5 +1,6 @@
 # System Age and Updates {#sec-age}
 
+The next section of the survey asks questions about (1) the age of the majority of CPI Production Systems and (2) the update frequency of the majority of CPI Production Systems.
 
 ```{r}
 #| echo: false
@@ -263,6 +264,10 @@ age_levels = c("<1 year", "2-5 years", "6-10 years", "11-20 years", ">20 years",
 ```
 ## System Age
 
+Respondents are presented with the following question.
+
+![Age of Systems Survey Question](./diagrams/cpi-systems-age-question.png)
+
 In this question, we aim to understand for how long the **majority** of CPI Production Systems at NSOs have been in operation.
 
 In the context of this question, a system could be long-lived because (1) it was built in an extensible fashion and has been easy to update and maintain over a long time period, (2) the requirements of the system have changed very little over a long time period, or (3) every component of the system has been replaced at some point without ever doing a full "system rewrite" (see [Theseus's Paradox](https://en.wikipedia.org/wiki/Ship_of_Theseus)).
@@ -301,7 +306,7 @@ modular_dat = factor(modular_dat, levels=age_levels)
 ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Modular)")
 ```
 
-The system age distribution for NSOs with modular representative systems is approximately uniform, while NSOs with monolithic representative systems are more likely to report that the majority of their systems are between 6-10 years old, and less likely to report that the majority of their systems are more than 20 years old.
+The system age distribution for NSOs with modular representative systems is approximately uniform, while NSOs with monolithic representative systems are more likely to report that the majority of their systems are between 6-20 years old, and less likely to report that the majority of their systems are more than 20 years old.
 
 One possible explanation for this observation is that monolithic systems are more likely to reach a level of complexity where it becomes too difficult to reliably make changes to the system due to a high degree of coupling (inter-dependency) between components[^1]. If this is true, it could be the case that relatively few monolithic systems reach an age greater than 20 years before a complete system rewrite is necessary.
 
@@ -350,6 +355,10 @@ Our hypothesis for this observation is that teams comprised of individuals with 
 
 ## System Update Frequency
 
+Respondents are presented with the following question.
+
+![Age of Systems Survey Question](./diagrams/cpi-systems-update-frequency-question.png)
+
 In this section, we ask respondents how often the majority of CPI Production Systems are usually updated.
 
 Unless software is being written in a domain where (1) the problem is "solved" (i.e., requirements never change) and/or (2) the software's correctness can be proved mathematically, routinely updating systems (e.g., fixing errors in source code or enhancing the system with new features) is a practical reality of software development.
@@ -359,36 +368,6 @@ Given this practical reality, updating systems at a somewhat high frequency is g
 We share below some observations on how frequently respondents update their systems.
 
 [^4]: N.B., having the **ability** to update systems at a high frequency is **unambiguously** good practice.
-
-::: {.callout-note}
-
-For the purposes of this section, we are referring to **non-trivial updates** that affect the functionality of the system.
-
-**Example of non-trivial updates**
-
-- A new price index calculation was introduced to an Excel Workbook used in the system.
-
-- A bug affecting outlier detection in the system was fixed.
-
-- The system's data ingestion code was modified to enable the ingestion of a new upstream data source.
-
-**Example of trivial updates**
-
-- The operating system on the machine running a system was updated.
-
-- Corporate IT has asked everyone to upgrade from Python 3.10 to Python 3.11, which didn't require any updates to the system's codebase or dependencies.
-
-- A new version of Microsoft Excel was made available through your organization's software catalogue, and one of your systems requires an Excel Workbook to run.
-
-:::
-
-NSOs with monolithic representative systems are much more likely to **never update systems** compared to NSOs with Modular representative systems.
-
-We suspect this is once again related to the fact that monolithic systems tend to be complex and involve many inter-connected components. In the most extreme case, it can be too risky to update these systems due to the possibility of a change in one part of a system causing unintended consequences in another (seemingly unrelated) part of the system.
-
-Modular systems, in contrast, tend to be easier to reason about, and involve a lower degree of coupling between system components that are unrelated. Hence, making a change to a system component is less likely to lead to an unintended consequence elsewhere in the system.
-
-More generally, across all respondents, almost one fifth of respondents indicated that the majority of their systems are **never updated**. We are very surprised by this finding. Given the impetus to incorporate alternative data sources in CPI Production Systems, we believe it would be highly undesirable to have CPI Production Systems that are never updated.
 
 
 ```{r}
@@ -419,3 +398,46 @@ ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") 
 OVERALL_NEVER_UPDATE = sum(overall_dat == "Never updated")
 OVERALL_ROW_COUNT = length(overall_dat)  # Note that some respondents left this one blank, so the row count doesn't match the overall number of people who submitted the survey.
 ```
+
+NSOs with monolithic representative systems are much more likely to **never update systems** compared to NSOs with Modular representative systems.
+
+We suspect this is once again related to the fact that monolithic systems tend to be complex and involve many inter-connected components. In the most extreme case, it can be too risky to update these systems due to the possibility of a change in one part of a system causing unintended consequences in another (seemingly unrelated) part of the system.
+
+Modular systems, in contrast, tend to be easier to reason about, and involve a lower degree of coupling between system components that are unrelated. Hence, making a change to a system component is less likely to lead to an unintended consequence elsewhere in the system.
+
+Across all respondents, almost one fifth of respondents indicated that the majority of their systems are **never updated**. We are very surprised by this finding.
+
+More generally, the distribution of update frequencies seems to be left skewed, with a majority of NSOs having the majority of systems updated once per year or less, or not updated at all.
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Update Frequency Distribution (Stream-Aligned)
+#| - Update Frequency Distribution (IT-Only)
+#| - Update Frequency Distribution (Analyst-Only)
+#| - Update Frequency Distribution (Other Mix)
+
+stream_aligned_dat = make_update_freq_table(stream_aligned_df)
+stream_aligned_dat = factor(stream_aligned_dat, levels=update_levels)
+ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Stream-Aligned)")
+
+it_only_dat = make_update_freq_table(it_only_df)
+it_only_dat = factor(it_only_dat, levels=update_levels)
+ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (IT-Only)")
+
+analyst_only_dat = make_update_freq_table(analyst_only_df)
+analyst_only_dat = factor(analyst_only_dat, levels=update_levels)
+ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Analyst-Only)")
+
+other_mix_dat = make_update_freq_table(other_mix_df)
+other_mix_dat = factor(other_mix_dat, levels=update_levels)
+ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Other Mix)")
+```
+
+When looking at the system age distributions broken down by team type, we do not see much difference from the overall trend. One noteworthy exception to this is the Other Mix team category, which seems to have a relatively high proportion of cases updated less than once per year or not at all[^5].
+
+[^5]: Once again, we note the small sample size caveat of NSOs containing Other Mix teams.
