@@ -1,0 +1,393 @@
+# Number of People {#sec-num-ppl}
+
+In this section of the survey, we are interested in how many individuals need to participate in (1) small system changes and (2) large system changes.
+
+The rationale behind asking this question is to get a sense for how much communication overhead is required to make changes to CPI Production Systems. We assume that the requirement of more individuals is associated with more communication overhead.
+
+## Number of People (Small Changes)
+
+Respondents are presented with the following question.
+
+![Number of Individuals for small changes](./diagrams/cpi-systems-num-people-small-changes.png)
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
+
+# df[,199:203]  # how many individuals small change
+# df[,204:208]  # how many individuals large change
+# df[,209:213]  # lead time small change
+# df[,214:218]  # lead time large change
+
+make_individuals_sm_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('ind_ing_sm', "ind_proc_sm", 'ind_elem_sm', 'ind_agg_sm', 'ind_fin_sm')], factor, levels=individual_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+df <- df |> rename(
+  ind_ing_sm=colnames(df)[199],
+  ind_proc_sm=colnames(df)[200],
+  ind_elem_sm=colnames(df)[201],
+  ind_agg_sm=colnames(df)[202],
+  ind_fin_sm=colnames(df)[203],
+  ind_ing_lg=colnames(df)[204],
+  ind_proc_lg=colnames(df)[205],
+  ind_elem_lg=colnames(df)[206],
+  ind_agg_lg=colnames(df)[207],
+  ind_fin_lg=colnames(df)[208],
+  lead_t_ing_sm=colnames(df)[209],
+  lead_t_proc_sm=colnames(df)[210],
+  lead_t_elem_sm=colnames(df)[211],
+  lead_t_agg_sm=colnames(df)[212],
+  lead_t_fin_sm=colnames(df)[213],
+  lead_t_ing_lg=colnames(df)[214],
+  lead_t_proc_lg=colnames(df)[215],
+  lead_t_elem_lg=colnames(df)[216],
+  lead_t_agg_lg=colnames(df)[217],
+  lead_t_fin_lg=colnames(df)[218],
+)
+
+systems_matrix <- function(row) {
+  q1 <- matrix(nrow=5, ncol=5)
+  q1[1,] <- as.numeric(obs[,67:71])
+  q1[2,] <- as.numeric(obs[,72:76])
+  q1[3,] <- as.numeric(obs[,77:81])
+  q1[4,] <- as.numeric(obs[,82:86])
+  q1[5,] <- as.numeric(obs[,87:91])
+  
+  q1[is.na(q1)] = 0
+  
+  q1
+}
+
+maintainer_matrix <- function(row) {
+  q2 <- matrix(nrow=5, ncol=5)
+  q2[1,] <- as.numeric(obs[,92:96])
+  q2[2,] <- as.numeric(obs[,97:101])
+  q2[3,] <- as.numeric(obs[,102:106])
+  q2[4,] <- as.numeric(obs[,107:111])
+  q2[5,] <- as.numeric(obs[,112:116])
+  
+  q2[is.na(q2)] = 0
+  
+  q2
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
+
+df$has_monolith = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
+
+
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
+
+df$has_hybrid_arch = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
+
+df$has_modular = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Any organization that doesn't fit one of the 3 definitions above is excluded
+# because the answers are incomplete. Drop these records from the analysis
+df <- df[df$has_monolith | df$has_hybrid_arch | df$has_modular, ]
+
+# ---------------------
+# Add a column to indicate whether the organization has stream aligned teams
+# maintaining the representative system
+# ---------------------
+
+df$has_stream_aligned_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,3] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,3] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,3] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,3] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,3] == 1)
+  if (idx) {
+    df[i, "has_stream_aligned_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has IT-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_it_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,3] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,1] == 1) |
+         (maintainers[2,3] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,1] == 1) |
+         (maintainers[3,3] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,1] == 1) |
+         (maintainers[4,3] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,1] == 1) |
+         (maintainers[5,3] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,1] == 1)
+  if (idx) {
+    df[i, "has_it_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has analyst-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_analyst_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,2] == 0 & maintainers[1,5] == 0) & (maintainers[1,3] == 1 | maintainers[1,4] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,2] == 0 & maintainers[2,5] == 0) & (maintainers[2,3] == 1 | maintainers[2,4] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,2] == 0 & maintainers[3,5] == 0) & (maintainers[3,3] == 1 | maintainers[3,4] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,2] == 0 & maintainers[4,5] == 0) & (maintainers[4,3] == 1 | maintainers[4,4] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,2] == 0 & maintainers[5,5] == 0) & (maintainers[5,3] == 1 | maintainers[5,4] == 1)
+  if (idx) {
+    df[i, "has_analyst_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has "other" teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_other_mix_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # An "Other" mix is anything that's not stream aligned, IT-only, or analyst-only.
+  # Any organization that doesn't have any of the other team types is "other".
+  if (!df[i, "has_stream_aligned_team"] & !df[i, "has_it_only_team"] & !df[i, "has_analyst_only_team"]) {
+    df[i, "has_other_mix_team"] = TRUE
+  }
+}
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+make_age_table <- function(df) {
+    factor_df = as.data.frame(lapply(df[, c('age_ing', "age_proc", 'age_elem', 'age_agg', 'age_fin')], factor, levels=age_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+make_update_freq_table <- function(df) {
+      factor_df = as.data.frame(lapply(df[, c('update_ing', "update_proc", 'update_elem', 'update_agg', 'update_fin')], factor, levels=update_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
+```
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Number of Individuals for Small Changes (Overall)
+#| - Number of Individuals for Small Changes (Monolith)
+#| - Number of Individuals for Small Changes (Modular)
+
+# Order of the factor variable
+individual_levels = c("1 individual", "2-3 individuals", "4-6 individuals", "7-9 individuals", "10-15 individuals", "16-24 individuals", "25 or more individuals", "No answer")
+
+# Overall
+overall_dat = make_individuals_sm_table(df)
+
+overall_dat = factor(overall_dat, levels=individual_levels)
+
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+# Monolith
+monolith_dat = make_individuals_sm_table(monolith_df)
+
+monolith_dat = factor(monolith_dat, levels=individual_levels)
+
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+# Modular
+modular_dat = make_individuals_sm_table(modular_df)
+
+modular_dat = factor(modular_dat, levels=individual_levels)
+
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+```
+
+Overall, the majority of respondents indicate between 1-3 individuals needing to be involved with small changes, while a minority indicate that 4 or more individuals need to be involved with small changes.
+
+Our sense is that 1-3 individuals participating in a small change is reasonable. For low risk small changes, one person could make the change in isolation, while for more important small changes, one or two individuals could quickly peer review the change before it is implemented.
+
+It appears that NSOs with Hybrid or Modular representative systems are slightly more likely to involve 4-6 individuals in small changes compared to NSOs with Monolithic representative systems.
+
+Our suspicion here is that NSOs with Hybrid or Modular representative systems are more likely to have "interface boundaries" between systems maintained by two or more distinct teams. If this is the case, certain small changes may require input from individuals across two or more teams. This is not necessarily unreasonable. If system and team boundaries are well defined, communication about small changes to a system can still be efficient even if a slightly greater number of individuals need to be made aware of the small change.
+
+There are no significant differences in the number of individuals required for small changes between the various team types.
+
+## Number of People (Large Changes)
+
+Respondents are presented with the following question.
+
+![Number of Individuals for large changes](./diagrams/cpi-systems-num-people-large-changes.png)
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Number of Individuals for Small Changes (Overall)
+#| - Number of Individuals for Small Changes (Monolith)
+#| - Number of Individuals for Small Changes (Modular)
+
+make_individuals_lg_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('ind_ing_lg', "ind_proc_lg", 'ind_elem_lg', 'ind_agg_lg', 'ind_fin_lg')], factor, levels=individual_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Order of the factor variable
+individual_levels = c("1 individual", "2-3 individuals", "4-6 individuals", "7-9 individuals", "10-15 individuals", "16-24 individuals", "25 or more individuals", "No answer")
+
+# Overall 
+overall_dat = make_individuals_lg_table(df)
+
+overall_dat = factor(overall_dat, levels=individual_levels)
+
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+# Monolith
+monolith_dat = make_individuals_lg_table(monolith_df)
+
+monolith_dat = factor(monolith_dat, levels=individual_levels)
+
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+# Modular
+#| echo: false
+modular_dat = make_individuals_lg_table(modular_df)
+
+modular_dat = factor(modular_dat, levels=individual_levels)
+
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+```
+
+Unsurprisingly, more individuals are required to participate in large changes than small changes. It appears that the majority of respondents require between 2-6 individuals to participate in a large change to a system.
+
+Interestingly, there is not a significant difference in the number of people required for large changes between NSOs with Monolithic representative systems and NSOs with Modular representative systems. Moreover, there is also no meaningful difference in this metric between the various team compositions.
+
+We were a bit surprised by this finding, as we expected that certain team compositions and system architectures would be associated with differing numbers of people who need to participate in large changes.
+
+Our hypothesis here is that the number of people required to participate in large changes is probably a function of organization size more than anything else. For example, if the size of all teams involved in a large change for a small NSO is 6, then it would be impossible for the total number of individuals to exceed 6, regardless of the CPI System architecture or the team compositions.
