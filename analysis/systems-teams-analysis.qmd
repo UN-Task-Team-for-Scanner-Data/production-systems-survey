@@ -2,10 +2,21 @@
 
 Our first objective in this analysis is to articulate the kinds of team and system organizations we encountered in our survey. We start with an explanation of our methodology, followed by some notable findings.
 
+## Steps Where Systems are Coupled
+
+One important piece of system architecture information we were interested in is cases where systems span more than one GSBPM step along the flow of change. Using our definition of system from @sec-concepts, a system that spans two or more GSBPM steps implies that it would not be straightforward to modify just one GSBPM step in the system without affecting the others[^12]. This relates to the concept of [coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming)) in software engineering, which measures the extent to which distinct software modules depend on each other.
+
+[^12]: For example, a single Python script that processes data using [Pandas](https://pandas.pydata.org/) and immediately performs a price index calculation on the processed data frame while it's still in memory would be a system that spans the Processing and Elementary Indexes GSBPM steps. Such a system would be coupled across the the implementations of Processing logic and Elementary Indexes logic because it would not be straightforward to change just the Processing component without also needing to consider how the Elementary Indexes component is affected.
+
+![Diagram of loose and high coupling  (source: https://en.wikipedia.org/wiki/Coupling_(computer_programming))](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png)
+
+We asked the following question to get a coarse-grained sense of where there were sytems that spanned more than one GSBPM step.
+
+![Systems Spanning Multiple GSBPM Steps Question](./diagrams/cpi-systems-steps-coupling.png)
+
 ```{r}
 #| echo: false
 #| warning: false
-
 # -------------------
 # Dataframe setup
 # -------------------
@@ -16,6 +27,93 @@ library(dplyr)
 df <- read.csv("./data/results.csv")  #[,67:116]
 # Drop any incomplete responses
 df <- df[df[,2] != "",]
+
+# Helpers.
+is_yes <- function(x) x == "Yes"
+
+as_steps_matrix <- function(x, rows) {
+  dn <- list(rows, c("Ingest", "Process", "Elementals", "Aggregate", "Finalize"))
+  list(matrix(!is.na(x), ncol = 5, byrow = TRUE, dimnames = dn))
+}
+
+# Turn Q1 into a logical matrix.
+crossings_Q1 <-df[df[,15] == "Yes",] |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(c_across(16:40), paste0("System", 1:5)))
+
+# Find 3 clusters.
+clusters <- crossings_Q1 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+
+# How many times do we see **only** Ingestion and Processing, but not the other three?
+ing_proc_crossings = 0
+proc_elem_crossings = 0
+elem_agg_crossings = 0
+agg_fin_crossings = 0
+ing_proc_elem_x = 0
+proc_elem_agg_x = 0
+elem_agg_fin_x = 0
+first_4_x = 0
+last_4_x = 0
+all_5_x = 0
+# Partition the Q3 matrices by cluster.
+for (mat in crossings_Q1$steps) {
+  for (ix in 1:5) {
+    if (all(mat[ix,] == c(TRUE, TRUE, FALSE, FALSE, FALSE))) {
+      ing_proc_crossings <- ing_proc_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, FALSE, FALSE))) {
+      proc_elem_crossings <- proc_elem_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, TRUE, TRUE, FALSE))) {
+      elem_agg_crossings <- elem_agg_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, FALSE, TRUE, TRUE))) {
+      agg_fin_crossings <- agg_fin_crossings + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, FALSE, FALSE))) {
+      ing_proc_elem_x <- ing_proc_elem_x + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, FALSE))) {
+      first_4_x <- first_4_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, TRUE, TRUE))) {
+      last_4_x <- last_4_x + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, TRUE))) {
+      all_5_x <- all_5_x + 1
+    }
+  }
+}
+# split(crossings_Q1$steps, clusters$cluster)
+
+```
+
+We note in table 
+
+| | Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
+| ---- | ----- | ----- | ---- | ----- | ----- | ---- |
+| System 1-5 | ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
+| System 1-5 | ❌ | ✅ | ✅ | ❌ | ❌ | `r proc_elem_crossings` |
+| System 1-5 | ❌ | ❌ | ✅ | ✅ | ❌ | `r elem_agg_crossings` |
+| System 1-5 | ❌ | ❌ | ❌ | ✅ | ✅ | `r agg_fin_crossings` |
+| System 1-5 | ✅ | ✅ | ✅ | ❌ | ❌ | `r ing_proc_elem_x` |
+| System 1-5 | ❌ | ✅ | ✅ | ✅ | ❌ | `r proc_elem_agg_x` |
+| System 1-5 | ❌ | ❌ | ✅ | ✅ | ✅ | `r elem_agg_fin_x` |
+| System 1-5 | ✅ | ✅ | ✅ | ✅ | ❌ | `r first_4_x` |
+| System 1-5 | ❌ | ✅ | ✅ | ✅ | ✅ | `r last_4_x` |
+| System 1-5 | ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
+
+
+```{r}
+#| echo: false
+#| warning: false
+
+
 # Filter and rename columns used in the analysis for this page
 df <- df |> rename(
   sg1_ing=colnames(df)[67],
@@ -543,7 +641,7 @@ num_teams = sum(df$has_stream_aligned_team) + sum(df$has_it_only_team) + sum(df$
 We define similarity between organizations having a particular team type **and** a representative system with a particular architecture as follows.
 
 $$
-\text{Similarity} = \frac{\sum \text{Has Architecture Type} == 1 \land \text{Has Team Type} == 1}{\sum \text{Has Team Type} == 1}
+\text{Similarity} = \frac{\sum_{\text{respondents}} \text{Has Architecture Type} == 1 \land \text{Has Team Type} == 1}{\sum_{\text{respondents}} \text{Has Team Type} == 1}
 $$
 
 The rationale for this similarity metric is that we care about what fraction of organizations with a particular team type also uses a given architecture type relative to how many instances of that team type are observed in the sample.
