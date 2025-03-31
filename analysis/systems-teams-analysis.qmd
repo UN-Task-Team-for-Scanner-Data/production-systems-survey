@@ -107,9 +107,11 @@ The second most common pattern we observed was the "Monolith" pattern, where one
 
 Monolithic systems are not inherently bad. If they are carefully designed for maximum cohesion and minimal coupling, they can be maintainable. However, if monoliths emerge accidentally, they often involve many tightly coupled components and become very difficult to maintain in the long run.
 
-The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** and **elementary indexes-aggregation-finalization**. The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprises us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
+The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** and **elementary indexes-aggregation-finalization**. The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprised us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
 
+We were also surprised to learn that there are zero occurrences of a system spanning **elementary indexes-aggregation**. In the price statistics business domain, these concepts are often closely related, so we thought there would be more cases where a single system handled both steps[^13].
 
+[^13]: An example of a system that performs both elementary index calculation and aggregation would be if the same script calculated component price changes in apples, bananas, and oranges, then the same script also calculated the overall price change in fruit from these component price changes.
 
 | Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
 | ----- | ----- | ---- | ----- | ----- | ---- |
