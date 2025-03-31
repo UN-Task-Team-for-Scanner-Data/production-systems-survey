@@ -10,7 +10,7 @@ One important piece of system architecture information we were interested in is 
 
 ![Diagram of loose and high coupling  (source: https://en.wikipedia.org/wiki/Coupling_(computer_programming))](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png)
 
-We asked the following question to get a coarse-grained sense of where there were sytems that spanned more than one GSBPM step.
+We asked the following question to get a coarse-grained understanding of sytems that spanned more than one GSBPM step.
 
 ![Systems Spanning Multiple GSBPM Steps Question](./diagrams/cpi-systems-steps-coupling.png)
 
@@ -78,6 +78,12 @@ for (mat in crossings_Q1$steps) {
     if (all(mat[ix,] == c(TRUE, TRUE, TRUE, FALSE, FALSE))) {
       ing_proc_elem_x <- ing_proc_elem_x + 1
     }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, TRUE, FALSE))) {
+      proc_elem_agg_x <- proc_elem_agg_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, TRUE, TRUE, TRUE))) {
+      elem_agg_fin_x <- elem_agg_fin_x + 1
+    }
     if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, FALSE))) {
       first_4_x <- first_4_x + 1
     }
@@ -93,21 +99,32 @@ for (mat in crossings_Q1$steps) {
 
 ```
 
-We note in table 
+We note how frequently systems cross certain GSBPM steps in @tbl-span-steps.
 
-| | Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
-| ---- | ----- | ----- | ---- | ----- | ----- | ---- |
-| System 1-5 | ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
-| System 1-5 | ❌ | ✅ | ✅ | ❌ | ❌ | `r proc_elem_crossings` |
-| System 1-5 | ❌ | ❌ | ✅ | ✅ | ❌ | `r elem_agg_crossings` |
-| System 1-5 | ❌ | ❌ | ❌ | ✅ | ✅ | `r agg_fin_crossings` |
-| System 1-5 | ✅ | ✅ | ✅ | ❌ | ❌ | `r ing_proc_elem_x` |
-| System 1-5 | ❌ | ✅ | ✅ | ✅ | ❌ | `r proc_elem_agg_x` |
-| System 1-5 | ❌ | ❌ | ✅ | ✅ | ✅ | `r elem_agg_fin_x` |
-| System 1-5 | ✅ | ✅ | ✅ | ✅ | ❌ | `r first_4_x` |
-| System 1-5 | ❌ | ✅ | ✅ | ✅ | ✅ | `r last_4_x` |
-| System 1-5 | ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
+The most common pattern we observed was that the same system handled both data ingestion and data processing. We suspect this is is fairly common as the two activities are conceptually similar, and often leverage similar tooling. For example, if an analyst wrote a web-scraping script to collect price data from a certain website, it's reasonable that they would also perform some data cleaning activities in the same script before writing the output to persistent storage.
 
+The second most common pattern we observed was the "Monolith" pattern, where one system spans all 5 GSBPM steps. We elaborate on this concept later in this section, but our suspicion is that systems like these mostly fall into one of two categories: (1) a small team and an Excel Workbook that handles everything from ingestion to finalization or (2) a single system managed by an IT team.
+
+Monolithic systems are not inherently bad. If they are carefully designed for maximum cohesion and minimal coupling, they can be maintainable. However, if monoliths emerge accidentally, they often involve many tightly coupled components and become very difficult to maintain in the long run.
+
+The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** and **elementary indexes-aggregation-finalization**. The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprises us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
+
+
+
+| Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
+| ----- | ----- | ---- | ----- | ----- | ---- |
+| ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | `r proc_elem_crossings` |
+| ❌ | ❌ | ✅ | ✅ | ❌ | `r elem_agg_crossings` |
+| ❌ | ❌ | ❌ | ✅ | ✅ | `r agg_fin_crossings` |
+| ✅ | ✅ | ✅ | ❌ | ❌ | `r ing_proc_elem_x` |
+| ❌ | ✅ | ✅ | ✅ | ❌ | `r proc_elem_agg_x` |
+| ❌ | ❌ | ✅ | ✅ | ✅ | `r elem_agg_fin_x` |
+| ✅ | ✅ | ✅ | ✅ | ❌ | `r first_4_x` |
+| ❌ | ✅ | ✅ | ✅ | ✅ | `r last_4_x` |
+| ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
+
+: Systems that span across multiple GSBPM steps {#tbl-span-steps}
 
 ```{r}
 #| echo: false
