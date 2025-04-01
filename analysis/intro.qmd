@@ -9,6 +9,33 @@ We created this survey about the state of Consumer Price Index (CPI) Production 
 
 While this report is specific to the state of CPI Production Systems at National Statistics Organizations (NSOs) around the world, we attempt to explain our results in a general way and highlight opportunities where our survey approach could be applied in related settings.
 
+## Motivation
+
+TODO: re-order some of the introduction content.
+
+In our time working at National Statistics Organizations (NSOs), we have encountered some extremely complex systems and business processes that exist for the purpose of creating various analytical and data products. These systems are often developed entirely or in large part by people with backgrounds in Economics, Statistics, Mathematics, or another area related to the domain of Official Statistics. These systems can in some sense be thought of as software systems as they often involve non-trivial amounts of code (and other non-code artifacts such as Excel Workbooks) that carry out complex business logic in order to transform some kind of input data into output data. However they differ from typical software systems (e.g., mobile applications, client-server web applications, etc.) in a number of important ways.
+
+Our experience has been that since these systems are often written by individuals who typically do not have any training in software engineering, the teams developing and maintaining them struggle to manage the complexity that comes with building large software products. However, due to the extensive domain knowledge required to build these systems, it is often infeasible to take every single one of these systems through the traditional software development process with a team of software professionals (e.g., [Agile](https://en.wikipedia.org/wiki/Agile_software_development), [Waterfall](https://en.wikipedia.org/wiki/Waterfall_model))[^4].
+
+In cases where (1) the analytical and data outputs are important enough and (2) the organization has sufficient financial resources, we do sometimes see a situation where a portion of the system is developed by a formal IT capacity, usually in the form of a Corporate IT department or IT professionals embedded in the domain area. This too leads to challenges. For instance, due to the sheer amount of expert domain knowledge to build these systems, there is often a very significant communication gap between software professionals lacking the domain knowledge and the domain experts themselves, exasperating the complexity of each stage of the software development process. Moreover, since there is often a team boundary between the domain expert team and the software development team, a significant amount of business process often sits between the team requiring changes and the team with the capacity to actually deliver those changes, which also slows down the pace of work delivery[^5].
+
+[^5]: For example, a business domain team in this situation likely has a financial arrangement with the Corporate IT department of their organization or an external contractor that stipulates the work that will be delivered in a given period of time. Making changes to the work in the agreement often requires formal business processes and the exchange of funds from one team to another.
+
+This leads to a tricky situation where one of two things often happens.
+
+1. For many intents and purposes, teams of people without training in software engineering are effectively developing and maintaining software systems[^5]. Or
+
+2. There is an organizational partition between the team who needs work to be done and the team with the capacity to actually deliver that work.
+
+Both of these situations are not ideal because in both cases work is likely to happen at a slower pace than would otherwise be possible if one domain-aligned team had the skills and capacity to deliver on their own requirements.
+
+[^5]: While a number of these individuals take it upon themselves to self-learn relevant ideas from software engineering, our impression is that the consensus is that these kinds of teams, in general, struggle with the complexity of developing and maintaining the complex software systems needed to deliver the analytical and data products they are responsible for.
+
+To this end, we use this survey to characterize some high-level yet germane aspects of existing system architectures, team compositions, technology choices, and maintenance challenges for NSO teams around the world maintaining CPI Production Systems. We introduce a number of concepts and ideas that are well understood in the world of software engineering, but may not be obvious to many of the domain teams maintaining these CPI Production Systems. We then characterize the state of these CPI Production Systems overall, and by system architecture and team type. Finally we propose both immediate actions that CPI Production System teams can take in the short term, as well as directions for future work in both CPI Production Systems and related domains where these Complex Analytical Systems emerge.
+
+
+[^4]: If, for example, it was necessary to commission a formal software project every time a meaningful change to an analytical output was needed (e.g., incorporating a new data source, incorporating a new statistical modelling technique), it would be very expensive to change anything.
+
 ## Overview of CPI Production Systems
 
 CPI Production Systems are complex [sociotechnical systems](https://en.wikipedia.org/wiki/Sociotechnical_system) that require significant expertise across multiple skill domains such as Economics, Statistics, and Computer Science in order to develop and maintain them. The recent adoption of alternative data sources[^1] has significantly increased the complexity of these systems, and has increased the importance of skills in newly emerging disciplines such as [Data Science](https://en.wikipedia.org/wiki/Data_science), [Data Engineering](https://en.wikipedia.org/wiki/Data_engineering), and [Analytics Engineering](https://www.getdbt.com/what-is-analytics-engineering).
