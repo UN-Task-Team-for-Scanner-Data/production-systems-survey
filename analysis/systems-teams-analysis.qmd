@@ -10,7 +10,7 @@ One important piece of system architecture information we were interested in is 
 
 ![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png)
 
-We asked the following question to get a coarse-grained understanding of sytems that spanned more than one GSBPM step.
+We asked the following question to get a coarse-grained understanding of systems that spanned more than one GSBPM step.
 
 ![Systems Spanning Multiple GSBPM Steps Question](./diagrams/cpi-systems-steps-coupling.png)
 
