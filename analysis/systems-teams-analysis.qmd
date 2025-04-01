@@ -39,7 +39,7 @@ as_steps_matrix <- function(x, rows) {
 # Turn Q1 into a logical matrix.
 crossings_Q1 <-df[df[,15] == "Yes",] |>
   rowwise() |>
-  mutate(steps = as_steps_matrix(c_across(16:40), paste0("System", 1:5)))
+  mutate(steps = as_steps_matrix(c_across(16:40), paste0("System ", 1:5)))
 
 # Find 3 clusters.
 clusters <- crossings_Q1 |>
@@ -135,6 +135,83 @@ The next concept we try to learn in the survey is which types of teams discussed
 We present respondents with the following question.
 
 ![Systems Spanning Multiple GSBPM Steps Question](./diagrams/cpi-systems-steps-teams.png)
+
+```{r}
+#| echo: false
+#| warning: false
+
+# Turn Q2 into a logical matrix.
+crossings_Q2 <- df |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(
+    c_across(42:66),
+    c(
+      "Corp. IT",
+      "Domain IT",
+      "Domain Analyst",
+      "Other Analyst",
+      "Consultant"
+    )
+  ))
+
+# Find 3 clusters.
+clusters <- crossings_Q2 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+
+# How many times do we see **only** Ingestion and Processing, but not the other three?
+d_analyst_only = 0
+stream_aligned = 0
+cit_only = 0
+dit_only = 0
+it_only = 0
+cit_d_analyst = 0
+# Partition the Q3 matrices by cluster.
+for (mat in crossings_Q2$steps) {
+  for (ix in 1:5) {
+    if (all(mat[,ix] == c(FALSE, FALSE, TRUE, FALSE, FALSE))) {
+      d_analyst_only <- d_analyst_only + 1
+    }
+    if (all(mat[,ix] == c(FALSE, TRUE, TRUE, FALSE, FALSE))) {
+      stream_aligned <- stream_aligned + 1
+    }
+    if (all(mat[,ix] == c(TRUE, FALSE, FALSE, FALSE, FALSE))) {
+      cit_only <- cit_only + 1
+    }
+    if (all(mat[,ix] == c(FALSE, TRUE, FALSE, FALSE, FALSE))) {
+      dit_only <- dit_only + 1
+    }
+    if (all(mat[,ix] == c(TRUE, TRUE, FALSE, FALSE, FALSE))) {
+      it_only <- it_only + 1
+    }
+    if (all(mat[,ix] == c(TRUE, FALSE, TRUE, FALSE, FALSE))) {
+      cit_d_analyst <- cit_d_analyst + 1
+    }
+  }
+}
+# split(crossings_Q1$steps, clusters$cluster)
+
+```
+
+| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
+| ----- | ----- | ---- | ----- | ----- | ---- | ---- |
+| ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analyst Only | `r d_analyst_only` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | Stream Aligned | `r stream_aligned` |
+| ✅ | ❌ | ❌ | ❌ | ❌ | Corporate IT-Only | `r cit_only` |
+| ❌ | ✅ | ❌ | ❌ | ❌ | Domain IT-Only | `r dit_only` |
+| ✅ | ✅ | ❌ | ❌ | ❌ | IT-Only | `r it_only` |
+| ✅ | ❌ | ✅ | ❌ | ❌ | Corporate IT and Domain Analysts Only | `r cit_d_analyst` |
+
+: Common Team Combinations **within** GSBPM Steps {#tbl-team-steps}
+
+@tbl-team-steps shows how frequently certain team combinations were reported **within** any given GSBPM step.
+
+We were surprised to see that Corporate IT and Domain Analyst teams occurred almost twice as frequently as Stream Aligned teams (Domain-embedded IT and Domain-embedded analysts). In particular, this suggests that technical expertise offered by IT personnel is often centralized outside of the domain area rather than functionally embedding IT personnel within the domain team.
+
+## Capturing System And Team Organizations Together
 
 ```{r}
 #| echo: false
