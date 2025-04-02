@@ -7,54 +7,15 @@ We created this survey about the state of Consumer Price Index (CPI) Production 
 ![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
 :::
 
-While this report is specific to the state of CPI Production Systems at National Statistics Organizations (NSOs) around the world, we attempt to explain our results in a general way and highlight opportunities where our survey approach could be applied in related settings.
+While this report is specific to the state of CPI Production Systems at National Statistics Organizations (NSOs) around the world, our hope is that some of the content in this report is also useful for a wider audience maintaining similar kinds of systems. As such, we attempt to explain our results in a general way and highlight opportunities where our survey approach and findings could be applied in related settings.
 
-## Motivation
+## Motivation {#sec-motivation}
 
-TODO: re-order some of the introduction content.
+In our time working at National Statistics Organizations (NSOs), we have encountered some extremely complicated systems that exist in order to produce various analytical and data products such as consumer price indexes, national accounts figures, or labour force statistics. These complicated systems and the teams who maintain them are the subject of this survey and write up. To reduce ambiguity, we refer to these systems as **Complex Analytical Systems** throughout this report.
 
-In our time working at National Statistics Organizations (NSOs), we have encountered some extremely complex systems and business processes that exist for the purpose of creating various analytical and data products. These systems are often developed entirely or in large part by people with backgrounds in Economics, Statistics, Mathematics, or another area related to the domain of Official Statistics. These systems can in some sense be thought of as software systems as they often involve non-trivial amounts of code (and other non-code artifacts such as Excel Workbooks) that carry out complex business logic in order to transform some kind of input data into output data. However they differ from typical software systems (e.g., mobile applications, client-server web applications, etc.) in a number of important ways.
+Complex Analytical Systems involve significant amounts of code, documentation, and other non-code artifacts such as Excel Workbooks that carry out complex business logic in order to transform input data into output data. Additionally, they are often developed entirely or in large part by people with backgrounds in Economics, Statistics, Mathematics, or another area related to the domain of Official Statistics.
 
-Our experience has been that since these systems are often written by individuals who typically do not have any training in software engineering, the teams developing and maintaining them struggle to manage the complexity that comes with building large software products. However, due to the extensive domain knowledge required to build these systems, it is often infeasible to take every single one of these systems through the traditional software development process with a team of software professionals (e.g., [Agile](https://en.wikipedia.org/wiki/Agile_software_development), [Waterfall](https://en.wikipedia.org/wiki/Waterfall_model))[^4].
-
-In cases where (1) the analytical and data outputs are important enough and (2) the organization has sufficient financial resources, we do sometimes see a situation where a portion of the system is developed by a formal IT capacity, usually in the form of a Corporate IT department or IT professionals embedded in the domain area. This too leads to challenges. For instance, due to the sheer amount of expert domain knowledge to build these systems, there is often a very significant communication gap between software professionals lacking the domain knowledge and the domain experts themselves, exasperating the complexity of each stage of the software development process. Moreover, since there is often a team boundary between the domain expert team and the software development team, a significant amount of business process often sits between the team requiring changes and the team with the capacity to actually deliver those changes, which also slows down the pace of work delivery[^5].
-
-[^5]: For example, a business domain team in this situation likely has a financial arrangement with the Corporate IT department of their organization or an external contractor that stipulates the work that will be delivered in a given period of time. Making changes to the work in the agreement often requires formal business processes and the exchange of funds from one team to another.
-
-This leads to a tricky situation where one of two things often happens.
-
-1. For many intents and purposes, teams of people without training in software engineering are effectively developing and maintaining software systems[^5]. Or
-
-2. There is an organizational partition between the team who needs work to be done and the team with the capacity to actually deliver that work.
-
-Both of these situations are not ideal because in both cases work is likely to happen at a slower pace than would otherwise be possible if one domain-aligned team had the skills and capacity to deliver on their own requirements.
-
-[^5]: While a number of these individuals take it upon themselves to self-learn relevant ideas from software engineering, our impression is that the consensus is that these kinds of teams, in general, struggle with the complexity of developing and maintaining the complex software systems needed to deliver the analytical and data products they are responsible for.
-
-To this end, we use this survey to characterize some high-level yet germane aspects of existing system architectures, team compositions, technology choices, and maintenance challenges for NSO teams around the world maintaining CPI Production Systems. We introduce a number of concepts and ideas that are well understood in the world of software engineering, but may not be obvious to many of the domain teams maintaining these CPI Production Systems. We then characterize the state of these CPI Production Systems overall, and by system architecture and team type. Finally we propose both immediate actions that CPI Production System teams can take in the short term, as well as directions for future work in both CPI Production Systems and related domains where these Complex Analytical Systems emerge.
-
-
-[^4]: If, for example, it was necessary to commission a formal software project every time a meaningful change to an analytical output was needed (e.g., incorporating a new data source, incorporating a new statistical modelling technique), it would be very expensive to change anything.
-
-## Overview of CPI Production Systems
-
-CPI Production Systems are complex [sociotechnical systems](https://en.wikipedia.org/wiki/Sociotechnical_system) that require significant expertise across multiple skill domains such as Economics, Statistics, and Computer Science in order to develop and maintain them. The recent adoption of alternative data sources[^1] has significantly increased the complexity of these systems, and has increased the importance of skills in newly emerging disciplines such as [Data Science](https://en.wikipedia.org/wiki/Data_science), [Data Engineering](https://en.wikipedia.org/wiki/Data_engineering), and [Analytics Engineering](https://www.getdbt.com/what-is-analytics-engineering).
-
-[^1]: In the context of CPI systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.
-
-## What This Survey Is About
-
-We are trying to characterize how CPI Systems and the teams that own them are organized in order to improve business outcomes for these teams.
-
-Our survey asks a series of questions about how software systems and teams are organized with respect to a fairly generic data processing workflow. We then ask several questions related to the various tools and technologies being used by the various teams maintaining CPI Systems. We conclude by asking a series of questions related to business outcomes of interest.
-
-## 	Why Did We Run This Survey? {#sec-why-run-this-survey}
-
-In our experience, we've noticed that many teams who produce complicated analytics outputs struggle with managing system complexity.
-
-While these teams are often comprised of individuals with strong analytical skills and significant domain knowledge, they often do not have training in software engineering. Therefore, they are often not exposed to the significant body of knowledge that has been developed over decades to deal with the kinds of system complexity problems that software developers are routinely exposed to.
-
-Moreover, the nature of these Complex Analytical Systems differ from traditional software systems in a number of important aspects[^3]:
+However, Complex Analytical Systems differ from traditional software systems in a number of important aspects[^3]:
 
 | Complex Analytical Systems | Typical Software System |
 | -------------------------- | ----------------------- |
@@ -65,13 +26,40 @@ Moreover, the nature of these Complex Analytical Systems differ from traditional
 | Batch workloads that are run manually (or semi-manually). | System running continuously in an event loop waiting for user input. |
 | Operate on a large fraction of an entire table quickly. | Search for one specific record in a large table quickly. |
 
+[^3]: We are not implying that all "typical" software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would often develop and maintain.
+
 Due to differences like those mentioned above, there is not a perfect mapping between best practices from the software engineering world and pain points currently experienced by teams maintaining Complex Analytical Systems. However, there are certainly some best practices from software engineering that are highly appropriate to solve some of the problems faced in the development and maintenance of Complex Analytical Systems.
 
-Therefore, our hope with this survey is to begin bridging the gap between well-understood industry best practices from the world of software engineering, and those aspects of Complex Analytical Systems that could benefit from these best practices.
+To this end, we hope this survey can help bridge the gap between well-understood industry best practices from the world of software engineering, and those aspects of Complex Analytical Systems that could benefit from these best practices.
 
-More specifically, we are trying to understand the current state of Complex Analytical Systems and the teams who maintain them, using CPI Production Systems as a representative use case. Our hope is that the insights gained and the survey methodology may be valuable for other Complex Analytical Systems facing similar challenges.
+More specifically, we are trying to understand the current state of Complex Analytical Systems and the teams who maintain them. Our hope is that the insights gained and the survey methodology deployed may be valuable for other Complex Analytical Systems facing similar challenges.
 
-[^3]: We are not implying that all "typical" software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would typically develop and maintain.
+## 	Why Did We Run This Survey? {#sec-why-run-this-survey}
+
+In our experience, we've noticed that many teams who are responsible for Complex Analytical Systems struggle with managing many aspects of system complexity.
+
+Complex Analytical System business domain teams are typically comprised of individuals with strong analytical skills and significant domain knowledge, however, they often do not have specific training in software engineering concepts. Therefore, they are often not exposed to the significant body of knowledge that has been developed over decades to deal with the kinds of system complexity problems that software developers are routinely exposed to.
+
+We have also found that individuals in these business domains are often missing the vocabulary and concepts to articulate the state of their Complex Analytical Systems. As a result, when these individuals try to explain where they are struggling to a more IT-oriented audience, miscommunication often results, and it becomes difficult to arrive at reasonable solutions.
+
+In this survey, we ask questions that capture several germane aspects of system organization, team organization, technology choices, and business outcomes using language, terms, and conceptual models that are more familiar to individuals on these business domain teams. Our rationale for doing this is threefold.
+
+1. Measure and describe the state of many Complex Analytical Systems around the world within a specific business domain (CPI Production Systems).
+
+2. Provide some concrete and practical suggestions to address common areas of struggle within this domain across many NSOs.
+
+3. Expose people from these business domain teams to software engineering concepts that are relevant in the development and maintenance of Complex Analytical Systems.
+
+While this report is tailored towards a Consumer Prices domain audience, we welcome and encourage readers from different domains to read through this report. We make significant efforts to avoid using too much domain-specific jargon, and present findings in a way that should comprehensible to a more general audience. In @sec-conclusion, we elaborate on aspects of our survey we believe have high external validity, provide some practical suggestions that are applicable to Complex Analytical Systems in general, and describe some productive areas of future exploration that are not limited to the Consumer Prices business domain.
+
+## Overview of CPI Production Systems
+
+With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in @sec-motivation. More precisely, these systems take data on the price of consumer goods purchased throughout an economy and calculate period-over-period price changes of these goods. These price changes are ultimately mapped to a taxonomy of product categories, with the highest level of the taxonomy being the monthly "all items" CPI that is commonly used when discussing the overall level of inflation.
+
+The recent adoption of alternative data sources[^1] in the calculation of CPIs has further increased the complexity of these systems, and has increased the importance of skills in newly emerging disciplines such as [Data Science](https://en.wikipedia.org/wiki/Data_science), [Data Engineering](https://en.wikipedia.org/wiki/Data_engineering), and [Analytics Engineering](https://www.getdbt.com/what-is-analytics-engineering).
+
+[^1]: In the context of CPI Production Systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.
+
 
 ## Related Work
 
@@ -89,8 +77,26 @@ Throughout this write up, we distinguish between software systems and IT profess
 
 ## How This Report Is Organized
 
-@sec-concepts covers the key concepts used in the survey. @sec-sys-team analyzes our findings with respect to system and team organization.
+This report is presented in the order that the survey was conducted, with findings presented along the way.
+
+- @sec-concepts covers the key conceptual models and terminology used to articulate concepts about system and team organization.
+
+- @sec-sys-teams analyzes our findings with respect to system and team organization.
+
+- @sec-tools-tech covers some high-level questions on the use of tools and technologies required to develop and maintain CPI Production Systems.
+
+- @sec-age covers questions about the age and update frequency of certain systems.
+
+- @sec-num-ppl covers questions about the number of individuals required to participate in certain system changes.
+
+- @sec-lead-time covers questions about a concept called [lead time](https://en.wikipedia.org/wiki/Lead_time), which measures the end-to-end time required to implement a change to a software component.
+
+- @sec-alt-data covers questions about the usage of alternative data in CPI Production Systems.
+
+- @sec-challenges covers the challenges CPI Production Systems teams face with respect to maintaining their systems.
+
+- @sec-findings concludes with a summary of the most notable findings from the survey, some practical insights to address some common areas of struggle, and some areas of future work.
 
 ## Note on Confidentiality and Privacy
 
-As part of the administration of this survey, we ensured respondents that their data will be treated confidentiality. Therefore, no individual response data are made available in this report; all results presented are aggregated over all responses.
+As part of the administration of this survey, we ensured respondents that their data will be treated confidentiality. Therefore, no individual response data are made available in this report; all results presented are aggregated over all respondents.
