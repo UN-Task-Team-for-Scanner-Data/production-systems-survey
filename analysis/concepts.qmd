@@ -14,11 +14,11 @@ The concepts introduced in the rest of this page can easily be applied to other 
 For the purposes of this survey, we define a **system** as any indivisible (atomic) software component that takes one or more data inputs and produces one or more data outputs.
 :::
 
-When we refer to an indivisible software component, we mean that the component runs "entirely or not at all" with respect to the transformation of inputs into outputs. For example, if there is one Python script that reads a file and writes an intermediate file, and a second R script that reads the intermediate file and produces another output file, we would consider this to be two systems.
+When we refer to an indivisible software component, we mean that the component runs "entirely or not at all" with respect to the transformation of inputs into outputs. For example, if there is one Python script that reads a file and writes an intermediate file, and a second R script that reads the intermediate file and produces another output file, we would consider this to be two separate systems.
 
 The types of systems developed and maintained by the teams being surveyed can vary wildly. Therefore, we intentionally keep the definition of system vague so that it captures the key activity of transforming data without imposing any assumptions about how data are transformed.
 
-A **team** is defined as a group of individuals who maintains one or more systems. Teams can be composed of many different types of professionals, but for the purpose of this survey we distinguish between those who are Information Technology (IT) professionals (e.g., software developers) and those who are non-IT analysts (e.g., economists, statisticians)[^1].
+A **team** is defined as a group of individuals who maintain one or more systems. Teams can be composed of many different types of professionals, but for the purpose of this survey we distinguish between those who are Information Technology (IT) professionals (e.g., software developers) and those who are non-IT analysts (e.g., economists, statisticians)[^1].
 
 [^1]: We recognize there is some grey area as to whether or not certain occupations are considered to be IT, and that two organizations may classify the same positions differently.
 
@@ -58,17 +58,17 @@ In the event that multiple teams collectively maintain a very large system, a te
 
 ![Putting it All Together](./diagrams/gsbpm-systems-3.drawio.svg){#fig-putting-it-all-together}
 
-@fig-putting-it-all-together shows an example of what one of these diagrams could look for a real NSO. A description of team/system organization that could correspond to this example is described below.
+@fig-putting-it-all-together shows an example of what one of these diagrams could look like for a real NSO. A description of team/system organization that could correspond to this example is described below.
 
 - A **corporate IT** team maintains a large Java application with an application-specific database that handles ingestion of most data sources[^4].
 
 - A team of **domain-embedded analysts** (e.g., economists and statisticians) maintain a system written in Python, using [pandas](https://pandas.pydata.org/) to ingest data from one source that does not integrate with the corporate system[^5].
 
-- A team of domain-embedded analysts maintain a series of systems, using some combination of R and Python, that perform data processing and compute elementary indexes.
+- A team of domain-embedded analysts maintain a series of systems, using some combination of R and Python, that perform data processing and computation of elementary indexes.
 
     - The top system handles both the data processing step **and** the elementary index calculation step, implying it would not be straightforward to decouple these two concerns.
     
-    - The bottom three cases have two separate systems that handle data processing and elementary index calculation separately.
+    - The bottom three cases have two distinct systems that handle data processing and elementary index calculation separately.
 
 - A second system owned by corporate IT aggregates the elementary indexes and stores the resulting price indexes in a database.
 
@@ -90,7 +90,7 @@ It is unlikely that any NSO will have systems organized like one of these extrem
 
 ## Representative Groups of Systems
 
-To get a complete understanding of each NSO's team and system topology, we would need to have a comprehensive white boarding session with representatives from each NSO to fully articulate their CPI team and system architecture. This is obviously not feasible.
+To get a complete understanding of each NSO's team organization and system topology, we would need to have a comprehensive whiteboarding session with representatives from each NSO to fully articulate their CPI team structures and system architectures. This is obviously not feasible.
 
 To get around this impracticality, we introduce the concept of a **representative system group** to the survey, which lets respondents describe one or more groups of systems that follow a typical pattern in their organization. @fig-rep-sys-group shows what one such system group might look like using the example shown earlier in @fig-putting-it-all-together.
 
@@ -104,7 +104,7 @@ The systems enclosed by the dashed red line in the diagram constitute a represen
 
 - There is one large system that handles aggregation and finalization of elementary index calculations. This system is also maintained by the corporate IT department (system group 3).
 
-Our rationale behind asking respondents to describe their representative system group concept is threefold:
+Our rationale behind asking respondents to describe their representative system group is threefold:
 
 1. Significantly reduce the response burden compared to completely articulating the state of **all** systems and teams that produce the CPI.
 
@@ -114,6 +114,6 @@ Our rationale behind asking respondents to describe their representative system 
 
 [^2]: For readers unfamiliar with the CPI domain, this step refers to calculating period-over-period price changes for a particular product category at the lowest level of aggregation (e.g., "Canned salmon").
 
-[^3]: For readers unfamiliar with the CPI domain, this step refers to the process of combining elementary indexes into higher level indexes. For example, "Canned Salmon" and "Canned tuna" belong to the higher level category such as "Canned and other preserved fish", which in turn belongs to a higher level category like "Fish, seafood and other marine products", and so on until you reach the "All Items" CPI.
+[^3]: For readers unfamiliar with the CPI domain, this step refers to the process of combining elementary indexes into higher level indexes. For example, "Canned Salmon" and "Canned tuna" belong to a higher level category such as "Canned and other preserved fish", which in turn belongs to a higher level category like "Fish, seafood and other marine products", and so on until you reach the "All Items" CPI.
 
 
