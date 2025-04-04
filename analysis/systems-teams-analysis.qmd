@@ -1,12 +1,12 @@
 # Systems and Teams Analysis {#sec-sys-teams}
 
-Our first objective in this analysis is to articulate the kinds of team and system organizations we encountered in our survey. We start with an explanation of our methodology, followed by some notable findings.
+Our first objective in this analysis is to describe the kinds of system and team organizations we encountered in our survey. We start with an explanation of our methodology, followed by some notable findings.
 
 ## Steps Where Systems are Coupled
 
-One important piece of system architecture information we were interested in is cases where systems span more than one GSBPM step along the flow of change. Using our definition of system from @sec-concepts, a system that spans two or more GSBPM steps implies that it would not be straightforward to modify just one GSBPM step in the system without affecting the others[^12]. This relates to the concept of [coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming)) in software engineering, which measures the extent to which distinct software modules depend on each other.
+One important piece of system architecture information we were interested in is cases where systems span more than one GSBPM step along the flow of change. Using our definition of "system" from @sec-concepts, a system that spans two or more GSBPM steps implies that it would not be straightforward to modify just one GSBPM step in the system without affecting the others[^12]. This relates to the concept of [coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming)) in software engineering, which measures the extent to which distinct software modules depend on each other.
 
-[^12]: For example, a single Python script that processes data using [Pandas](https://pandas.pydata.org/) and immediately performs a price index calculation on the processed data frame while it's still in memory would be a system that spans the Processing and Elementary Indexes GSBPM steps. Such a system would be coupled across the the implementations of Processing logic and Elementary Indexes logic because it would not be straightforward to change just the Processing component without also needing to consider how the Elementary Indexes component is affected.
+[^12]: For example, a single Python script that processes data using [Pandas](https://pandas.pydata.org/) and immediately performs a price index calculation on the processed data frame while it's still in memory is a system that spans the (1) Processing and the (2) Elementary Indexes GSBPM steps. Such a system has coupled the Processing logic and the Elementary Indexes logic because it is not straightforward to change just the Processing component without also needing to consider how the Elementary Indexes component is affected.
 
 ![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png)
 
@@ -105,7 +105,7 @@ The most common pattern we observed was that the same system handled both data i
 
 The second most common pattern we observed was the "Monolith" pattern, where one system spans all 5 GSBPM steps. We elaborate on this concept later in this section, but our suspicion is that systems like these mostly fall into one of two categories: (1) a small team and an Excel Workbook that handles everything from ingestion to finalization or (2) a single system managed by an IT team.
 
-Monolithic systems are not inherently bad. If they are carefully designed for maximum cohesion and minimal coupling, they can be maintainable. However, if monoliths emerge accidentally, they often involve many tightly coupled components and become very difficult to maintain in the long run.
+Monolithic systems are not inherently bad. If they are carefully designed for maximum [cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science)) and minimal coupling, they can be maintainable. However, if monoliths emerge accidentally, they often involve many tightly coupled components and become very difficult to maintain in the long run.
 
 The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** and **elementary indexes-aggregation-finalization**. The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprised us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
 
@@ -199,7 +199,7 @@ for (mat in crossings_Q2$steps) {
 | Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
 | ----- | ----- | ---- | ----- | ----- | ---- | ---- |
 | ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analyst Only | `r d_analyst_only` |
-| ❌ | ✅ | ✅ | ❌ | ❌ | Stream Aligned | `r stream_aligned` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts and Domain IT | `r stream_aligned` |
 | ✅ | ❌ | ❌ | ❌ | ❌ | Corporate IT-Only | `r cit_only` |
 | ❌ | ✅ | ❌ | ❌ | ❌ | Domain IT-Only | `r dit_only` |
 | ✅ | ✅ | ❌ | ❌ | ❌ | IT-Only | `r it_only` |
@@ -209,7 +209,7 @@ for (mat in crossings_Q2$steps) {
 
 @tbl-team-steps shows how frequently certain team combinations were reported **within** any given GSBPM step.
 
-We were surprised to see that Corporate IT and Domain Analyst teams occurred almost twice as frequently as Stream Aligned teams (Domain-embedded IT and Domain-embedded analysts). In particular, this suggests that technical expertise offered by IT personnel is often centralized outside of the domain area rather than functionally embedding IT personnel within the domain team.
+We were surprised to see that Corporate IT and Domain Analyst teams occurred almost twice as frequently as teams with Domain-embedded IT **and** Domain-embedded analysts. In particular, this suggests that technical expertise offered by IT personnel is often centralized outside of the domain area rather than functionally embedding IT personnel within the domain team.
 
 ## Capturing System And Team Organizations Together
 

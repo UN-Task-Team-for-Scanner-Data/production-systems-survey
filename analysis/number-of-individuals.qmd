@@ -347,9 +347,9 @@ Respondents are presented with the following question.
 #| layout-ncol: 2
 #| out-width: "100%"
 #| fig-cap:
-#| - Number of Individuals for Small Changes (Overall)
-#| - Number of Individuals for Small Changes (Monolith)
-#| - Number of Individuals for Small Changes (Modular)
+#| - Number of Individuals for Large Changes (Overall)
+#| - Number of Individuals for Large Changes (Monolith)
+#| - Number of Individuals for Large Changes (Modular)
 
 make_individuals_lg_table <- function(df) {
   factor_df = as.data.frame(lapply(df[, c('ind_ing_lg', "ind_proc_lg", 'ind_elem_lg', 'ind_agg_lg', 'ind_fin_lg')], factor, levels=individual_levels))

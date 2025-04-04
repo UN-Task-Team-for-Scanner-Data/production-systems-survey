@@ -2,11 +2,109 @@
 
 As far as we know, this is the first survey to investigate the current state of CPI Production Systems at National Statistics Agencies (NSO)s around the world. By introducing a generic set of concepts around system and team structure, we were able to derive some meaningful information about how CPI Production Systems and the teams that maintain them are organized. We were also able to characterize several important aspects of the teams maintaining these systems, including the tools and technologies they use, the age and update frequency of typical systems, number of collaborators, lead time, and challenges faced.
 
+We begin be highlighting some noteworthy observations throughout the survey. Next, we provide some concrete and practical suggestions that we believe to be beneficial for both CPI Production Systems teams and teams maintaining Complex Analytical Systems more generally. Finally, we highlight future work that we believe to be productive.
+
 ## Bottom Line Up Front
 
+This section highlights some of the noteworthy results we found in our survey on CPI Production Systems.
 
+### System and Team Organization
 
-## Next Steps
+- The two most common ways that system components are coupled across GSBPM steps are (1) to have one system span both the data ingestion step and the data processing step, and (2) to have one system span all 5 GSBPM steps.
+
+- By far the most common team structure we found was comprised only of domain-embedded analysts. The second most common team structure we found was a mix of Corporate IT employees and domain-embedded analysts.
+
+- Teams of domain-embedded analysts and domain-embedded IT professionals were not very common, suggesting that it is **not** common practice to embed IT staff within a business domain team. In other words, IT expertise tends to be centralized rather than embedded in business domain teams, which may contribute to increased communication overhead due to centralized IT staff lacking important business domain context.
+
+- Using the "Representative System Group" question, we were able to elicit a high level description of the system **and** team organization for a representative group of CPI Production Systems at the respondent's organization. While this system/team description was high level, it provided us with enough information to loosely group NSOs into 3 architecture categories (Monolithic, Hybrid, Modular) and 4 team categories (Stream-Aligned, IT-Only, Analyst-Only, Other Mix).
+
+- IT-Only teams were the msot likely to develop Modular Systems compared to the other 4 team types.
+
+- The most common architecture type overall was Monolithic.
+
+- Other Mix teams were much more likely to develop Monolithic systems compared to the other 3 team types[^1].
+
+[^1]: Note that there is a small sample size caveat with this observation. Had the sample size been larger, this observation may not have been as extreme as what we observed.
+
+### Tools and Technologies
+
+- A majority of respondents surveyed **don't use any kind of Version Control System at all**. The second most common answer was GitLab/GitHub, and the third most common version control strategy was to use "File Naming Conventions". 
+
+- Microsoft Excel was by far the most commonly used commercial software product in CPI Production System teams. The next most common product used was SAS, and the third most commonly used product is Microsoft Access.
+
+- The most common tool used for project management was a shared Microsoft Excel workbook, while the second most common response was to not use any software for project management.
+
+- The most common programming language used across all systems is SQL, while the second most frequently used language is tied between Python, R, and SAS.
+
+- Among organizations with Monolithic representative systems, SQL is still the most commonly used language, with many other languages being reported. For example, Java, Python, Visual Basic Applications, R, Visual Basic, SAS, C#, and C++ all being used by multiple organizations.
+
+- Among organizations with Modular representative systems, R and SAS are tied for first place, with SQL in a close second. The only other responses with more than a couple of occurrences are "None" (i.e., no programming language is used), Python, and Visual Basic Applications.
+
+- By far the most commonly used storage formats were (1) Database Management Systems (DBMS) and (2) file systems, with the former having a slightly higher occurrence.
+
+- Very few respondents reported leveraging analytics-optimized file formats such as Apache Parquet, and very few respondents reported using Object Storage solutions such as Amazon S3 or Azure Data Lake Storage.
+
+### System Age and Updates
+
+- Organizations with Monolithic representative systems are most likely to report a system age of 6-10 years or 11-20 years, while organizations with Modular representative systems are equally likely to report any of the system ages provided.
+
+- IT-Only teams were much less likely to report a system age of "more than 20 years" compared to Stream Aligned teams and Analyst-Only teams.
+
+- Other Mix teams were much more likely to report a system age of 6-10 years compared to any of the other options[^1].
+
+- Organizations with Monolithic representative systems were much more likely to report that the **majority of systems that are never updated** compared to organizations with Modular representative systems.
+
+- Overall, the most common answers for how often the majority of systems are updated were (1) less than once per year, (2) never updated, and (3) once per year.
+
+- Stream-Aligned teams were the most likely to report that the majority of systems are never updated, with all other team types reporting this answer multiple times[^2]. Updating systems less than once per year was the most common answer across all team types.
+
+- Other Mix teams didn't report any update frequency that was more frequent than every six months[^1].
+
+[^2]: We suspect that this is slightly biased by the fact that the majority of Stream-Aligned teams in our sample are comprised of domain-analysts only rather than having both domain-embedded analysts **and** domain-embedded IT professionals.
+
+### Number of People
+
+- Most small changes require the participation of 2-3 individuals, with answers of "1 individual" and "4-6 individuals" also being somewhat common.
+
+- Organizations with monolithic representative systems were slightly more likely to report a smaller number of individuals participating in **small changes** compared to organizations with modular representative systems.
+
+- Organizations with monolithic representative systems were most likely to require participation of  4-6 individuals or 2-3 individuals for **large changes**, whereas organizations with modular representative systems were most likely to report requiring participation of 2-3 individuals. For both architecture types, there were a roughly equal number of answers requiring 7-9 individuals or more for large changes.
+
+### Lead Times
+
+- The most common responses overall were lead times of "within 1 week" or "within 1 day" for **small changes**. However, a non-trivial fraction of respondents reported lead times of "within 1 month" or "within 3 months" for small changes.
+
+- There was no meaningful difference between architecture types or team types for lead times on small changes.
+
+- Organizations with monolithic representative systems were more likely to report lead times of "within 1 year" or "more than 1 year" for **large changes** compared to organizations with modular representative systems. A few respondents from organizations with monolithic representative systems reported that large changes were "too complex" or "the system can't be modified", whereas zero respondents from organizations with modular representative systems reported either of these answers.
+
+- The most common lead time for **large changes** by far among organizations with stream-aligned teams was "within 1 month", whereas IT-Only teams were almost equally likely to report "within 1 week", "within 1 month", "within 3 months", or "more than 1 year".
+
+- Other Mix teams reported the longest lead times for **large changes**, with every lead time reported being "within 1 month" or longer[^1].
+
+- Across all team types, "within 1 year" and "more than 1 year" were somewhat common answers to the question about lead times for **large changes**.
+
+### Alternative Data Usage
+
+- Just under two thirds of respondents report not using alternative data at all.
+
+- Of those respondents that do use alternative data, the majority of respondents report that "less than 10%" or "between 10% and 30%" of their CPI is comprised of alternative data by expenditure weight.
+
+- Of those respondents that don't use alternative data, almost three quarters of them report that they would like to use alternative data.
+
+- The most commonly cited challenges with respect to alternative data adoption are (1) lack of data provider cooperation, (2) insufficient capacity, and (3) insufficient skills to work with alternative data.
+
+### Overall Challenges Faced
+
+- The most commonly cited challenge by far was "lack of staff", followed by "lack of skills maintaining complex systems" and "system interactions" in second and third place.
+
+- Tied for fourth place are (1) managing complexity within a system (e.g., maintaining large quantities of code) and (2) verifying that a system behaves correctly.
+
+- Surprisingly few respondents cited "version control" as a challenge they faced, despite the majority of respondents indicating that they do not use any kind of version control solution.
+
+## Practical Suggestions
+
+Based on our survey results, we have several concrete and practical suggestions that may help the teams responsible for CPI Production Systems to manage complexity and reduce maintenance burden for these systems. While this guidance is targeted at the audience of this survey, our suspicion is that other teams managing similar Complex Analytical Systems may benefit from applying a number of the suggestions in this section.
 
 
 ## Future Work

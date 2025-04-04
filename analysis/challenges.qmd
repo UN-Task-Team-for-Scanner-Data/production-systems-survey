@@ -11,6 +11,7 @@ We show a stacked bar chart of the 5 most commonly cited challenges below.
 #| echo: false
 #| warning: false
 #| fig-cap: Challenges Faced (Rank 1 through 5)
+#| out-width: "100%"
 
 library(forcats)
 library(dplyr)
@@ -111,7 +112,7 @@ For example, if one analyst writes an R script that performs some data processin
 
 The more likely scenario is that the first analyst's output table will not be immediately compatible with the second analyst's system (e.g., column names don't match, data types for a primary key column don't match, the two analysts were using different semantics for the same concept, and so on)[^1].
 
-In our experience, these kinds of system integration issues are usually small enough that they are resolved in an ad hoc manner. However, the accumulation of many ad hoc solutions over time can create significant technical debt and lead to significant system interaction challenges.
+In our experience, these kinds of system integration issues are usually small enough that they are resolved in an ad hoc manner. However, the accumulation of many ad hoc solutions over time can create significant [technical debt](https://en.wikipedia.org/wiki/Technical_debt) and lead to significant system interaction challenges.
 
 Tied for fourth place are (1) complexity within a system (e.g., managing large quantities of code) and (2) verifying that a system behaves correctly. 
 
