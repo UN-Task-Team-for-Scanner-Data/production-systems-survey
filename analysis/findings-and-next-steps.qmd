@@ -1,8 +1,8 @@
 # Conclusion {#sec-findings}
 
-As far as we know, this is the first survey to investigate the current state of CPI Production Systems at National Statistics Agencies (NSO)s around the world. By introducing a generic set of concepts around system and team structure, we were able to derive some meaningful information about how CPI Production Systems and the teams that maintain them are organized. We were also able to characterize several important aspects of the teams maintaining these systems, including the tools and technologies they use, the age and update frequency of typical systems, number of collaborators, lead time, and challenges faced.
+As far as we know, this is the first survey to investigate the current state of CPI Production Systems at National Statistics Organizations (NSO)s around the world. By introducing a generic set of concepts around system and team structure, we were able to derive some meaningful information about how CPI Production Systems and the teams that maintain them are organized. We were also able to characterize several important aspects of the teams maintaining these systems, including the tools and technologies they use, the age and update frequency of typical systems, number of collaborators, lead time, and challenges faced.
 
-We begin be highlighting some noteworthy observations throughout the survey. Next, we provide some concrete and practical suggestions that we believe to be beneficial for both CPI Production Systems teams and teams maintaining Complex Analytical Systems more generally. Finally, we highlight future work that we believe to be productive.
+We begin by highlighting some noteworthy observations throughout the survey. Next, we provide some concrete and practical suggestions that we believe to be beneficial for both CPI Production Systems teams and teams maintaining Complex Analytical Systems more generally. Finally, we highlight future work that we believe will be productive.
 
 ## Bottom Line Up Front
 
@@ -16,9 +16,9 @@ This section highlights some of the noteworthy results we found in our survey on
 
 - Teams of domain-embedded analysts and domain-embedded IT professionals were not very common, suggesting that it is **not** common practice to embed IT staff within a business domain team. In other words, IT expertise tends to be centralized rather than embedded in business domain teams, which may contribute to increased communication overhead due to centralized IT staff lacking important business domain context.
 
-- Using the "Representative System Group" question, we were able to elicit a high level description of the system **and** team organization for a representative group of CPI Production Systems at the respondent's organization. While this system/team description was high level, it provided us with enough information to loosely group NSOs into 3 architecture categories (Monolithic, Hybrid, Modular) and 4 team categories (Stream-Aligned, IT-Only, Analyst-Only, Other Mix).
+- Using the "Representative System Group" question, we were able to elicit a high-level description of the system **and** team organization for a representative group of CPI Production Systems at the respondent's organization. While this system/team description was high level, it provided us with enough information to loosely group NSOs into 3 architecture categories (Monolithic, Hybrid, Modular) and 4 team categories (Stream-Aligned, IT-Only, Analyst-Only, Other Mix).
 
-- IT-Only teams were the msot likely to develop Modular Systems compared to the other 4 team types.
+- IT-Only teams were the most likely to develop Modular Systems compared to the other 3 team types.
 
 - The most common architecture type overall was Monolithic.
 
@@ -36,7 +36,7 @@ This section highlights some of the noteworthy results we found in our survey on
 
 - The most common programming language used across all systems is SQL, while the second most frequently used language is tied between Python, R, and SAS.
 
-- Among organizations with Monolithic representative systems, SQL is still the most commonly used language, with many other languages being reported. For example, Java, Python, Visual Basic Applications, R, Visual Basic, SAS, C#, and C++ all being used by multiple organizations.
+- Among organizations with Monolithic representative systems, SQL is still the most commonly used language, with many other languages being reported. For example, Java, Python, Visual Basic Applications, R, Visual Basic, SAS, C#, and C++ are all being used by multiple organizations.
 
 - Among organizations with Modular representative systems, R and SAS are tied for first place, with SQL in a close second. The only other responses with more than a couple of occurrences are "None" (i.e., no programming language is used), Python, and Visual Basic Applications.
 
@@ -109,23 +109,23 @@ This section highlights some of the noteworthy results we found in our survey on
 Based on our survey results, we have several concrete and practical suggestions that may help the teams responsible for CPI Production Systems to manage complexity and reduce maintenance burden for these systems. While this guidance is targeted at the audience of this survey, our suspicion is that other teams managing similar Complex Analytical Systems may benefit from applying a number of the suggestions in this section.
 
 ::: {.callout-important}
-All of the suggestions are guidelines based on correlational evidence and general industry knowledge.
+All of these suggestions are guidelines based on correlational evidence and general industry knowledge.
 
 We are **not** claiming any strict cause-and-effect relationships from this survey alone. Rather, our goal is to encourage readers to think critically about these suggestions and to pursue suggestions that resonate based on their own experiences.
 :::
 
 | Suggestion | Explanation |
 | ---------- | ----------- |
-| Think explicitly about system boundaries. | There is some evidence in our survey that monolithic architectures are associated with certain outcomes such as (1) longer lead times for large changes and (2) never updating. <br/> <br/> Are two unrelated concerns are implemented in the same system? Would it be easier to maintain your codebase if these concerns were split into two independent components? |
+| Think explicitly about system boundaries. | There is some evidence in our survey that monolithic architectures are associated with certain outcomes such as (1) longer lead times for large changes and (2) never updating systems. <br/> <br/> Are two unrelated concerns implemented in the same system? Would it be easier to maintain your codebase if these concerns were split into two independent components? |
 | Think explicitly about data interchange **between** systems. | If an important piece of data is exchanged between two or more systems, take the time to properly doucument important properties of the data such as the columns available, the data types, and the semantics of the data. This will make it easier for data consumers to make use of this data. <br/> <br/> One way to do formalize this data exchange is through a standard format such as [Data Contract Specification](https://datacontract.com/). |
 | Embed technical expertise in business domain teams. | There is some evidence in our survey that "Other Mix" teams underperformed the other team mixes on several outcomes. <br/> <br/> Effectively developing and maintaining CPI Production Systems requires a team of individuals with **both** strong domain knowledge and strong technical skills. <br/> <br/> Whether technical expertise is embedded by directly employing IT professionals **within** the business domain team, or by upskilling domain-embedded analysts to improve their technical skills, our belief is that improving the technical capacity of business domain teams who own CPI Production Systems will lead to a number of improved business outcomes. |
 | Adopt Git and GitLab or GitHub as a Version Control System for code, configuration, and documentation. | The cognitive load of understanding CPI Production Systems is already high enough without manually keeping track of version control and code integration from multiple collaborators. Allow a purpose-built tool handle the burden of revision control. |
-| Practice updating systems more frequently. | In software engineering, there is a commonly used performance metric called **Deployment Frequency** (@forsgren2018accelerate), which measures how frequently code is deployed to production. <br/> <br/> The closest analog to this concept in the world of CPI Production Systems is what we've been referring to as "Update Frequency" throughout this report. The rationale for deployment frequency is that it's better to deploy many small and safe changes regularly than to deploy big risky changes infrequently. <br/> <br/> There are limits to how far this can be taken in CPI Production Systems, however, our belief is that frequently updating and testing systems with small changes leads to fewer unforeseen issues when it comes time to release a change for production[^5]. |
+| Practice updating systems more frequently. | In software engineering, there is a commonly used performance metric called **Deployment Frequency** (@forsgren2018accelerate), which measures how frequently code is deployed to production. <br/> <br/> The closest analog to this concept in the world of CPI Production Systems is what we've been referring to as "Update Frequency" throughout this report. The rationale for deployment frequency is that it's better to deploy many small and safe changes regularly than to deploy big risky changes infrequently. <br/> <br/> There are limits to how far this can be taken with CPI Production Systems, however, our belief is that frequently updating and testing systems with small changes leads to fewer unforeseen issues when it comes time to release a change for production[^5]. |
 | Ensure your CPI Production System can operate in a separate development environment. | When dealing with complex systems, it is critical to have a safe environment where teams can "move fast and break things" without any risk to the production version of the system[^6]. <br/> <br/> This is in contrast to **only** having the live production system to perform tests on, in which case one needs to be absolutely certain that a change won't irreparably break the live production system. In extreme cases, this proposition is so risky that the production system is never updated at all. |
 
 : Practical Takeaways from Survey {tbl-colwidths="[35,65]"}
 
-[^5]: In general, the Consumer Price Index is a non-revisable product, meaning that it is not straightforward to "roll back" a change in the same way that would be possible in other settings. Because of this, there is a certain level of due-dilligence required for largesystem changes, meaning there are some limits on how frequently CPI Production Systems can be updated.
+[^5]: In general, the Consumer Price Index is a non-revisable product, meaning that it is not straightforward to "roll back" a change in the same way that would be possible in other settings. Because of this, there is a certain level of due-dilligence required for large system changes, meaning there are some limits on how frequently CPI Production Systems can be updated.
 
 [^6]: Note that this can be as simple as having a `production` folder and a `development` folder on a network file system and scoping activities to the appropriate folder. More complex separations of development, testing, and production environments are possible, but we encourage readers to start simple if this is a new concept.
 
@@ -137,14 +137,14 @@ First, as mentioned at the beginning of this report, teams maintaining Complex A
 
 What is noteworthy is that none of these system complexity challenges are unsolved problems. As we note several times throughout our report, these problems have been examined extensively in other disciplines such as software engineering, and satisfactory solutions to these problems have often existed for decades.
 
-Moreover, there is an abundance of freely available online material to teach these best practices, and there are often open source software solutions to many of these challenges as well. There are even initiatives such as Reproducible Analytical Pipelines (RAP) (@RAPsite) which actively curate the most relevant software engineering concepts for the kind of work required by Complex Analytical Systems.
+Moreover, there is an abundance of freely available online material to teach these best practices, and there are often open source software products that address many of these challenges as well. There are even initiatives such as Reproducible Analytical Pipelines (RAP) (@RAPsite) which actively curate the most relevant software engineering concepts for the kind of work required by Complex Analytical Systems.
 
-Despite all of this, at the time of producing this report (April, 2025), effectively managing Complex Analytical Systems seems to be far from a solved problem. To this end, we think there is significant value in understanding the reasons this gap is so difficult to bridge[^7].
+Despite all of this, at the time of producing this report (April, 2025), effectively managing Complex Analytical Systems seems to be far from a solved problem. To this end, we think there is significant value in understanding the reasons this gap is so difficult to bridge. Importantly, is there a communication gap that can be bridged by more effectively connecting business domain analysts with the relevant content, or is the issue related to cognitive load or some other constraint limiting the bandwidth of these business domain teams?
 
 Second, are there improvements that can be made to both (1) system architecture and (2) team organization for Complex Analytical Systems in order to improve business outcomes? For example, to what extent has [Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law) impacted the architecture of Complex Analytical Systems such as the CPI Production Systems studied in this report? Would different team structures and team interaction modes lead to more effective system architectures?
 
 Our survey provides some evidence that certain findings from the world of software engineering regarding team organization and system architecture may indeed be applicable to Complex Analytical Systems. However, the evidence from this survey alone is insufficient to make any sweeping generalizations about Complex Analytical Systems as a whole.
 
-To this end, we believe there might be significant business value to be gained (e.g., lower maintenance costs, improved delivery frequency) by further investigating these topics in the context of other business domains maintaining Complex Analytical Systems.
+To this end, we believe there is significant business value to be gained by further investigating these topics in the context of other business domains maintaining Complex Analytical Systems[^7].
 
-[^7]: For example, is the cognitive load for these teams already very high due to the nature of the systems they maintain, limiting their bandwidth to learn and adopt new practices? Are there other reasons for this discrepancy?
+[^7]: For example, if there is evidence that certain team structures, team interaction modes, and system architectures are more effective than others, then organizations that adopt the improved team topologies and system architectures may see reduced maintenance costs and faster delivery times, among other benefits.
