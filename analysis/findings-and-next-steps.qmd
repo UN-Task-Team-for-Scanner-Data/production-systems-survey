@@ -24,7 +24,7 @@ This section highlights some of the noteworthy results we found in our survey on
 
 - Other Mix teams were much more likely to develop Monolithic systems compared to the other 3 team types[^1].
 
-[^1]: Note that there is a small sample size caveat with this observation. Had the sample size been larger, this observation may not have been as extreme as what we observed.
+[^1]: Note that there is a small sample size caveat with observations involving Other Mix teams. Had the sample size been larger, the observations we observed with this team type may not have been as extreme as what we observed in the survey.
 
 ### Tools and Technologies
 
@@ -50,7 +50,7 @@ This section highlights some of the noteworthy results we found in our survey on
 
 - IT-Only teams were much less likely to report a system age of "more than 20 years" compared to Stream Aligned teams and Analyst-Only teams.
 
-- Other Mix teams were much more likely to report a system age of 6-10 years compared to any of the other options[^1].
+- Other Mix teams were much more likely to report a system age of 6-10 years compared to any of the other options.
 
 - Organizations with Monolithic representative systems were much more likely to report that the **majority of systems that are never updated** compared to organizations with Modular representative systems.
 
@@ -58,7 +58,7 @@ This section highlights some of the noteworthy results we found in our survey on
 
 - Stream-Aligned teams were the most likely to report that the majority of systems are never updated, with all other team types reporting this answer multiple times[^2]. Updating systems less than once per year was the most common answer across all team types.
 
-- Other Mix teams didn't report any update frequency that was more frequent than every six months[^1].
+- Other Mix teams didn't report any update frequency that was more frequent than every six months.
 
 [^2]: We suspect that this is slightly biased by the fact that the majority of Stream-Aligned teams in our sample are comprised of domain-analysts only rather than having both domain-embedded analysts **and** domain-embedded IT professionals.
 
@@ -80,7 +80,7 @@ This section highlights some of the noteworthy results we found in our survey on
 
 - The most common lead time for **large changes** by far among organizations with stream-aligned teams was "within 1 month", whereas IT-Only teams were almost equally likely to report "within 1 week", "within 1 month", "within 3 months", or "more than 1 year".
 
-- Other Mix teams reported the longest lead times for **large changes**, with every lead time reported being "within 1 month" or longer[^1].
+- Other Mix teams reported the longest lead times for **large changes**, with every lead time reported being "within 1 month" or longer.
 
 - Across all team types, "within 1 year" and "more than 1 year" were somewhat common answers to the question about lead times for **large changes**.
 
@@ -100,13 +100,51 @@ This section highlights some of the noteworthy results we found in our survey on
 
 - Tied for fourth place are (1) managing complexity within a system (e.g., maintaining large quantities of code) and (2) verifying that a system behaves correctly.
 
-- Surprisingly few respondents cited "version control" as a challenge they faced, despite the majority of respondents indicating that they do not use any kind of version control solution.
+- Almost noone cited "version control" as a challenge they faced, despite the majority of respondents indicating that they do not use any kind of version control solution or file naming conventions[^4].
+
+[^4]: We are skeptical that these two facts can be true at the same time. Our suspicion is that some respondents have not explicitly thought about version control as a distinct problem with purpose-built tooling that exists to solve it.
 
 ## Practical Suggestions
 
 Based on our survey results, we have several concrete and practical suggestions that may help the teams responsible for CPI Production Systems to manage complexity and reduce maintenance burden for these systems. While this guidance is targeted at the audience of this survey, our suspicion is that other teams managing similar Complex Analytical Systems may benefit from applying a number of the suggestions in this section.
 
+::: {.callout-important}
+All of the suggestions are guidelines based on correlational evidence and general industry knowledge.
+
+We are **not** claiming any strict cause-and-effect relationships from this survey alone. Rather, our goal is to encourage readers to think critically about these suggestions and to pursue suggestions that resonate based on their own experiences.
+:::
+
+| Suggestion | Explanation |
+| ---------- | ----------- |
+| Think explicitly about system boundaries. | There is some evidence in our survey that monolithic architectures are associated with certain outcomes such as (1) longer lead times for large changes and (2) never updating. <br/> <br/> Are two unrelated concerns are implemented in the same system? Would it be easier to maintain your codebase if these concerns were split into two independent components? |
+| Think explicitly about data interchange **between** systems. | If an important piece of data is exchanged between two or more systems, take the time to properly doucument important properties of the data such as the columns available, the data types, and the semantics of the data. This will make it easier for data consumers to make use of this data. <br/> <br/> One way to do formalize this data exchange is through a standard format such as [Data Contract Specification](https://datacontract.com/). |
+| Embed technical expertise in business domain teams. | There is some evidence in our survey that "Other Mix" teams underperformed the other team mixes on several outcomes. <br/> <br/> Effectively developing and maintaining CPI Production Systems requires a team of individuals with **both** strong domain knowledge and strong technical skills. <br/> <br/> Whether technical expertise is embedded by directly employing IT professionals **within** the business domain team, or by upskilling domain-embedded analysts to improve their technical skills, our belief is that improving the technical capacity of business domain teams who own CPI Production Systems will lead to a number of improved business outcomes. |
+| Adopt Git and GitLab or GitHub as a Version Control System for code, configuration, and documentation. | The cognitive load of understanding CPI Production Systems is already high enough without manually keeping track of version control and code integration from multiple collaborators. Allow a purpose-built tool handle the burden of revision control. |
+| Practice updating systems more frequently. | In software engineering, there is a commonly used performance metric called **Deployment Frequency** (@forsgren2018accelerate), which measures how frequently code is deployed to production. <br/> <br/> The closest analog to this concept in the world of CPI Production Systems is what we've been referring to as "Update Frequency" throughout this report. The rationale for deployment frequency is that it's better to deploy many small and safe changes regularly than to deploy big risky changes infrequently. <br/> <br/> There are limits to how far this can be taken in CPI Production Systems, however, our belief is that frequently updating and testing systems with small changes leads to fewer unforeseen issues when it comes time to release a change for production[^5]. |
+| Ensure your CPI Production System can operate in a separate development environment. | When dealing with complex systems, it is critical to have a safe environment where teams can "move fast and break things" without any risk to the production version of the system[^6]. <br/> <br/> This is in contrast to **only** having the live production system to perform tests on, in which case one needs to be absolutely certain that a change won't irreparably break the live production system. In extreme cases, this proposition is so risky that the production system is never updated at all. |
+
+: Practical Takeaways from Survey {tbl-colwidths="[35,65]"}
+
+[^5]: In general, the Consumer Price Index is a non-revisable product, meaning that it is not straightforward to "roll back" a change in the same way that would be possible in other settings. Because of this, there is a certain level of due-dilligence required for largesystem changes, meaning there are some limits on how frequently CPI Production Systems can be updated.
+
+[^6]: Note that this can be as simple as having a `production` folder and a `development` folder on a network file system and scoping activities to the appropriate folder. More complex separations of development, testing, and production environments are possible, but we encourage readers to start simple if this is a new concept.
 
 ## Future Work
 
-While our survey has focused on CPI Production Systems, we believe that our findings have a high degree of external validity for other Complex Analytical Systems.
+We believe there are many areas of future work on this topic, but for brevity, we attempt to summarize them into two main categories below.
+
+First, as mentioned at the beginning of this report, teams maintaining Complex Analytical Systems often struggle with many aspects of managing system complexity.
+
+What is noteworthy is that none of these system complexity challenges are unsolved problems. As we note several times throughout our report, these problems have been examined extensively in other disciplines such as software engineering, and satisfactory solutions to these problems have often existed for decades.
+
+Moreover, there is an abundance of freely available online material to teach these best practices, and there are often open source software solutions to many of these challenges as well. There are even initiatives such as Reproducible Analytical Pipelines (RAP) (@RAPsite) which actively curate the most relevant software engineering concepts for the kind of work required by Complex Analytical Systems.
+
+Despite all of this, at the time of producing this report (April, 2025), effectively managing Complex Analytical Systems seems to be far from a solved problem. To this end, we think there is significant value in understanding the reasons this gap is so difficult to bridge[^7].
+
+Second, are there improvements that can be made to both (1) system architecture and (2) team organization for Complex Analytical Systems in order to improve business outcomes? For example, to what extent has [Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law) impacted the architecture of Complex Analytical Systems such as the CPI Production Systems studied in this report? Would different team structures and team interaction modes lead to more effective system architectures?
+
+Our survey provides some evidence that certain findings from the world of software engineering regarding team organization and system architecture may indeed be applicable to Complex Analytical Systems. However, the evidence from this survey alone is insufficient to make any sweeping generalizations about Complex Analytical Systems as a whole.
+
+To this end, we believe there might be significant business value to be gained (e.g., lower maintenance costs, improved delivery frequency) by further investigating these topics in the context of other business domains maintaining Complex Analytical Systems.
+
+[^7]: For example, is the cognitive load for these teams already very high due to the nature of the systems they maintain, limiting their bandwidth to learn and adopt new practices? Are there other reasons for this discrepancy?

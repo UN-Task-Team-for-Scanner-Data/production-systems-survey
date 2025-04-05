@@ -16,7 +16,7 @@ book:
     - change-lead-times.qmd
     - alternative-data.qmd
     - challenges.qmd
-    - conclusions.qmd
+    - findings-and-next-steps.qmd
     - references.qmd
 
 bibliography: references.bib
