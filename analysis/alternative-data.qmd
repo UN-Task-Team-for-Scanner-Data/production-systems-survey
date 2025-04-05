@@ -1,0 +1,212 @@
+# Alternative Data {#sec-alt-data}
+
+In the world of official statistics, the term **alternative data** is used to describe sources of data other than traditional field-collected data that can be used to derive meaningful statistics.
+
+These data sources often require more complicated tooling and methodology to work with, but offer certain benefits over field-collected data such as collection cost and comprehensiveness[^1].
+
+In this section, we ask respondents about the extent to which they currently leverage alternative data sources in their CPI Production Systems. We also ask respondents about the primary challenges they face with respect to the adoption of Alternative Data in their CPI Production Systems.
+
+[^1]: For example, if a retailer agrees to share data with a NSO, the retailer can quite easily send weekly snapshots of their product transaction records. This dataset is much larger than anything that could realistically be collected by a field collection agent, but it also introduces new statistical issues (e.g., sample selection), and special tooling may be required to work with a dataset of this size.
+
+## Alternative Data Usage
+
+Just under two thirds of respondents report not using alternative data sources at all. Of those that use alternative data sources, the majority of respondents report that "Less than 10%" or "Between 10% and 30%" of their CPI is derived from alternative data sources[^2].
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  use_ads=colnames(df)[219],
+  geks=colnames(df)[220],
+  tdh=colnames(df)[221],
+  hedonic=colnames(df)[222],
+  oth_mlt=colnames(df)[223],
+  dyn_smpl=colnames(df)[224],
+  fix_smpl=colnames(df)[225],
+  other=colnames(df)[226],
+  pct_ads=colnames(df)[227],
+  want_use_ads_if_not_already=colnames(df)[228],
+  want_use_ads_pct=colnames(df)[229],
+)
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+pct_dat <- factor(df[df$pct_ads != "", 'pct_ads'], levels=c('Less than 10%.', 'Between 10% and 30%.', 'Between 30% and 50%.', 'Between 50% and 70%.', 'Between 70% and 90%.', 'Over 90%.'))
+
+ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+NUM_USE_ADS = sum(df$use_ads == "Yes")
+NUM_NOT_USE_ADS = sum(nrow(df) - NUM_USE_ADS)
+NUM_WANT_USE_ADS = sum(df$want_use_ads_if_not_already == "Yes")
+```
+
+Of those NSOs that don't currently use alternative data sources, almost three quarters of them report that they would like to use alternative data sources. Of those NSOs that would like to use alternative data sources, we asked them how much alternative data they would like to use in their CPI Production Systems in an ideal scenario. We show this distribution below.
+
+```{r}
+#| echo: false
+
+pct_dat <- factor(df[df$want_use_ads_pct != "", 'want_use_ads_pct'], levels=c('Less than 10%.', 'Between 10% and 30%.', 'Between 30% and 50%.', 'Between 50% and 70%.', 'Between 70% and 90%.', 'Over 90%.'))
+
+ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+
+It appears that most NSOs want between 10% and 50% of their CPI to be comprised of alternative data sources (by expenditure weight). Our suspicion is that leveraging alternative data may be challenging for certain components of the CPI, so even in an ideal scenario, NSOs may prefer to continue using field collected data for quality reasons.
+
+[^2]: These percentages refer to the share of the CPI by expenditure weight. For example, if an NSO uses alternative data sources to calculate the CPI for product categories that make up 10% of total household expenditures, then we would say that 10% of the CPI comes from alternative data sources.
+
+## Which Price Index Methods are Used on Alternative Data Sources
+
+Of those respondents reporting that they currently use alternative data sources, we asked which price index methods are most commonly used[^3]. The table below summarizes the number of respondents who are using each method[^4].
+
+[^3]: For readers who are unfamiliar with the Consumer Prices business domain, these are techniques that are used to calculate period-over-period price changes from a given data source.
+
+[^4]: These choices are not mutually exclusive; one NSO may use multiple price index methods.
+
+```{r}
+#| echo: false
+#| warning: false
+
+ads_methods <- matrix(nrow=7, ncol=2)
+
+ads_methods[1,1] = "GEKS"
+ads_methods[1,2] = sum(df$geks == "Yes")
+
+ads_methods[2,1] = "Time Dummy Hedonic"
+ads_methods[2,2] = sum(df$tdh == "Yes")
+
+ads_methods[3,1] = "Hedonic"
+ads_methods[3,2] = sum(df$hed == "Yes")
+
+ads_methods[4,1] = "Other Multilateral"
+ads_methods[4,2] =sum(df$oth_mlt == "Yes")
+
+ads_methods[5,1] = "Dynamic Sample"
+ads_methods[5,2] = sum(df$dyn_smpl == "Yes")
+
+ads_methods[6,1] = "Fixed Sample"
+ads_methods[6,2] = sum(df$fix_smpl == "Yes")
+
+ads_methods[7,1] = "Other"
+ads_methods[7,2] = sum(df$other != "")
+
+ads_methods
+```
+
+## What Challenges are Faced in the Adoption of Alternative Data
+
+We asked all respondents to rank the challenges they face in adopting alternative data sources(regardless of whether or not they are currently using alternative data in their CPI Production Systems).
+
+```{r}
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Ranked Alternative Data Challenges
+
+make_challenges_table <- function(df) {
+  dat <- data.frame(
+    Challenges = c(
+      df$rank1,
+      df$rank2,
+      df$rank3,
+      df$rank4,
+      df$rank5,
+      df$rank6,
+      df$rank7,
+      df$rank8,
+      df$rank9,
+      df$rank10,
+      df$rank11,
+      df$rank12
+    ),
+    Ranking = c(
+      rep("Rank 1", each=nrow(df)),
+      rep("Rank 2", each=nrow(df)),
+      rep("Rank 3", each=nrow(df)),
+      rep("Rank 4", each=nrow(df)),
+      rep("Rank 5", each=nrow(df)),
+      rep("Rank 6", each=nrow(df)),
+      rep("Rank 7", each=nrow(df)),
+      rep("Rank 8", each=nrow(df)),
+      rep("Rank 9", each=nrow(df)),
+      rep("Rank 10", each=nrow(df)),
+      rep("Rank 11", each=nrow(df)),
+      rep("Rank 12", each=nrow(df))
+    )
+  )
+  
+  # Replace empty string with NA
+  dat <- dat[dat$Challenges != "",]
+  dat <- dat[!is.na(dat$Challenges),]
+  
+  dat
+}
+
+# ADS Challenges
+
+df <- df |> rename(
+  rank1=colnames(df)[230],
+  rank2=colnames(df)[231],
+  rank3=colnames(df)[232],
+  rank4=colnames(df)[233],
+  rank5=colnames(df)[234],
+  rank6=colnames(df)[235],
+  rank7=colnames(df)[236],
+  rank8=colnames(df)[237],
+  rank9=colnames(df)[238],
+  rank10=colnames(df)[239],
+  rank11=colnames(df)[240],
+  rank12=colnames(df)[241],
+)
+
+# Shorten value names
+df[df == "Lack of cooperation with owners of alternative data sources."] = "Lack of Provider Cooperation"
+
+df[df == "Lack of organizational capacity (e.g., corporate IT could assist, but there is no capacity)."] = "Insufficient Capacity"
+
+df[df == "So costly that it is not worth implementing."] = "Too Costly"
+
+df[df == "Concerns about data quality from alternative sources."] = "Data Quality Issues"
+
+df[df == "Lack of funding to procure alternative data."] = "Insufficient Funding"
+
+df[df == "None of these (we do not face any challenges)."] = "No Challenges"
+
+df[df == "Lack of availability of alternative data."] = "Data Availability"
+
+df[df == "Concerns about legal challenges to acquiring alternative data (e.g., lack of authority to web scrape prices)."] = "Insufficient Authority"
+
+df[df == "None of these (we do not face any challenges)."] = "No Challenges"
+
+df[df == "Lack of skills within the domain team to make use of alternative data."] = "Insufficient Skills"
+
+df[df ==  "No legal mechanism to require sharing data with your office, or no willingness to compel sharing data."] = "No Willingness"
+
+df[df == "Lack of availability of alternative data."] = "Insufficient Availability"
+
+df[df == "Lack of mandate (not a priority)."] = "Not a Priority"
+
+df[df == "Lack of methodological knowledge to calculate price statistics from alternative data."] = "Methodology Knowledge"
+
+overall_dat <- make_challenges_table(df)
+
+ggplot(overall_dat,aes(x=forcats::fct_infreq(Challenges), fill=Ranking)) +
+  geom_bar(alpha=1, position="stack", color="black") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Ranked Alternative Data Challenges")
+```
+
+Some alternative data challenges will be region-specific, such as lack of cooperation from data providers, authority to collect alternative data, and availability of alternative data.
+
+However, some commonly cited issues such as Insufficient Skills and Methodology Knowledge can be addressed in part by effective knowledge sharing from domain experts.

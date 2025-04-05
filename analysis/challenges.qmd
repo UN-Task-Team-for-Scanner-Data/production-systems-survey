@@ -1,112 +1,24 @@
 # Challenges {#sec-challenges}
 
+We conclude the survey by asking respondents to rank the challenges they face with respect to system development and maintenance in general.
+
+The survey question presented to respondents was as follows.
+
+![Ranked Challenges Question](./diagrams/cpi-systems-challenge-question.png)
+We show a stacked bar chart of the 5 most commonly cited challenges below.
+
 ```{r message = FALSE}
 #| echo: false
+#| warning: false
+#| fig-cap: Challenges Faced (Rank 1 through 5)
+#| out-width: "100%"
 
-library(dplyr)
 library(forcats)
+library(dplyr)
 library(ggplot2)
 
 df <- read.csv("./data/results.csv")
 df <- df[df[,2] != "",]
-
-# Overall Challenges
-
-df <- df |> rename(
-  rank1=colnames(df)[230],
-  rank2=colnames(df)[231],
-  rank3=colnames(df)[232],
-  rank4=colnames(df)[233],
-  rank5=colnames(df)[234],
-  rank6=colnames(df)[235],
-  rank7=colnames(df)[236],
-  rank8=colnames(df)[237],
-  rank9=colnames(df)[238],
-  rank10=colnames(df)[239],
-  rank11=colnames(df)[240],
-  rank12=colnames(df)[241],
-)
-
-# Shorten value names
-df[df == "Lack of cooperation with owners of alternative data sources."] = "Lack of Provider Cooperation"
-
-df[df == "Lack of organizational capacity (e.g., corporate IT could assist, but there is no capacity)."] = "Insufficient Capacity"
-
-df[df == "So costly that it is not worth implementing."] = "Too Costly"
-
-df[df == "Concerns about data quality from alternative sources."] = "Data Quality Issues"
-
-df[df == "Lack of funding to procure alternative data."] = "Insufficient Funding"
-
-df[df == "None of these (we do not face any challenges)."] = "No Challenges"
-
-df[df == "Lack of availability of alternative data."] = "Data Availability"
-
-df[df == "Concerns about legal challenges to acquiring alternative data (e.g., lack of authority to web scrape prices)."] = "Insufficient Authority"
-
-df[df == "None of these (we do not face any challenges)."] = "No Challenges"
-
-df[df == "Lack of skills within the domain team to make use of alternative data."] = "Insufficient Skills"
-
-df[df ==  "No legal mechanism to require sharing data with your office, or no willingness to compel sharing data."] = "No Willingness"
-
-df[df == "Lack of availability of alternative data."] = "Insufficient Availability"
-
-df[df == "Lack of mandate (not a priority)."] = "Not a Priority"
-
-df[df == "Lack of methodological knowledge to calculate price statistics from alternative data."] = "Methodology Knowledge"
-
-
-
-# Overlay all histograms on one plot
-dat <- data.frame(
-  Challenges = c(
-    df$rank1,
-    df$rank2,
-    df$rank3,
-    df$rank4,
-    df$rank5,
-    df$rank6,
-    df$rank7,
-    df$rank8,
-    df$rank9,
-    df$rank10,
-    df$rank11,
-    df$rank12
-  ),
-  Ranking = c(
-    rep("Rank 1", each=nrow(df)),
-    rep("Rank 2", each=nrow(df)),
-    rep("Rank 3", each=nrow(df)),
-    rep("Rank 4", each=nrow(df)),
-    rep("Rank 5", each=nrow(df)),
-    rep("Rank 6", each=nrow(df)),
-    rep("Rank 7", each=nrow(df)),
-    rep("Rank 8", each=nrow(df)),
-    rep("Rank 9", each=nrow(df)),
-    rep("Rank 10", each=nrow(df)),
-    rep("Rank 11", each=nrow(df)),
-    rep("Rank 12", each=nrow(df))
-  )
-)
-
-# Replace empty string with NA
-dat <- dat[dat$Challenges != "",]
-dat <- dat[!is.na(dat$Challenges),]
-
-ggplot(dat,aes(x=forcats::fct_infreq(Challenges), fill=Ranking)) +
-  geom_bar(alpha=1, position="stack", color="black") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-```
-
-```{r message = FALSE}
-#| echo: false
-
-library(forcats)
-library(dplyr)
-library(ggplot2)
-
-df <- read.csv("./data/results.csv")
 
 # Overall Challenges
 
@@ -170,36 +82,14 @@ dat <- data.frame(
     df$rank2,
     df$rank3,
     df$rank4,
-    df$rank5,
-    df$rank6,
-    df$rank7,
-    df$rank8,
-    df$rank9,
-    df$rank10,
-    df$rank11,
-    df$rank12,
-    df$rank13,
-    df$rank14,
-    df$rank15,
-    df$rank16
+    df$rank5
   ),
   Ranking = c(
     rep("Rank 1", each=nrow(df)),
     rep("Rank 2", each=nrow(df)),
     rep("Rank 3", each=nrow(df)),
     rep("Rank 4", each=nrow(df)),
-    rep("Rank 5", each=nrow(df)),
-    rep("Rank 6", each=nrow(df)),
-    rep("Rank 7", each=nrow(df)),
-    rep("Rank 8", each=nrow(df)),
-    rep("Rank 9", each=nrow(df)),
-    rep("Rank 10", each=nrow(df)),
-    rep("Rank 11", each=nrow(df)),
-    rep("Rank 12", each=nrow(df)),
-    rep("Rank 13", each=nrow(df)),
-    rep("Rank 14", each=nrow(df)),
-    rep("Rank 15", each=nrow(df)),
-    rep("Rank 16", each=nrow(df))
+    rep("Rank 5", each=nrow(df))
   )
 )
 
@@ -209,5 +99,33 @@ dat <- dat[!is.na(dat$Challenges),]
 
 ggplot(dat,aes(x=forcats::fct_infreq(Challenges), fill=Ranking)) +
   geom_bar(alpha=1, position="stack", color="black") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Challenges Faced (Rank 1 through 5)")
 ```
+
+By far the most commonly cited challenge was "Lack of Staff". It is important to note that this reported challenge could be explained by any combination of (1) teams working at peak efficiency who are bottle necked by the number of individuals, or (2) teams where the same number of individuals could improve their efficiency if other challenges were alleviated (e.g., skills gaps, technology gaps, and so on).
+
+The second most commonly cited challenge was "Lack of Skills" in the development and maintenance of CPI Production Systems. Given the technical, bespoke, and multidisciplinary nature of CPI Production Systems, there is probably a significant opportunity to bridge the skills gap by finding ways to facilitate knowledge sharing with domain experts.
+
+Interestingly, managing the interaction between systems ("System Interactions") registered as the third most common challenge. Our suspicion is that most people who develop and maintain CPI Production Systems don't think extensively about how to integrate the outputs from one system into the inputs of another downstream system.
+
+For example, if one analyst writes an R script that performs some data processing and writes an intermediate output to an `intermediate-table.RData` file, and a second analyst later discovers they can leverage that intermediate output in another system they are working on, it is unlikely that the second analyst will simply read the `intermediate-table.RData` file and it will seamlessly integrate with their system.
+
+The more likely scenario is that the first analyst's output table will not be immediately compatible with the second analyst's system (e.g., column names don't match, data types for a primary key column don't match, the two analysts were using different semantics for the same concept, and so on)[^1].
+
+In our experience, these kinds of system integration issues are usually small enough that they are resolved in an ad hoc manner. However, the accumulation of many ad hoc solutions over time can create significant [technical debt](https://en.wikipedia.org/wiki/Technical_debt) and lead to significant system interaction challenges.
+
+Tied for fourth place are (1) complexity within a system (e.g., managing large quantities of code) and (2) verifying that a system behaves correctly. 
+
+Maintaining large and complex code bases over time is an inherently challenging problem that requires years of practice. Our suspicion is that applying a relatively small number of relevant ideas from software engineering can lead to a significant reduction in the complexity of CPI Production Systems[^2]. However, we emphasize that mastering these concepts takes significant practice, even if the concepts are fairly straightforward at face value.
+
+We were not surprised to learn that verifying system correctness registered as one of the top challenges due to the complexity of CPI Production Systems. While there are a large number of tools and techniques that can greatly facilitate the testing of software, being able to take advantage of these tools and techniques requires a minimum level of knowledge. Every major programming language comes with at least one comprehensive framework for automated testing. However, taking advantage of these frameworks require adopting certain idioms in order to integrate the testing framework into the code under test[^3]. In brief, very good solutions to this challenge exist, but they require a baseline level of programming skills to adopt in the first place.
+
+As a final note, we were very surprised to see so few respondents identifying Version Control as a challenge. In @sec-tools-tech, the majority of respondents indicated that they either don't use a version control system at all, or they use file-naming conventions to version files. We are skeptical that these two facts are true at the same time.
+
+Our suspicion is that the concept of learning how to use a tool like [Git](https://git-scm.com/) that exists specifically for the purpose of revision control is not something that many survey respondents considered until encountering it in the survey. We therefore suspect that respondents may have lumped revision control challenges with another type of challenge such as "Manual Tasks" or "System Complexity".
+
+[^1]: The problem of passing data inputs from one system to another system has been around since the dawn of computing. However, the somewhat new concept of Data Contracts (see [Data Contract Specification](https://datacontract.com/) for example) try to address this problem in the context of passing complex structured data between data producers and data consumers.
+
+[^2]: For example, adopting a few simple ideas such as grouping related functions into the same module or separating configuration information source code can lead to significant simplifications to code bases that don't currently leverage these ideas.
+
+[^4]: For example, a 1,000 line Python script that performs multiple operations on a [Pandas](https://pandas.pydata.org/) data frame entirely in the global scope will not integrate nicely with a testing framework like [PyTest](https://docs.pytest.org/en/stable/). This is because there is no straightforward way to identify and group a section of the code to be run in a test. 

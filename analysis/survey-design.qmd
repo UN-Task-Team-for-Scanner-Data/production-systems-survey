@@ -1,0 +1,5 @@
+TODO:
+
+- map of respondents by continent
+
+- explanation of questions asked
