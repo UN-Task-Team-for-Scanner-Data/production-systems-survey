@@ -1,0 +1,3 @@
+/.quarto/
+# Ignore presentation build folder
+pres/

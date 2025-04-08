@@ -1,0 +1,181 @@
+---
+title: CPI Production Systems
+subtitle: Survey Analysis
+
+author:
+  - name: Collin Brown
+    affiliation: Statistics Canada
+  - name: Steve Martin
+    affiliation: Statistics Canada
+---
+
+## Upfront Admin
+
+::: {layout-ncol=2}
+Survey created on behalf of the [Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) under the [UN Committee of Experts on Big Data and Data Science for Official Statistics](https://unstats.un.org/bigdata/).
+
+Thank you for the helpful feedback and numerous contributions from our colleagues in the **Workstream on CPI Systems Architecture**
+:::
+
+![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
+
+**Note**: The full report can be found [here]().
+
+
+## CPI Production Systems Background
+
+- CPI Production Systems involve significant amounts of **code**, **documentation**, and **other non-code artifacts** (e.g., Excel Workbooks).
+
+- These systems carry out complex business logic in order to **transform input data into output data**.
+
+- These systems are often developed entirely or in large part by people **with domain expertise but without training in software engineering**.
+
+## Why Run This Survey?
+
+1. Many CPI Production Systems teams struggle with managing system complexity.
+
+2. State of CPI Production Systems around the world is unknown (e.g., how are systems organized, how often are systems updated).
+
+3. Provide targeted advice based on the current state of systems.
+
+## Related Work
+
+A lot of related work is from the world of software engineering. **Notable Examples**:
+
+- [Team Topologies](https://teamtopologies.com/) (@skelton2019team) looks at how to optimally organize teams.
+
+- [Accelerate: The State of DevOps Report](https://cloud.google.com/devops/state-of-devops) (@forsgren2018accelerate) shares ideas around how to measure software delivery performance.
+
+- [Data Mesh Architecture](https://www.datamesh-architecture.com/) (@dehghani2022data) introduces architecture concepts oriented around domain-aligned data product teams.
+
+- [Reproducible Analytical Pipelines (RAP) Community of Practice](https://nhsdigital.github.io/rap-community-of-practice/) (@RAPsite) shares tools, principles, and techniques to create more robust analytical systems.
+
+## Survey Concepts
+
+Goal is to characterize system layout, team organization, tool use, and system performance metrics.
+
+How to articulate germane aspects of system architecture in a short survey?
+
+## Survey Concepts - Systems
+
+![](diagrams/gsbpm-systems.drawio.png){width=50% fig-align="center"}
+
+We define a **system** as any indivisible (atomic) software component that takes **one or more data inputs** and produces **one or more data outputs**.
+
+## Survey Concepts - Teams
+
+A **team** is defined as a **group of individuals** who **maintain** one or more **systems**. 
+
+| Team Type | Description |
+| --------- | ----------- |
+| Corporate IT | IT professionals **not in** the price statistics team. |
+| Domain-Embedded IT | IT professionals **in** the price statistics team. |
+| Domain-Embedded Analysts | non-IT professionals **in** the price statistics team. |
+| Non-Domain Analysts | non-IT professionals **not in** the price statistics team.
+| External Consultants or Contractors | Professionals outside of the organization to whom work is contracted. |
+
+## Survey Concepts - Flow of Change
+
+From left to right, we go from raw data to the production of the CPI.
+
+![Flow of Change](./diagrams/gsbpm-systems-2.drawio.svg){#fig-flow-of-work width="90%"}
+
+Flow of change based loosely on the General Statistical Business Process Model (GSBPM).
+
+## Survey Concepts - Monolithic vs. Modular Architectures
+
+::: {layout-ncol=2}
+![Perfect Monolith Example](./diagrams/gsbpm-monolith.drawio.svg){#fig-monolith height="30%"}
+
+![Perfect Modular Example](./diagrams/gsbpm-modular.drawio.svg){#fig-modular height="30%"}
+:::
+
+## Results - Which Steps are Systems Coupled Across?
+
+![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png){width="40%"}
+
+**Question**: To what extent do distinct software modules depend on eachother?
+
+## Results - Which Steps are Systems Coupled Across?
+
+| Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
+| ----- | ----- | ---- | ----- | ----- | ---- |
+| ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
+| ✅ | ✅ | ✅ | ❌ | ❌ | `r ing_proc_elem_x` |
+| ❌ | ✅ | ✅ | ✅ | ❌ | `r proc_elem_agg_x` |
+| ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
+
+## Results - Which Team Combinations are Common Within the Flow of Change?
+
+| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
+| ----- | ----- | ---- | ----- | ----- | ---- | ---- |
+| ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analysts | `res` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts & Domain IT | `res` |
+| ✅ | ❌ | ✅ | ❌ | ❌ | Corp. IT & Domain Analysts | `res` |
+
+## Results - Version Control System Use
+
+TODO: insert chart
+
+## Results - Commercial Software Use
+
+TODO: insert chart
+
+## Results - Project Management Software Use
+
+TODO: insert chart
+
+## Results - Programming Language Use (Monolith vs. Modular)
+
+TODO: insert chart
+
+## Results - Storage Use
+
+TODO: insert chart
+
+## Results - System Age
+
+TODO: insert figures
+
+- Monolithic architectures most likely to have systems between 6-10 years or 11-20 years old.
+
+- IT-Only teams less likely to have systems older than 20 years compared to Stream Aligned teams.
+
+- By far most common answer for Other Mix teams is system age between 6-10 years.
+
+## Results - Update Frequency
+
+TODO: insert figures
+
+- Non-trivial fraction of respondents never update the majority of systems 
+
+- Monolithic systems more likely to never update than modular systems.
+
+- IT-Only teams more likely to update systems frequently than other team types.
+
+- Other Mix teams most likely to never update or update very infrequently.
+
+- **All team types** reported multiple "never update" answers.
+
+## Results - Number of Individuals
+
+- Most NSOs require 2-3 individuals or 4-6 individuals to complete **small changes** and **large changes** to systems.
+
+## Results - Lead Time
+
+[Lead time](https://en.wikipedia.org/wiki/Lead_time): the amount of time required to get an end-to-end change to a CPI Production System implemented.
+
+- Most NSOs reported lead time of "within 1 day" or "within 1 week" for **small changes** (a non-trivial fraction reported "within 1 month").
+
+- Monolithic systems more likely to report "within 1 year" or "more than 1 year" for **large changes** compared to modular systems.
+
+- Modular systems never reported "can't be modified" or "too complex" for the **large changes** lead time question.
+
+- Stream-aligned teams and analyst-only teams were most likely to report "within 1 month" for **large changes** compared to any other answer.
+
+## Results - Alternative Data
+
+## References {.unnumbered}
+
+::: {#refs}
+:::
