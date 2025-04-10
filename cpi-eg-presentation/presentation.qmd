@@ -173,7 +173,41 @@ TODO: insert figures
 
 - Stream-aligned teams and analyst-only teams were most likely to report "within 1 month" for **large changes** compared to any other answer.
 
-## Results - Alternative Data
+## Results - Alternative Data Usage
+
+- Almost 2/3 of respondents don't use Alternative Data Sources (ADS) at all.
+
+- Of those who use ADS, their CPIs are comprised of "less than 10%" or "between 10% and 30%" alternative data by expenditure weight.
+
+- Of those respondents who do not use ADS, most of them would like "between 10% and 30%" or "between 30% and 50%" of their CPI to be comprised of alternative data by expenditure weight.
+
+## Results - Alternative Data Challenges
+
+In the following order, the most commonly cited ADS challenges are:
+
+1. Lack of data provider cooperation
+
+2. Insufficient capacity
+
+3. Insufficient technical skills to make use of ADS
+
+4. Lack of methodology knowledge to make use of ADS
+
+5. Appropriate data are not available
+
+## Results - System Development Challenges (In General)
+
+In the following order, the most commonly cited challenges are:
+
+1. Lack of staff
+
+2. Insufficient technical skills
+
+3. Managing complexity of system interactions (e.g., passing data between systems)
+
+4. Managing complexity of the system itself (e.g., managing a complex codebase)
+
+5. Verifying the correct behaviour of a system
 
 ## References {.unnumbered}
 
