@@ -32,11 +32,11 @@ Thank you for the helpful feedback and numerous contributions from our colleague
 
 ## Why Run This Survey?
 
-1. Many CPI Production Systems teams struggle with managing system complexity.
+1. Many CPI Production Systems teams **struggle with managing system complexity**.
 
-2. State of CPI Production Systems around the world is unknown (e.g., how are systems organized, how often are systems updated).
+2. State of CPI Production Systems around the world is **unknown** (e.g., how are systems organized, how often are systems updated).
 
-3. Provide targeted advice based on the current state of systems.
+3. Provide **practical advice** based on the current state of systems.
 
 ## Related Work
 
@@ -55,6 +55,8 @@ A lot of related work is from the world of software engineering. **Notable Examp
 Goal is to characterize system layout, team organization, tool use, and system performance metrics.
 
 How to articulate germane aspects of system architecture in a short survey?
+
+    - Need to introduce a simple conceptual model to communicate key system ideas.
 
 ## Survey Concepts - Systems
 
@@ -208,6 +210,26 @@ In the following order, the most commonly cited challenges are:
 4. Managing complexity of the system itself (e.g., managing a complex codebase)
 
 5. Verifying the correct behaviour of a system
+
+## Practical Suggestions
+
+- Think explicitly about system boundaries.
+
+- Think explicitly about data interchange between systems.
+
+- Embed technical expertise in business domain teams.
+
+- Version control all the things.
+
+- Practice updating systems more frequently.
+
+## Future Work
+
+Two main follow-questions from our survey.
+
+1. Effectively managing the complexity of CPI Production Systems **in practice** is far from a solved problem, despite viable solutions existing for all of the component problems. **How can this gap be bridged**?
+
+2. Are lessons about system architecture and team organization from software engineering applicable to complex analytical systems like the CPI Production Systems studied in this survey?
 
 ## References {.unnumbered}
 
