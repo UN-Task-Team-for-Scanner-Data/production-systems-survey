@@ -96,9 +96,92 @@ Flow of change based loosely on the General Statistical Business Process Model (
 
 ![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png){width="40%"}
 
-**Question**: To what extent do distinct software modules depend on eachother?
+**Question**: To what extent do distinct software modules depend on each other?
 
 ## Results - Which Steps are Systems Coupled Across?
+```{r}
+#| echo: false
+#| warning: false
+# -------------------
+# Dataframe setup
+# -------------------
+
+library(dplyr)
+
+# Load results
+df <- read.csv("./data/results.csv")  #[,67:116]
+# Drop any incomplete responses
+df <- df[df[,2] != "",]
+
+# Helpers.
+is_yes <- function(x) x == "Yes"
+
+as_steps_matrix <- function(x, rows) {
+  dn <- list(rows, c("Ingest", "Process", "Elementals", "Aggregate", "Finalize"))
+  list(matrix(!is.na(x), ncol = 5, byrow = TRUE, dimnames = dn))
+}
+
+# Turn Q1 into a logical matrix.
+crossings_Q1 <-df[df[,15] == "Yes",] |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(c_across(16:40), paste0("System ", 1:5)))
+
+# Find 3 clusters.
+clusters <- crossings_Q1 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+
+# How many times do we see **only** Ingestion and Processing, but not the other three?
+ing_proc_crossings = 0
+proc_elem_crossings = 0
+elem_agg_crossings = 0
+agg_fin_crossings = 0
+ing_proc_elem_x = 0
+proc_elem_agg_x = 0
+elem_agg_fin_x = 0
+first_4_x = 0
+last_4_x = 0
+all_5_x = 0
+# Partition the Q3 matrices by cluster.
+for (mat in crossings_Q1$steps) {
+  for (ix in 1:5) {
+    if (all(mat[ix,] == c(TRUE, TRUE, FALSE, FALSE, FALSE))) {
+      ing_proc_crossings <- ing_proc_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, FALSE, FALSE))) {
+      proc_elem_crossings <- proc_elem_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, TRUE, TRUE, FALSE))) {
+      elem_agg_crossings <- elem_agg_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, FALSE, TRUE, TRUE))) {
+      agg_fin_crossings <- agg_fin_crossings + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, FALSE, FALSE))) {
+      ing_proc_elem_x <- ing_proc_elem_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, TRUE, FALSE))) {
+      proc_elem_agg_x <- proc_elem_agg_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, TRUE, TRUE, TRUE))) {
+      elem_agg_fin_x <- elem_agg_fin_x + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, FALSE))) {
+      first_4_x <- first_4_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, TRUE, TRUE))) {
+      last_4_x <- last_4_x + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, TRUE))) {
+      all_5_x <- all_5_x + 1
+    }
+  }
+}
+# split(crossings_Q1$steps, clusters$cluster)
+```
 
 | Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
 | ----- | ----- | ---- | ----- | ----- | ---- |
@@ -109,11 +192,71 @@ Flow of change based loosely on the General Statistical Business Process Model (
 
 ## Results - Which Team Combinations are Common Within the Flow of Change?
 
+```{r}
+#| echo: false
+#| warning: false
+
+# Turn Q2 into a logical matrix.
+crossings_Q2 <- df |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(
+    c_across(42:66),
+    c(
+      "Corp. IT",
+      "Domain IT",
+      "Domain Analyst",
+      "Other Analyst",
+      "Consultant"
+    )
+  ))
+
+# Find 3 clusters.
+clusters <- crossings_Q2 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+
+# How many times do we see **only** Ingestion and Processing, but not the other three?
+d_analyst_only = 0
+stream_aligned = 0
+cit_only = 0
+dit_only = 0
+it_only = 0
+cit_d_analyst = 0
+# Partition the Q3 matrices by cluster.
+for (mat in crossings_Q2$steps) {
+  for (ix in 1:5) {
+    if (all(mat[,ix] == c(FALSE, FALSE, TRUE, FALSE, FALSE))) {
+      d_analyst_only <- d_analyst_only + 1
+    }
+    if (all(mat[,ix] == c(FALSE, TRUE, TRUE, FALSE, FALSE))) {
+      stream_aligned <- stream_aligned + 1
+    }
+    if (all(mat[,ix] == c(TRUE, FALSE, FALSE, FALSE, FALSE))) {
+      cit_only <- cit_only + 1
+    }
+    if (all(mat[,ix] == c(FALSE, TRUE, FALSE, FALSE, FALSE))) {
+      dit_only <- dit_only + 1
+    }
+    if (all(mat[,ix] == c(TRUE, TRUE, FALSE, FALSE, FALSE))) {
+      it_only <- it_only + 1
+    }
+    if (all(mat[,ix] == c(TRUE, FALSE, TRUE, FALSE, FALSE))) {
+      cit_d_analyst <- cit_d_analyst + 1
+    }
+  }
+}
+# split(crossings_Q1$steps, clusters$cluster)
+
+```
+
 | Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
 | ----- | ----- | ---- | ----- | ----- | ---- | ---- |
-| ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analysts | `res` |
-| ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts & Domain IT | `res` |
-| ✅ | ❌ | ✅ | ❌ | ❌ | Corp. IT & Domain Analysts | `res` |
+| ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analysts | `r d_analyst_only` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts & Domain IT | `r stream_aligned` |
+| ✅ | ❌ | ✅ | ❌ | ❌ | Corp. IT & Domain Analysts | `r cit_d_analyst` |
 
 ## Results - Version Control System Use
 

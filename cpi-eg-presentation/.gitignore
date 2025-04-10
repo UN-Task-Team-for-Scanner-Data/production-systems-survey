@@ -3,3 +3,5 @@
 pres/
 # ignore intermediate ipynb files
 *.ipynb
+# ignore local data folder
+data/
