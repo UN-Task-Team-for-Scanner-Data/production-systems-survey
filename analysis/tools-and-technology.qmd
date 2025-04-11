@@ -375,16 +375,13 @@ df <- df |> rename(
 
 # Version control
 dat <- data.frame(
-  Frequency = c(df$vc_git, df$vc_github, df$vc_svn, df$vc_hg, df$vc_commercial, df$vc_naming_convention, df$vc_none, df$vc_other),
+  Frequency = c(df$vc_git, df$vc_github, df$vc_commercial, df$vc_naming_convention, df$vc_none),
   VCS = c(
     rep("Git", each=nrow(df)),
     rep("GitHub/GitLab", each=nrow(df)),
-    rep("Subversion", each=nrow(df)),
-    rep("Mercurial", each=nrow(df)),
     rep("Built-In Versioning", each=nrow(df)),
     rep("File Naming Conventions", each=nrow(df)),
-    rep("None", each=nrow(df)),
-    rep("Other", each=nrow(df))
+    rep("None", each=nrow(df))
   )
 )
 
@@ -428,18 +425,14 @@ The next question we asked was which commercial software (if any) is used in eac
 
 # Version control
 dat <- data.frame(
-  Frequency = c(df$cs_warehouse, df$cs_sas, df$cs_stata, df$cs_matlab, df$cs_spss, df$cs_excel, df$cs_pbi, df$cs_access, df$cs_none, df$cs_other),
+  Frequency = c(df$cs_warehouse, df$cs_sas, df$cs_excel, df$cs_pbi, df$cs_access, df$cs_none),
   Software = c(
     rep("Data Warehouse", each=nrow(df)),
-    rep("SAS", each=nrow(df)),
-    rep("Stata", each=nrow(df)),
-    rep("MATLAB", each=nrow(df)),
     rep("SPSS", each=nrow(df)),
     rep("Excel", each=nrow(df)),
     rep("Power BI", each=nrow(df)),
     rep("MS Access", each=nrow(df)),
-    rep("None", each=nrow(df)),
-    rep("Other", each=nrow(df))
+    rep("None", each=nrow(df))
   )
 )
 
@@ -480,14 +473,12 @@ We believe that using some purpose-built project management software for any non
 
 # Project Management
 dat <- data.frame(
-  Frequency = c(df$pm_jira, df$pm_gh_proj, df$pm_gitlab_issue, df$pm_share_excel, df$pm_none, df$pm_other),
+  Frequency = c(df$pm_jira, df$pm_gitlab_issue, df$pm_share_excel, df$pm_none),
   Software = c(
     rep("Jira", each=nrow(df)),
-    rep("GitHub Projects", each=nrow(df)),
     rep("GitLab Milestones", each=nrow(df)),
     rep("Shared Excel Workbook", each=nrow(df)),
-    rep("None", each=nrow(df)),
-    rep("Other", each=nrow(df))
+    rep("None", each=nrow(df))
   )
 )
 
@@ -588,36 +579,26 @@ dat <- data.frame(
   Frequency = c(
     df$python,
     df$r,
-    df$julia,
-    df$scala,
     df$java,
     df$csharp,
     df$corcpp,
     df$vb,
     df$vba,
     df$sas,
-    df$stata,
-    df$spss,
     df$sql,
-    df$none,
-    df$other
+    df$none
   ),
   Language = c(
     rep("Python", each=nrow(df)),
     rep("R", each=nrow(df)),
-    rep("Julia", each=nrow(df)),
-    rep("Scala", each=nrow(df)),
     rep("Java", each=nrow(df)),
     rep("C#", each=nrow(df)),
     rep("C/C++", each=nrow(df)),
     rep("Visual Basic", each=nrow(df)),
     rep("Visual Basic Applications", each=nrow(df)),
     rep("SAS", each=nrow(df)),
-    rep("Stata", each=nrow(df)),
-    rep("SPSS", each=nrow(df)),
     rep("SQL", each=nrow(df)),
-    rep("None", each=nrow(df)),
-    rep("Other", each=nrow(df))
+    rep("None", each=nrow(df))
   )
 )
 
@@ -670,36 +651,24 @@ dat <- data.frame(
   Frequency = c(
     monolith_df$python,
     monolith_df$r,
-    monolith_df$julia,
-    monolith_df$scala,
     monolith_df$java,
     monolith_df$csharp,
     monolith_df$corcpp,
     monolith_df$vb,
     monolith_df$vba,
     monolith_df$sas,
-    monolith_df$stata,
-    monolith_df$spss,
-    monolith_df$sql,
-    monolith_df$none,
-    monolith_df$other
+    monolith_df$sql
   ),
   Language = c(
     rep("Python", each=nrow(monolith_df)),
     rep("R", each=nrow(monolith_df)),
-    rep("Julia", each=nrow(monolith_df)),
-    rep("Scala", each=nrow(monolith_df)),
     rep("Java", each=nrow(monolith_df)),
     rep("C#", each=nrow(monolith_df)),
     rep("C/C++", each=nrow(monolith_df)),
     rep("Visual Basic", each=nrow(monolith_df)),
     rep("Visual Basic Applications", each=nrow(monolith_df)),
     rep("SAS", each=nrow(monolith_df)),
-    rep("Stata", each=nrow(monolith_df)),
-    rep("SPSS", each=nrow(monolith_df)),
-    rep("SQL", each=nrow(monolith_df)),
-    rep("None", each=nrow(monolith_df)),
-    rep("Other", each=nrow(monolith_df))
+    rep("SQL", each=nrow(monolith_df))
   )
 )
 
@@ -715,36 +684,18 @@ dat <- data.frame(
   Frequency = c(
     modular_df$python,
     modular_df$r,
-    modular_df$julia,
-    modular_df$scala,
-    modular_df$java,
-    modular_df$csharp,
-    modular_df$corcpp,
-    modular_df$vb,
     modular_df$vba,
     modular_df$sas,
-    modular_df$stata,
-    modular_df$spss,
     modular_df$sql,
-    modular_df$none,
-    modular_df$other
+    modular_df$none
   ),
   Language = c(
     rep("Python", each=nrow(modular_df)),
     rep("R", each=nrow(modular_df)),
-    rep("Julia", each=nrow(modular_df)),
-    rep("Scala", each=nrow(modular_df)),
-    rep("Java", each=nrow(modular_df)),
-    rep("C#", each=nrow(modular_df)),
-    rep("C/C++", each=nrow(modular_df)),
-    rep("Visual Basic", each=nrow(modular_df)),
     rep("Visual Basic Applications", each=nrow(modular_df)),
     rep("SAS", each=nrow(modular_df)),
-    rep("Stata", each=nrow(modular_df)),
-    rep("SPSS", each=nrow(modular_df)),
     rep("SQL", each=nrow(modular_df)),
-    rep("None", each=nrow(modular_df)),
-    rep("Other", each=nrow(modular_df))
+    rep("None", each=nrow(modular_df))
   )
 )
 
@@ -757,15 +708,6 @@ ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE
 
 We conclude the Tools and Technology portion of the survey by asking which data storage tools are in use by respondents in their CPI Production Systems.
 
-We were surprised by the following findings.
-
-1. A very small percentage of the respondents reported using analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/) in their CPI Production Systems. There is a small learning curve associated with using these file formats, but they offer many benefits such as columnar storage on disk, data types supported natively by the file format, and a significantly smaller storage footprint due to columnar data compression strategies[^10].
-
-2. There is an approximately equal split between the usage of Database Management Systems (DBMS) and file system storage, which is true across both NSOs with modular representative systems and NSOs with monolithic representative systems.
-
-3. The small number of respondents who reported using something in addition to DBMS or filesystem storage all belonged to NSOs with modular representative systems.
-
-[^10]: While there is a learning curve for some of the concepts involved, reading and writing to analytics-optimized file formats like Parquet is very easy due to the existence of many well-documented third party packages. For example, Python's Pandas can [read parquet files directly](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html) as long as an engine like `pyarrow` or `fastparquet` is also installed.
 
 ```{r message = FALSE}
 #| echo: false
@@ -798,15 +740,13 @@ dat <- data.frame(
     df$obj_stor,
     df$dbms,
     df$olap_fmt,
-    df$fs,
-    df$other_ds
+    df$fs
   ),
   Storage = c(
     rep("Object Storage", each=nrow(df)),
     rep("DBMS", each=nrow(df)),
     rep("Analytics File Format", each=nrow(df)),
-    rep("Filesystem", each=nrow(df)),
-    rep("Other", each=nrow(df))
+    rep("Filesystem", each=nrow(df))
   )
 )
 
@@ -825,18 +765,12 @@ monolith_df <- monolith_df |> rename(
 # Version control
 dat <- data.frame(
   Frequency = c(
-    monolith_df$obj_stor,
     monolith_df$dbms,
-    monolith_df$olap_fmt,
-    monolith_df$fs,
-    monolith_df$other_ds
+    monolith_df$fs
   ),
   Storage = c(
-    rep("Object Storage", each=nrow(monolith_df)),
     rep("DBMS", each=nrow(monolith_df)),
-    rep("Analytics File Format", each=nrow(monolith_df)),
-    rep("Filesystem", each=nrow(monolith_df)),
-    rep("Other", each=nrow(monolith_df))
+    rep("Filesystem", each=nrow(monolith_df))
   )
 )
 
@@ -856,18 +790,12 @@ hybrid_df <- hybrid_df |> rename(
 # Version control
 dat <- data.frame(
   Frequency = c(
-    hybrid_df$obj_stor,
     hybrid_df$dbms,
-    hybrid_df$olap_fmt,
-    hybrid_df$fs,
-    hybrid_df$other_ds
+    hybrid_df$fs
   ),
   Storage = c(
-    rep("Object Storage", each=nrow(hybrid_df)),
     rep("DBMS", each=nrow(hybrid_df)),
-    rep("Analytics File Format", each=nrow(hybrid_df)),
-    rep("Filesystem", each=nrow(hybrid_df)),
-    rep("Other", each=nrow(hybrid_df))
+    rep("Filesystem", each=nrow(hybrid_df))
   )
 )
 
@@ -888,18 +816,12 @@ modular_df <- modular_df |> rename(
 # Version control
 dat <- data.frame(
   Frequency = c(
-    modular_df$obj_stor,
     modular_df$dbms,
-    modular_df$olap_fmt,
-    modular_df$fs,
-    modular_df$other_ds
+    modular_df$fs
   ),
   Storage = c(
-    rep("Object Storage", each=nrow(modular_df)),
     rep("DBMS", each=nrow(modular_df)),
-    rep("Analytics File Format", each=nrow(modular_df)),
-    rep("Filesystem", each=nrow(modular_df)),
-    rep("Other", each=nrow(modular_df))
+    rep("Filesystem", each=nrow(modular_df))
   )
 )
 
@@ -908,3 +830,12 @@ dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Modular] Storage Systems Used")
 
 ```
+We were surprised by the following findings.
+
+1. A very small percentage of the respondents reported using analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/) in their CPI Production Systems. There is a small learning curve associated with using these file formats, but they offer many benefits such as columnar storage on disk, data types supported natively by the file format, and a significantly smaller storage footprint due to columnar data compression strategies[^10].
+
+2. There is an approximately equal split between the usage of Database Management Systems (DBMS) and file system storage, which is true across both NSOs with modular representative systems and NSOs with monolithic representative systems.
+
+3. The small number of respondents who reported using something in addition to DBMS or filesystem storage all belonged to NSOs with modular or hybrid representative systems.
+
+[^10]: While there is a learning curve for some of the concepts involved, reading and writing to analytics-optimized file formats like Parquet is very easy due to the existence of many well-documented third party packages. For example, Python's Pandas can [read parquet files directly](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html) as long as an engine like `pyarrow` or `fastparquet` is also installed.
