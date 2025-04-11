@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Survey of CPI Production Systems - 7&nbsp; Lead Time</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./alternative-data.html" rel="next">
+<link href="./number-of-individuals.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./change-lead-times.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lead Time</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Survey of CPI Production Systems</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Concepts</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./systems-teams-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Systems and Teams Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tools-and-technology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tools and Technologies</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./system-age-and-updates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">System Age and Updates</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./number-of-individuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Number of People</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./change-lead-times.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lead Time</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./alternative-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Alternative Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./challenges.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Challenges</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./findings-and-next-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lead-time-small-changes" id="toc-lead-time-small-changes" class="nav-link active" data-scroll-target="#lead-time-small-changes"><span class="header-section-number">7.1</span> Lead Time (Small Changes)</a></li>
+  <li><a href="#lead-time-large-changes" id="toc-lead-time-large-changes" class="nav-link" data-scroll-target="#lead-time-large-changes"><span class="header-section-number">7.2</span> Lead Time (Large Changes)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-body" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-lead-time" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lead Time</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In this section, we ask questions about the <a href="https://en.wikipedia.org/wiki/Lead_time">lead time</a> of (1) small and (2) large changes to CPI Production Systems.</p>
+<p>In the context of software systems, lead time measures the time it takes for a committed code change to reach production, which reflects the efficiency of the software delivery process (<span class="citation" data-cites="forsgren2018accelerate">Forsgren, Humble, and Kim (<a href="#ref-forsgren2018accelerate" role="doc-biblioref">2018</a>)</span>).</p>
+<p>Given that we are looking at Complex Analytical Systems rather than traditional software systems in this survey (see <a href="#sec-why-run-this-survey"><span class="quarto-unresolved-ref">sec-why-run-this-survey</span></a>), we modify this definition slightly to refer to the total amount of time required to get an end-to-end change to a CPI Production System implemented, which could include activities in addition to code implementation such as data analysis, methodology research, and discussions with data providers.</p>
+<p>Lead time is generally regarded as a very important performance metric, and short lead times are generally considered better than long lead times<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>We prompt the respondent with some examples of small and large changes before asking the lead time questions.</p>
+<p><strong>Example of a small change:</strong></p>
+<ul>
+<li><p>A small piece of code in a system needs to be modified to update business logic for processing a particular data source.</p></li>
+<li><p>A new sheet needs to be added to an Excel Workbook to perform a new calculation in a system.</p></li>
+</ul>
+<p><strong>Examples of a large change:</strong></p>
+<ul>
+<li><p>An entirely new methodology was recently discovered and needs to be introduced as one of the options in an elementary aggregate system.</p></li>
+<li><p>A system was previously ingesting survey data, but it now needs to also ingest retail scanner data.</p></li>
+</ul>
+<section id="lead-time-small-changes" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="lead-time-small-changes"><span class="header-section-number">7.1</span> Lead Time (Small Changes)</h2>
+<p>Respondents are presented with the following question.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./diagrams/cpi-systems-lead-time-small.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead times for small changes</figcaption>
+</figure>
+</div>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Overall)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Monolith)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Modular)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Overall, the majority of lead times for small changes are between 1 day and 1 week, with a minority of respondents indicating small changes happening within 3 months (i.e., 3 months or less).</p>
+<p>Our expectation is that small changes of the magnitude we described in the question prompt should take teams at most a few days to implement, test, and integrate into production systems. We were a bit surprised to see a non-trivial fraction of the sample reporting lead times of “Within 1 month” or “Within 3 months” for small changes.</p>
+<p>It is also noteworthy that NSOs with monolithic representative systems were more likely to report lead times for small changes of “Within 1 day”, whereas NSOs with modular representative systems were more likely to report lead times for small changes of “Within 1 week”.</p>
+<p>Our hypothesis here is that, by definition, a modular representative system is more likely than a monolithic representative system to span two or more teams. Therefore, small changes may still need to be reviewed by a member on each team. It is reasonable that it might take more than one business day to find a time where the various team members are available to meet, so this alone could cause a small change to take more than one day.</p>
+<p>In either case, our view is that “Within 1 day” and “Within 1 week” are both reasonable answers to this question.</p>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Stream-Aligned)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (IT-Only)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Analyst-Only)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-3-4.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Other Mix)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>With respect to team composition, Stream-Aligned teams, IT-Only teams, and Analyst-Only teams had lead time distributions that were close to the overall lead time distribution. The most common response for Other Mix teams is “Within 1 month”, but the sample size for this team type is too small to conclude anything meaningful here.</p>
+</section>
+<section id="lead-time-large-changes" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="lead-time-large-changes"><span class="header-section-number">7.2</span> Lead Time (Large Changes)</h2>
+<p>Respondents are presented with the following question.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./diagrams/cpi-systems-lead-time-large.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead times for large changes</figcaption>
+</figure>
+</div>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Large Changes (Overall)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Large Changes (Monolith)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Large Changes (Modular)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Overall, the lead time for large changes was very right skewed, with the most common response being that large changes happen “Within 1 month”.</p>
+<p>It is interesting that, unlike with small changes, NSOs with Monolithic representative systems are more likely to report lead times of “Within 1 year” or “More than 1 year”, and they are also more likely to report an answer of “Too complex” or “Can’t be modified”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>This result is consistent with industry knowledge (<span class="citation" data-cites="ford2021software">Ford et al. (<a href="#ref-ford2021software" role="doc-biblioref">2021</a>)</span>, <span class="citation" data-cites="richards2020fundamentals">Richards and Ford (<a href="#ref-richards2020fundamentals" role="doc-biblioref">2020</a>)</span>) as well as earlier findings in this report (e.g., sec-age). Monolithic systems are more likely to have components that are highly coupled (inter-connected) compared to modular systems. This high degree of coupling not only makes it more difficult to reason through changes to the system, but it also requires more rigorous testing to ensure that a large change doesn’t break a seemingly unrelated component. Therefore, it is not surprising to observe that NSOs with monolithic representative systems are more likely to report higher lead times compared to NSOs with Modular representative systems.</p>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Stream-Aligned)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (IT-Only)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Analyst-Only)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="change-lead-times_files/figure-html/unnamed-chunk-5-4.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lead Time for Small Changes (Other Mix)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>When looking at the distribution of lead times for large changes by team type, there are several noteworthy observations.</p>
+<p>First, Stream-Aligned teams and Analyst-Only teams were more likely to report lead times of “Within 1 month” compared to any other answer. Stream-Aligned teams and Analyst-Only teams were a bit more likely to report shorter lead times compared to IT-Only teams, and were much more likely to report shorter lead times compared to Other Mix teams.</p>
+<p>This finding is consistent with the work of <span class="citation" data-cites="skelton2019team">Skelton, Pais, and Malan (<a href="#ref-skelton2019team" role="doc-biblioref">2019</a>)</span>, which suggests that Stream-Aligned teams organized around an end-to-end slice of a particular business domain tend to move faster<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>It is also worth noting that “More than 1 year” is a somewhat common answer across <strong>all</strong> team types, suggesting that a fraction of NSOs probably struggle with high lead times for reasons other than team types.</p>
+<p>We hypothesize that the lack of shared domain context in Other Mix teams could explain why their reported lead times are much higher than the other 3 team types. As discussed in <a href="#sec-age"><span class="quarto-unresolved-ref">sec-age</span></a>, the lack of a shared domain context increases communication overhead as all parties involved need to spend additional time bridging knowledge gaps. This extra communication overhead could extend each step of the system development process, leading to longer lead times overall.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-ford2021software" class="csl-entry" role="listitem">
+Ford, N., W. M. Richards, P. J. Sadalage, and Z. Dehghani. 2021. <em>Software Architecture: The Hard Parts : Modern Trade-Off Analysis for Distributed Architectures</em>. O’Reilly. <a href="https://books.google.ca/books?id=sWNozgEACAAJ">https://books.google.ca/books?id=sWNozgEACAAJ</a>.
+</div>
+<div id="ref-forsgren2018accelerate" class="csl-entry" role="listitem">
+Forsgren, N., J. Humble, and G. Kim. 2018. <em>Accelerate: The Science Behind DevOps : Building and Scaling High Performing Technology Organizations</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=85XHAQAACAAJ">https://books.google.ca/books?id=85XHAQAACAAJ</a>.
+</div>
+<div id="ref-richards2020fundamentals" class="csl-entry" role="listitem">
+Richards, M., and N. Ford. 2020. <em>Fundamentals of Software Architecture: An Engineering Approach</em>. O’Reilly Media, Incorporated. <a href="https://books.google.ca/books?id=_pNdwgEACAAJ">https://books.google.ca/books?id=_pNdwgEACAAJ</a>.
+</div>
+<div id="ref-skelton2019team" class="csl-entry" role="listitem">
+Skelton, M., M. Pais, and R. Malan. 2019. <em>Team Topologies: Organizing Business and Technology Teams for Fast Flow</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=oFdRuAEACAAJ">https://books.google.ca/books?id=oFdRuAEACAAJ</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>One important point to note here is that short lead times are good as long as a certain minimum standard of quality is met. For instance, shorter lead times are not necessarily better if they are associated with a significant drop in the quality of the output.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>For confidentiality reasons, we grouped “Too complex” and “Can’t be modified” into one category in the figures on this page.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>We are glossing over a lot of nuance here for simplicity. For readers who are interested in a more comprehensive overview of the work of <span class="citation" data-cites="skelton2019team">Skelton, Pais, and Malan (<a href="#ref-skelton2019team" role="doc-biblioref">2019</a>)</span>, we recommend reading the <a href="https://teamtopologies.com/key-concepts">Team Topologies Key Concepts</a> page.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation column-body">
+  <div class="nav-page nav-page-previous">
+      <a href="./number-of-individuals.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Number of People</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./alternative-data.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Alternative Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
