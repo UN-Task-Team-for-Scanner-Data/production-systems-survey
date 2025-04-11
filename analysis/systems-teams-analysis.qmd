@@ -39,7 +39,7 @@ as_steps_matrix <- function(x, rows) {
 # Turn Q1 into a logical matrix.
 crossings_Q1 <-df[df[,15] == "Yes",] |>
   rowwise() |>
-  mutate(steps = as_steps_matrix(c_across(16:40), paste0("System ", 1:5)))
+  mutate(steps = as_steps_matrix(c_across(16:40), paste0("System Group ", 1:5)))
 
 # Find 3 clusters.
 clusters <- crossings_Q1 |>
@@ -57,7 +57,6 @@ agg_fin_crossings = 0
 ing_proc_elem_x = 0
 proc_elem_agg_x = 0
 elem_agg_fin_x = 0
-first_4_x = 0
 last_4_x = 0
 all_5_x = 0
 # Partition the Q3 matrices by cluster.
@@ -84,9 +83,6 @@ for (mat in crossings_Q1$steps) {
     if (all(mat[ix,] == c(FALSE, FALSE, TRUE, TRUE, TRUE))) {
       elem_agg_fin_x <- elem_agg_fin_x + 1
     }
-    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, FALSE))) {
-      first_4_x <- first_4_x + 1
-    }
     if (all(mat[ix,] == c(FALSE, TRUE, TRUE, TRUE, TRUE))) {
       last_4_x <- last_4_x + 1
     }
@@ -96,22 +92,9 @@ for (mat in crossings_Q1$steps) {
   }
 }
 # split(crossings_Q1$steps, clusters$cluster)
-
 ```
 
 We note how frequently systems cross certain GSBPM steps in @tbl-span-steps.
-
-The most common pattern we observed was that the same system handled both data ingestion and data processing. We suspect this is is fairly common as the two activities are conceptually similar, and often leverage similar tooling. For example, if an analyst wrote a web-scraping script to collect price data from a certain website, it's reasonable that they would also perform some data cleaning activities in the same script before writing the output to persistent storage.
-
-The second most common pattern we observed was the "Monolith" pattern, where one system spans all 5 GSBPM steps. We elaborate on this concept later in this section, but our suspicion is that systems like these mostly fall into one of two categories: (1) a small team and an Excel Workbook that handles everything from ingestion to finalization or (2) a single system managed by an IT team.
-
-Monolithic systems are not inherently bad. If they are carefully designed for maximum [cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science)) and minimal coupling, they can be maintainable. However, if monoliths emerge accidentally, they often involve many tightly coupled components and become very difficult to maintain in the long run.
-
-The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** and **elementary indexes-aggregation-finalization**. The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprised us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
-
-We were also surprised to learn that there are zero occurrences of a system spanning **elementary indexes-aggregation**. In the price statistics business domain, these concepts are often closely related, so we thought there would be more cases where a single system handled both steps[^13].
-
-[^13]: An example of a system that performs both elementary index calculation and aggregation would be if the same script calculated component price changes in apples, bananas, and oranges, then the same script also calculated the overall price change in fruit from these component price changes.
 
 | Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
 | ----- | ----- | ---- | ----- | ----- | ---- |
@@ -122,11 +105,22 @@ We were also surprised to learn that there are zero occurrences of a system span
 | ✅ | ✅ | ✅ | ❌ | ❌ | `r ing_proc_elem_x` |
 | ❌ | ✅ | ✅ | ✅ | ❌ | `r proc_elem_agg_x` |
 | ❌ | ❌ | ✅ | ✅ | ✅ | `r elem_agg_fin_x` |
-| ✅ | ✅ | ✅ | ✅ | ❌ | `r first_4_x` |
 | ❌ | ✅ | ✅ | ✅ | ✅ | `r last_4_x` |
 | ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
 
 : Systems that span across multiple GSBPM steps {#tbl-span-steps}
+
+The most common pattern we observed was that the same system handled both data ingestion and data processing with `r ing_proc_crossings` occurrences. We suspect this is is fairly common as the two activities are conceptually similar, and often leverage similar tooling. For example, if an analyst wrote a web-scraping script to collect price data from a certain website, it's reasonable that they would also perform some data cleaning activities in the same script before writing the output to persistent storage.
+
+The second most common pattern we observed was the "Monolith" pattern, where we observe one system spanning all 5 GSBPM steps `r all_5_x` times. We elaborate on this concept later in this section, but our suspicion is that systems like these mostly fall into one of two categories: (1) a small team and an Excel Workbook that handles everything from ingestion to finalization or (2) a single system managed by an IT team.
+
+Monolithic systems are not inherently bad. If they are carefully designed for maximum [cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science)) and minimal coupling, they can be maintainable. However, if monoliths **emerge accidentally**, they often involve many tightly coupled components and become very difficult to maintain in the long run.
+
+The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** (`r ing_proc_elem_x` occurrences) and **elementary indexes-aggregation-finalization** (`r elem_agg_fin_x` occurrences). The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprised us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
+
+We were also surprised to learn that there are zero occurrences of a system spanning **elementary indexes-aggregation**. In the price statistics business domain, these concepts are often closely related, so we thought there would be more cases where a single system handled both steps[^13].
+
+[^13]: An example of a system that performs both elementary index calculation and aggregation would be if the same script calculated component price changes in apples, bananas, and oranges, then the same script also calculated the overall price change in fruit from these component price changes.
 
 ## Team Types at Each Step
 
@@ -559,7 +553,7 @@ as_steps_matrix <- function(x, rows) {
 # Turn Q3 into a logical matrix.
 crossings_Q3 <- df |>
   rowwise() |>
-  mutate(steps = as_steps_matrix(c_across(sg1_ing:sg5_fin), paste0("System", 1:5)))
+  mutate(steps = as_steps_matrix(c_across(sg1_ing:sg5_fin), paste0("System Group ", 1:5)))
 
 # Find 3 cluseters.
 clusters <- crossings_Q3 |>
@@ -586,14 +580,14 @@ However, we were able to identify some high-level patterns that were consistent 
 #| echo: false
 
 # Example of "monolith" cluster
-sys_cluster_split[[1]][[10]]
+knitr::kable(sys_cluster_split[[3]][[24]])
 ```
 
 ```{r}
 #| echo: false
 
 # Example of "monolith" cluster
-sys_cluster_split[[1]][[15]]
+knitr::kable(sys_cluster_split[[3]][[20]])
 ```
 
 ### There is exactly one "split point" between System Groups
@@ -601,13 +595,13 @@ sys_cluster_split[[1]][[15]]
 ```{r}
 #| echo: false
 
-sys_cluster_split[[3]][[2]]
+knitr::kable(sys_cluster_split[[1]][[10]])
 ```
 
 ```{r}
 #| echo: false
 
-sys_cluster_split[[3]][[3]]
+knitr::kable(sys_cluster_split[[1]][[16]])
 ```
 
 ### There are two or more split points between system groups
@@ -615,13 +609,13 @@ sys_cluster_split[[3]][[3]]
 ```{r}
 #| echo: false
 
-sys_cluster_split[[2]][[6]]
+knitr::kable(sys_cluster_split[[2]][[6]])
 ```
 
 ```{r}
 #| echo: false
 
-sys_cluster_split[[3]][[14]]
+knitr::kable(sys_cluster_split[[2]][[14]])
 ```
 
 
@@ -700,7 +694,7 @@ as_steps_matrix <- function(x, rows) {
 # Turn Q3 into a logical matrix.
 crossings_Q3 <- df |>
   rowwise() |>
-  mutate(steps = as_steps_matrix(c_across(sg1_cit:sg5_con), paste0("System", 1:5)))
+  mutate(steps = as_steps_matrix(c_across(sg1_cit:sg5_con), paste0("System Group ", 1:5)))
 
 # Find 3 cluseters.
 clusters <- crossings_Q3 |>
@@ -748,12 +742,17 @@ $$
 \text{Similarity} = \frac{\sum_{\text{respondents}} \text{Has Architecture Type} == 1 \land \text{Has Team Type} == 1}{\sum_{\text{respondents}} \text{Has Team Type} == 1}
 $$
 
-The rationale for this similarity metric is that we care about what fraction of organizations with a particular team type also uses a given architecture type relative to how many instances of that team type are observed in the sample.
+The rationale for this similarity metric is that we care about what fraction of organizations with a particular team type also uses a given architecture type relative to how many instances of that team type are observed in the sample. Note that this can also be interpreted as a conditional probability where **team type** is the conditioning variable.
 
 ```{r}
 #| echo: false
 
-team_arch_mat
+# Replace cells where there's obviously only one response.
+team_arch_mat[4,1] = "> 0.75"
+team_arch_mat[4,2] = "< 0.25"
+team_arch_mat[4,3] = "< 0.25"
+
+knitr::kable(team_arch_mat)
 ```
 
 There are a few notable observations to point out in the above distribution[^10].
