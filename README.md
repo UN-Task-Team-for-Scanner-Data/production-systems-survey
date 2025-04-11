@@ -1,2 +1,11 @@
-# production-systems-survey
-Questions for the survey on price statistics production systems.
+# CPI Production Systems Survey
+
+This repository contains a survey about the state of Consumer Price Index (CPI) Production Systems on behalf of the [Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) under the [UN Committee of Experts on Big Data and Data Science for Official Statistics](https://unstats.un.org/bigdata/).
+
+Please see below to access the following reports and presentations associated with this survey.
+
+- [Long Form Report](https://un-task-team-for-scanner-data.github.io/production-systems-survey/intro.html)
+
+- Presentation Coming soon
+
+- PDF Report coming soon
