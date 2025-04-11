@@ -583,12 +583,6 @@ However, we were able to identify some high-level patterns that were consistent 
 knitr::kable(sys_cluster_split[[3]][[24]])
 ```
 
-```{r}
-#| echo: false
-
-# Example of "monolith" cluster
-knitr::kable(sys_cluster_split[[3]][[20]])
-```
 
 ### There is exactly one "split point" between System Groups
 
@@ -598,19 +592,9 @@ knitr::kable(sys_cluster_split[[3]][[20]])
 knitr::kable(sys_cluster_split[[1]][[10]])
 ```
 
-```{r}
-#| echo: false
-
-knitr::kable(sys_cluster_split[[1]][[16]])
-```
 
 ### There are two or more split points between system groups
 
-```{r}
-#| echo: false
-
-knitr::kable(sys_cluster_split[[2]][[6]])
-```
 
 ```{r}
 #| echo: false
