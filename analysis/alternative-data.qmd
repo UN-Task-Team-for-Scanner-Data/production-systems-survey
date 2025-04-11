@@ -198,7 +198,7 @@ overall_dat <- make_challenges_table(df)
 overall_dat <- overall_dat[overall_dat["Challenges"] != "No Challenges",]
 
 ggplot(overall_dat,aes(x=forcats::fct_infreq(Challenges))) +
-  geom_bar(alpha=1, position="stack") +
+  geom_bar(alpha=1, position="stack", color="black") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Ranked Alternative Data Challenges")
 ```
 
