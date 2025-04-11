@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Collin Brown and Steve Martin">
-<meta name="dcterms.date" content="2025-02-03">
 
-<title>Survey of CPI Production Systems</title>
+<title>Survey of CPI Production Systems - 8&nbsp; Alternative Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./challenges.html" rel="next">
+<link href="./change-lead-times.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -75,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./alternative-data.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Alternative Data</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -102,7 +101,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -150,7 +149,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./alternative-data.html" class="sidebar-item-text sidebar-link">
+  <a href="./alternative-data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Alternative Data</span></span></a>
   </div>
 </li>
@@ -182,11 +181,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
-  <li><a href="#survey-methodology-notes" id="toc-survey-methodology-notes" class="nav-link" data-scroll-target="#survey-methodology-notes">Survey Methodology Notes</a>
-  <ul class="collapse">
-  <li><a href="#value-suppression" id="toc-value-suppression" class="nav-link" data-scroll-target="#value-suppression">Value Suppression</a></li>
-  </ul></li>
+  <li><a href="#alternative-data-usage" id="toc-alternative-data-usage" class="nav-link active" data-scroll-target="#alternative-data-usage"><span class="header-section-number">8.1</span> Alternative Data Usage</a></li>
+  <li><a href="#which-price-index-methods-are-used-on-alternative-data-sources" id="toc-which-price-index-methods-are-used-on-alternative-data-sources" class="nav-link" data-scroll-target="#which-price-index-methods-are-used-on-alternative-data-sources"><span class="header-section-number">8.2</span> Which Price Index Methods are Used on Alternative Data Sources</a></li>
+  <li><a href="#what-challenges-are-faced-in-the-adoption-of-alternative-data" id="toc-what-challenges-are-faced-in-the-adoption-of-alternative-data" class="nav-link" data-scroll-target="#what-challenges-are-faced-in-the-adoption-of-alternative-data"><span class="header-section-number">8.3</span> What Challenges are Faced in the Adoption of Alternative Data</a></li>
   </ul>
 </nav>
     </div>
@@ -195,26 +192,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Survey of CPI Production Systems</h1>
+<h1 class="title"><span id="sec-alt-data" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Alternative Data</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Collin Brown and Steve Martin </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 3, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -222,19 +207,97 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>We would like to acknowledge the helpful feedback and numerous contributions from our colleagues in the Workstream on CPI Systems Architecture in the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">Task Team on Scanner Data</a> under the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics</a>.</p>
+<p>In the world of official statistics, the term <strong>alternative data</strong> is used to describe sources of data other than traditional field-collected data that can be used to derive meaningful statistics.</p>
+<p>These data sources often require more complicated tooling and methodology to work with, but offer certain benefits over field-collected data such as collection cost and comprehensiveness<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>In this section, we ask respondents about the extent to which they currently leverage alternative data sources in their CPI Production Systems. We also ask respondents about the primary challenges they face with respect to the adoption of Alternative Data in their CPI Production Systems.</p>
+<section id="alternative-data-usage" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="alternative-data-usage"><span class="header-section-number">8.1</span> Alternative Data Usage</h2>
+<p>Just under two thirds of respondents report not using alternative data sources at all. Of those that use alternative data sources, the majority of respondents report that “Less than 10%” or “Between 10% and 30%” of their CPI is derived from alternative data sources<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="alternative-data_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Of those NSOs that don’t currently use alternative data sources, almost three quarters of them report that they would like to use alternative data sources. Of those NSOs that would like to use alternative data sources, we asked them how much alternative data they would like to use in their CPI Production Systems in an ideal scenario. We show this distribution below.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_bar(binwidth = 1, colour = "black", fill = "white"): Ignoring
+unknown parameters: `binwidth`</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="alternative-data_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It appears that most NSOs want between 10% and 50% of their CPI to be comprised of alternative data sources (by expenditure weight). Our suspicion is that leveraging alternative data may be challenging for certain components of the CPI, so even in an ideal scenario, NSOs may prefer to continue using field collected data for quality reasons.</p>
 </section>
-<section id="survey-methodology-notes" class="level1">
-<h1>Survey Methodology Notes</h1>
-<p>We follow a few standard practices for reporting on survey data.</p>
-<section id="value-suppression" class="level2">
-<h2 class="anchored" data-anchor-id="value-suppression">Value Suppression</h2>
-<p>To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.</p>
+<section id="which-price-index-methods-are-used-on-alternative-data-sources" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="which-price-index-methods-are-used-on-alternative-data-sources"><span class="header-section-number">8.2</span> Which Price Index Methods are Used on Alternative Data Sources</h2>
+<p>Of those respondents reporting that they currently use alternative data sources, we asked which price index methods are most commonly used<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. The table below summarizes the number of respondents who are using each method<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GEKS</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Time Dummy Hedonic</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hedonic</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Other Multilateral</td>
+<td style="text-align: left;">&lt; 3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dynamic Sample</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fixed Sample</td>
+<td style="text-align: left;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Other</td>
+<td style="text-align: left;">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="what-challenges-are-faced-in-the-adoption-of-alternative-data" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="what-challenges-are-faced-in-the-adoption-of-alternative-data"><span class="header-section-number">8.3</span> What Challenges are Faced in the Adoption of Alternative Data</h2>
+<p>We asked all respondents to rank the challenges they face in adopting alternative data sources(regardless of whether or not they are currently using alternative data in their CPI Production Systems).</p>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="alternative-data_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Ranked Alternative Data Challenges</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Some alternative data challenges will be region-specific, such as lack of cooperation from data providers, authority to collect alternative data, and availability of alternative data.</p>
+<p>However, some commonly cited issues such as Insufficient Skills and Methodology Knowledge can be addressed in part by effective knowledge sharing from domain experts.</p>
 
 
 </section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>For example, if a retailer agrees to share data with a NSO, the retailer can quite easily send weekly snapshots of their product transaction records. This dataset is much larger than anything that could realistically be collected by a field collection agent, but it also introduces new statistical issues (e.g., sample selection), and special tooling may be required to work with a dataset of this size.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>These percentages refer to the share of the CPI by expenditure weight. For example, if an NSO uses alternative data sources to calculate the CPI for product categories that make up 10% of total household expenditures, then we would say that 10% of the CPI comes from alternative data sources.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For readers who are unfamiliar with the Consumer Prices business domain, these are techniques that are used to calculate period-over-period price changes from a given data source.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>These choices are not mutually exclusive; one NSO may use multiple price index methods.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -473,10 +536,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
+      <a href="./change-lead-times.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lead Time</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./challenges.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Challenges</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

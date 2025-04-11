@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Collin Brown and Steve Martin">
-<meta name="dcterms.date" content="2025-02-03">
 
-<title>Survey of CPI Production Systems</title>
+<title>Survey of CPI Production Systems - 9&nbsp; Challenges</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./findings-and-next-steps.html" rel="next">
+<link href="./alternative-data.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -75,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./challenges.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Challenges</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -102,7 +101,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -156,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./challenges.html" class="sidebar-item-text sidebar-link">
+  <a href="./challenges.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Challenges</span></span></a>
   </div>
 </li>
@@ -177,44 +176,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
-  <li><a href="#survey-methodology-notes" id="toc-survey-methodology-notes" class="nav-link" data-scroll-target="#survey-methodology-notes">Survey Methodology Notes</a>
-  <ul class="collapse">
-  <li><a href="#value-suppression" id="toc-value-suppression" class="nav-link" data-scroll-target="#value-suppression">Value Suppression</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Survey of CPI Production Systems</h1>
+<h1 class="title"><span id="sec-challenges" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Challenges</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Collin Brown and Steve Martin </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 3, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -222,19 +199,38 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>We would like to acknowledge the helpful feedback and numerous contributions from our colleagues in the Workstream on CPI Systems Architecture in the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">Task Team on Scanner Data</a> under the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics</a>.</p>
-</section>
-<section id="survey-methodology-notes" class="level1">
-<h1>Survey Methodology Notes</h1>
-<p>We follow a few standard practices for reporting on survey data.</p>
-<section id="value-suppression" class="level2">
-<h2 class="anchored" data-anchor-id="value-suppression">Value Suppression</h2>
-<p>To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.</p>
+<p>We conclude the survey by asking respondents to rank the challenges they face with respect to system development and maintenance in general.</p>
+<p>The survey question presented to respondents was as follows.</p>
+<p><img src="./diagrams/cpi-systems-challenge-question.png" class="img-fluid" alt="Ranked Challenges Question"> We show a stacked bar chart of the 5 most commonly cited challenges below.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="challenges_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption class="figure-caption">Challenges Faced (Rank 1 through 5)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>By far the most commonly cited challenge was “Lack of Staff”. It is important to note that this reported challenge could be explained by any combination of (1) teams working at peak efficiency who are bottle necked by the number of individuals, or (2) teams where the same number of individuals could improve their efficiency if other challenges were alleviated (e.g., skills gaps, technology gaps, and so on).</p>
+<p>The second most commonly cited challenge was “Lack of Skills” in the development and maintenance of CPI Production Systems. Given the technical, bespoke, and multidisciplinary nature of CPI Production Systems, there is probably a significant opportunity to bridge the skills gap by finding ways to facilitate knowledge sharing with domain experts.</p>
+<p>Interestingly, managing the interaction between systems (“System Interactions”) registered as the third most common challenge. Our suspicion is that most people who develop and maintain CPI Production Systems don’t think extensively about how to integrate the outputs from one system into the inputs of another downstream system.</p>
+<p>For example, if one analyst writes an R script that performs some data processing and writes an intermediate output to an <code>intermediate-table.RData</code> file, and a second analyst later discovers they can leverage that intermediate output in another system they are working on, it is unlikely that the second analyst will simply read the <code>intermediate-table.RData</code> file and it will seamlessly integrate with their system.</p>
+<p>The more likely scenario is that the first analyst’s output table will not be immediately compatible with the second analyst’s system (e.g., column names don’t match, data types for a primary key column don’t match, the two analysts were using different semantics for the same concept, and so on)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>In our experience, these kinds of system integration issues are usually small enough that they are resolved in an ad hoc manner. However, the accumulation of many ad hoc solutions over time can create significant <a href="https://en.wikipedia.org/wiki/Technical_debt">technical debt</a> and lead to significant system interaction challenges.</p>
+<p>Tied for fourth place are (1) complexity within a system (e.g., managing large quantities of code) and (2) verifying that a system behaves correctly.</p>
+<p>Maintaining large and complex code bases over time is an inherently challenging problem that requires years of practice. Our suspicion is that applying a relatively small number of relevant ideas from software engineering can lead to a significant reduction in the complexity of CPI Production Systems<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. However, we emphasize that mastering these concepts takes significant practice, even if the concepts are fairly straightforward at face value.</p>
+<p>We were not surprised to learn that verifying system correctness registered as one of the top challenges due to the complexity of CPI Production Systems. While there are a large number of tools and techniques that can greatly facilitate the testing of software, being able to take advantage of these tools and techniques requires a minimum level of knowledge. Every major programming language comes with at least one comprehensive framework for automated testing. However, taking advantage of these frameworks require adopting certain idioms in order to integrate the testing framework into the code under test[^3]. In brief, very good solutions to this challenge exist, but they require a baseline level of programming skills to adopt in the first place.</p>
+<p>As a final note, we were very surprised to see so few respondents identifying Version Control as a challenge. In <a href="#sec-tools-tech"><span class="quarto-unresolved-ref">sec-tools-tech</span></a>, the majority of respondents indicated that they either don’t use a version control system at all, or they use file-naming conventions to version files. We are skeptical that these two facts are true at the same time.</p>
+<p>Our suspicion is that the concept of learning how to use a tool like <a href="https://git-scm.com/">Git</a> that exists specifically for the purpose of revision control is not something that many survey respondents considered until encountering it in the survey. We therefore suspect that respondents may have lumped revision control challenges with another type of challenge such as “Manual Tasks” or “System Complexity”.</p>
 
 
-</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The problem of passing data inputs from one system to another system has been around since the dawn of computing. However, the somewhat new concept of Data Contracts (see <a href="https://datacontract.com/">Data Contract Specification</a> for example) try to address this problem in the context of passing complex structured data between data producers and data consumers.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>For example, adopting a few simple ideas such as grouping related functions into the same module or separating configuration information source code can lead to significant simplifications to code bases that don’t currently leverage these ideas.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -471,12 +467,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
+      <a href="./alternative-data.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Alternative Data</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./findings-and-next-steps.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
