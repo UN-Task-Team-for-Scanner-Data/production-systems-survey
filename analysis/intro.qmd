@@ -48,7 +48,7 @@ In this survey, we ask questions that capture several germane aspects of system 
 
 3. Expose people from these business domain teams to software engineering concepts that are relevant in the development and maintenance of Complex Analytical Systems.
 
-While this report is tailored towards a Consumer Prices domain audience, we welcome and encourage readers from different domains to read through this report. We make significant efforts to avoid using too much domain-specific jargon, and present findings in a way that should comprehensible to a more general audience. In @sec-conclusion, we elaborate on aspects of our survey we believe to have high external validity, provide some practical suggestions that are applicable to Complex Analytical Systems in general, and describe some productive areas of future exploration that are not limited to the Consumer Prices business domain.
+While this report is tailored towards a Consumer Prices domain audience, we welcome and encourage readers from different domains to read through this report. We make significant efforts to avoid using too much domain-specific jargon, and present findings in a way that should comprehensible to a more general audience. In @sec-findings, we elaborate on aspects of our survey we believe to have high external validity, provide some practical suggestions that are applicable to Complex Analytical Systems in general, and describe some productive areas of future exploration that are not limited to the Consumer Prices business domain.
 
 ## Overview of CPI Production Systems
 
