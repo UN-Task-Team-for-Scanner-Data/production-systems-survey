@@ -1,487 +1,581 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!doctype html>
+<html lang="en">
 
-<meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+	<title>CPI Systems Survey</title>
 
-<meta name="author" content="Collin Brown and Steve Martin">
-<meta name="dcterms.date" content="2025-02-03">
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/white.css">
 
-<title>Survey of CPI Production Systems</title>
-<style>
-code{white-space: pre-wrap;}
-span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
-div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-  vertical-align: middle;
-}
-</style>
-
-
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
-  "copy-button": false,
-  "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
-  "limit": 20,
-  "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
-  }
-}</script>
-
-
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
 </head>
 
-<body class="nav-sidebar floating">
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml" , target="_blank">
+					<img src="https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png" alt="UNBigData logo"
+						style="margin: 0 auto 4rem auto; background: transparent;" class="un-big-data-logo">
+				</a>
+				<h3>CPI Systems Survey</h3>
+				<p>
+					<small>Created by Collin Brown and Steve Martin</small>
+					<small>
+						on behalf of the
+						<a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml" , target="_blank">
+							Task Team on Scanner Data
+						</a>
+					</small>
+				</p>
+				<div style="text-align: center; font-size: smaller">
+					<p>
+						<small>
+							Presentation created with <a href="https://revealjs.com/" target="_blank">RevealJS</a>
+						</small>
+					</p>
+				</div>
+			</section>
+			<section>
+				<h3>Presentation Overview</h3>
+				<ol>
+					<li>What this survey is about</li>
+					<li>Why we are running the survey</li>
+					<li>Explanation of key concepts</li>
+					<li>Survey walkthrough</li>
+					<li>What we hope to learn</li>
+				</ol>
+			</section>
+			<section>
+				<section data-auto-animate data-auto-animate-easing="cubic-bezier(0.125, 0.000, 0.175, 1.000)"
+					data-background="#fff">
+					<h3>What this survey is about</h3>
+					<p>The interaction between</p>
+					<ul>
+						<li>
+							<div data-id="box1"
+								style="background: #fff2cc; border: 1px solid black; width: auto; height: 50px; margin: 10px; border-radius: 5px; text-align: center;">
+								domain-aligned teams</div>
+						</li>
+						<li>
+							<div data-id="box2"
+								style="background: #dae8fc; border: 1px solid black; width: auto; height: 50px; margin: 10px; border-radius: 5px; text-align: center;">
+								centralized teams</div>
+						</li>
+						<li>
+							<div data-id="box3"
+								style="background: #d5e8d4; border: 1px solid black; width: auto; height: 50px; margin: 10px; border-radius: 5px; text-align: center;">
+								software systems</div>
+						</li>
+						<li>
+							<div data-id="box5"
+								style="background: #fff; border: 1px solid black;  width: auto; height: 50px; margin: 10px; border-radius: 5px; text-align: center;">
+								input data</div>
+						</li>
+						<li>
+							<div data-id="box4"
+								style="background: #fff; width: auto; height: 50px; margin: 10px; border-radius: 5px; text-align: center;">
+								<a href="https://unece.org/statistics/documents/2019/01/standards/gsbpm-v51" ,
+									target="_blank">GSBPM</a> processing steps, and
+							</div>
+						</li>
+						<li>
+							<div data-id="box6"
+								style="background: #fff; border: 1px solid black;  width: auto; height: 50px; margin: 10px; border-radius: 5px; text-align: center;">
+								output data</div>
+						</li>
+						</ol>
+						<p>and how it affects CPI production systems.</p>
+				</section>
+				<section data-auto-animate data-auto-animate-easing="cubic-bezier(0.125, 0.000, 0.175, 1.000)"
+					data-background="#fff">
+					<h3>What this survey is about</h3>
+					<ul>
+						<li>Teams own systems.</li>
+						<li>Teams and systems <b>interact</b> with eachother.</li>
+						<li>Systems transform data across the GSBPM process.</li>
+					</ul>
+					<div class="container" style="display: grid; grid-auto-flow: column; column-gap: 2%;">
+						<div class="r-stack col">
+							<div data-id="box5"
+								style="background: #fff; border: 1px solid black; width: auto; height: auto; border-radius: 0%; text-align: center; padding: 4%;">
+								input</div>
+						</div>
+						<div class="r-stack col">
+							<div data-id="box1"
+								style="background: #fff2cc; border: 1px solid black; width: auto; height: 300px; border-radius: 5%; text-align: center; padding: 4%;">
+								domain-aligned team</div>
+							<div data-id="box3"
+								style="background: #d5e8d4; border: 1px solid black; width: auto; height: auto; border-radius: 50%; text-align: center; vertical-align: middle; padding: 3%;">
+								system</div>
+						</div>
+						<div class="r-stack col">
+							<div data-id="box2"
+								style="background: #dae8fc; border: 1px solid black; width: auto; height: 300px; border-radius: 5%; text-align: center; padding: 4%;">
+								centralized team</div>
+							<div data-id="box3"
+								style="background: #d5e8d4; border: 1px solid black; width: auto; height: auto; border-radius: 50%; text-align: center; vertical-align: middle; padding: 3%;">
+								system</div>
+						</div>
+						<div class="r-stack col">
+							<div data-id="box6"
+								style="background: #fff; border: 1px solid black; width: auto; height: auto; border-radius: 0%; text-align: center; padding: 4%;">
+								output</div>
+						</div>
+					</div>
+				</section>
+				<section data-background="#fff">
+					<h3>What this survey is about</h3>
+					<p>For CPI Production systems around the world, we aim to</p>
+					<ul>
+						<li><b>characterize</b> team interactions and system organizations,</li>
+						<li><b>identify</b> the tools and practices currently in use, and </li>
+						<li><b>infer</b> how these factors relate to key business outcomes.</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>Why we are running the survey</h3>
+					<ul>
+						<li>Alternative Data Source (ADS) usage in CPI systems demands significant technical expertise
+							<b>across multiple skill domains</b>.
+						</li>
+						<li>Developing and maintaining CPI systems that use ADS can <b>cut across organizational
+								silos</b>.</li>
+						<li>Lifetime of CPI systems and practices can <b>span decades</b>.</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Why we are running the survey</h3>
+					<p>As far as we know, we are the first to:</p>
+					<ul>
+						<li>characterize the state of team and system organization,</li>
+						<li>identify the tools and practices being used, and</li>
+						<li>understand how these characteristics relate to business outcomes (including ADS adoption).
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>Explanation of Key Concepts</h3>
+					<p>
+						In this section, we cover the key terms and concepts used throughout the survey.
+					</p>
+				</section>
+				<section>
+					<h3>System</h3>
+					<p class="r-fit-text">
+						A <b>system</b> is any <b>indivisible</b><sup>1</sup> <b>software component</b> that takes
+						<b>data input(s)</b> and
+						produces <b>data output(s)</b>.
+					</p>
+					<img width="60%" src="./diagrams/gsbpm-systems.drawio.svg" alt="System diagram">
+					<div style="text-align: left; font-size: smaller">
+						<p>
+							<small>
+								1: I.e., the component runs <b>entirely</b> or <b>not at all</b>.
+							</small>
+						</p>
+					</div>
+				</section>
+				<section>
+					<table class="r-fit-text">
+						<h3>GSBPM Processing Steps</h3>
+						<tr>
+							<th>Process</th>
+							<th>Explanation</th>
+							<th></th>
+						</tr>
+						<tr class="fragment">
+							<td><b>Ingestion</b></td>
+							<td>Getting <b>acquired data</b> into a <b>machine-readable state</b> where it is
+								<b>ready</b> for further processing.
+							</td>
+							<td></td>
+						</tr>
+						<tr class="fragment">
+							<td><b>Processing</b></td>
+							<td><b>Preparing the data</b> to produce elementary indexes.</td>
+							<td></td>
+						</tr>
+						<tr class="fragment">
+							<td><b>Elementary Indexes</b></td>
+							<td>Calculate <b>elementary indexes</b> using the processed data.</td>
+							<td></td>
+						</tr>
+						<tr class="fragment">
+							<td><b>Aggregation</b></td>
+							<td>Aggregate elementary price indexes into <b>higher-level indexes</b>.</td>
+							<td></td>
+						</tr>
+						<tr class="fragment">
+							<td><b>Finalization</b></td>
+							<td>Store price indexes for <b>subsequent use</b> and <b>dissemination</b>.</td>
+							<td></td>
+						</tr>
+					</table>
+				</section>
+				<section>
+					<h3>Flow of Work</h3>
+					<p class="r-fit-text">
+						The direction of processing steps from <b>raw data</b> to <b>final outputs</b>.
+					</p>
+					<img width="100%" src="./diagrams/gsbpm-systems-2.drawio.svg" alt="Flow of work diagram">
+				</section>
+				<section>
+					<h3>Team</h3>
+					<p class="r-fit-text">
+						A <b>group of individuals</b> who maintains <b>one or more systems</b>.
+					</p>
+					<img width="100%" src="./diagrams/gsbpm-systems-2.drawio.svg" alt="Flow of work diagram">
+					<div class="fragment" style="text-align: left; font-size: smaller">
+						<p>
+							<small>
+								<b>Note</b>: One system can <b>cut across</b> steps.
+							</small>
+						</p>
+					</div>
+					<div class="fragment" style="text-align: left; font-size: smaller">
+						<p>
+							<small>
+								<b>Note</b>: More than one system can exist <b>within</b> a single step.
+							</small>
+						</p>
+					</div>
+				</section>
+				<section>
+					<h3>Domain-Aligned Team</h3>
 
-<div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
-<!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="./">Survey of CPI Production Systems</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Preface</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./concepts.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Concepts</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./systems-teams-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Systems and Teams Analysis</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./tools-and-technology.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tools and Technologies</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./system-age-and-updates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">System Age and Updates</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./number-of-individuals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Number of People</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./change-lead-times.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lead Time</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./alternative-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Alternative Data</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./challenges.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Challenges</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./findings-and-next-steps.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
-  <li><a href="#survey-methodology-notes" id="toc-survey-methodology-notes" class="nav-link" data-scroll-target="#survey-methodology-notes">Survey Methodology Notes</a>
-  <ul class="collapse">
-  <li><a href="#value-suppression" id="toc-value-suppression" class="nav-link" data-scroll-target="#value-suppression">Value Suppression</a></li>
-  </ul></li>
-  </ul>
-</nav>
-    </div>
-<!-- main -->
-<main class="content column-body" id="quarto-document-content">
+					<div style="background: #fff2cc; text-align: center; padding-left: 1%; border-radius: 10px;">
+						<p class="r-fit-text">
+							A <b>group of individuals</b> who are <b>functionally embedded</b> within the CPI team.
+							These teams tend to have significant <b>CPI domain knowledge</b>.
+						</p>
+					</div>
+					<p class="fragment">
+						<small>This is in contrast to a...</small>
+					</p>
+					<h3 class="fragment">Centralized Team</h3>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Survey of CPI Production Systems</h1>
-</div>
+					<div class="fragment"
+						style="background: #dae8fc; text-align: center; padding-left: 1%; border-radius: 10px;">
+						<p class="r-fit-text">
+							A <b>group of individuals</b> who are <b>centralized elsewhere</b> in the organization.
+							These teams tend to <b>NOT</b> have significant <b>domain knowledge</b>.
+						</p>
+					</div>
+				</section>
+				<section>
+					<h3>Putting it all together</h3>
+					<img height="100%" src="./diagrams/gsbpm-systems-3.drawio.svg" alt="System diagram">
+				</section>
+				<section>
+					<h3>Ingestion</h3>
+					<div class="container" style="display: grid; grid-auto-flow: column; column-gap: 2%;">
+						<div class="col">
+							<img height="75%" src="./diagrams/ingestion.PNG" alt="System diagram">
+						</div>
+						<div class="col">
+							<ul>
+								<li>
+									A (domain-aligned) group of economists in the CPI team maintain a single system for
+									one data source.
+								</li>
+								<li>
+									A (central) corporate IT team maintains a single system that manages the ingestion
+									of the remaining data that calculates the CPI.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h3>Processing and Elementary Indexes</h3>
+					<div class="container" style="display: grid; grid-auto-flow: column; column-gap: 2%;">
+						<div class="col">
+							<ul>
+								<li>
+									The top (domain-aligned) team maintains one system that handles <b>both</b>
+									processing and elementary index calculation<sup>1</sup>.
+								</li>
+								<li>
+									Each of the remaining (domain-aligned) teams maintain <b>two systems</b> that
+									<b>separately</b> handle processing and elementary index calculation.
+								</li>
+							</ul>
+							<div class="fragment" style="text-align: left; font-size: smaller">
+								<p>
+									<small>
+										<b>Note</b>: For the top system, it is <b>not straightforward</b> to make
+										significant changes to the processing component without also affecting the
+										elementary index component.
+									</small>
+								</p>
+							</div>
+						</div>
+						<div class="col">
+							<img height="65%" src="./diagrams/processing-elementary.PNG"
+								alt="System diagram">
+						</div>
+					</div>
+				</section>
+				<section>
+					<h3>Aggregate and Finalize</h3>
+					<div class="container" style="display: grid; grid-auto-flow: column; column-gap: 2%;">
+						<div class="col">
+							<img height="75%" src="./diagrams/aggregate-finalize.PNG"
+								alt="System diagram">
+						</div>
+						<div class="col">
+							<ul>
+								<li>
+									A second (central) corporate IT system implements <b>both</b> aggregation <b>and</b>
+									finalization <b>for every</b> upstream elementary index.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h3>Concluding Thoughts</h3>
 
+					<ul>
+						<li>
+							Goal is to have a <b>lingua franca</b> for <b>all CPI employees</b> to express team
+							organization and system architecture concepts.
+						</li>
+						<li>
+							Our goal is <b>not</b> to create an exact replica of your CPI system using these diagrams;
+							rather,
+							we are trying to <b>roughly characterize</b> the <b>germane aspects</b> of team and system
+							organization.</b>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>Survey Walkthrough</h3>
+					<p>
+						In this section, we go through each page of the survey.
+					</p>
+				</section>
+				<section>
+					<h3>Page 1: System Boundaries</h3>
+					<p>
+						The point of this page is to understand if and when <b>systems</b> cut across steps.
+					</p>
+					<p>
+						We are also interested in <b>how many systems</b> are used for each GSBPM step.
+					</p>
+				</section>
+				<section>
+					<h3>
+						Page 1: The two extremes
+					</h3>
+					<img height="600px" src="./diagrams/gsbpm-modular.drawio.svg" alt="Modular system diagram">
+				</section>
+				<section>
+					<h3>
+						Page 1: The two extremes
+					</h3>
+					<img height="600px" src="./diagrams/gsbpm-monolith.drawio.svg" alt="Monolithic system diagram">
+				</section>
+				<section>
+					<h3>Page 2: Team Boundaries</h3>
+					<p class="r-fit-text">
+						In this page, we're trying to learn which <b>kinds of teams</b> are involved in each step.
+					</p>
+					<table class="r-fit-text">
+						<tr>
+							<th>Team Type</th>
+							<th>Description</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td><b>Corporate IT</b></td>
+							<td>Information Technology (IT) professionals who are part of an <b>organization-wide
+									central group</b>.</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><b>Domain-embedded IT</b></td>
+							<td><b>IT professionals who are functionally embedded in the CPI team (i.e., part of the CPI
+									team, <b>not</b> the corporate IT department).</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><b>Domain-embedded Analysts</b></td>
+							<td>Professionals <b>without a formal IT background</b> (e.g., economists, statisticians)
+								who are <b>functionally embedded</b> in the CPI team.</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><b>Elsewhere Analysts</b></td>
+							<td>Professionals without a formal IT background who are <b>not</b> functionally embedded in
+								the price statistics team.</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><b>External Consultants/Contractors</b></td>
+							<td>Professionals <b>outside of the organization</b> to whom system development/maintenance
+								work is <b>contracted</b>.</td>
+							<td></td>
+						</tr>
+					</table>
+				</section>
+				<section>
+					<h3>Page 3: Joint Team-System Organization</h3>
+					<ul>
+						<li>
+							For a <b>representative group</b> of systems used in your CPI production, we want to
+							understand the joint team-system organization.
+						</li>
+						<li>
+							It is often <b>not feasible</b>
+							to ask respondents to characterize the joint team-system topology <b>for every system</b>
+							invovled
+							with CPI production.
+						</li>
+						<li>
+							No strict definition - the idea is to think of the group of systems that participate in the
+							<b>typical</b> flow of work.
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Example: Representative Group</h3>
+					<img height="600px" src="./diagrams/gsbpm-systems-3-highlight.drawio.svg"
+						alt="Monolithic system diagram">
+				</section>
+				<section>
+					<h3>Representative Group Takeaways</h3>
+					<ul>
+						<li>
+							The important part of this question is being able to accurately describe <b>which teams</b>
+							maintain <b>which groups of systems</b>.
+						</li>
+						<li>
+							The point of specifying a <b>representative group</b> in terms of <b>system groups</b> is
+							that there may be a group of distinct systems that all <b>behave the same way</b>. For the
+							purposes of this question, we can consider these distinct systems as part of the same
+							grouping.
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Page 4: Tools</h3>
+					<p>In this page, we simply ask about the various software tools used in your CPI production systems.
+					</p>
+				</section>
+				<section>
+					<h3>Page 5: System Age and Update Frequency</h3>
+					<ul>
+						<li>
+							In this page, we are trying to learn how old the <b>majority</b> of systems are, and
+							approximately how frequently the <b>majority</b> of systems are updated.
+						</li>
+						<li>
+							We are only looking for <b>coarse-grained answers</b> here. The answers are presented as intervals so that you need not know precicsely how old a system is or exactly how frequently it is updated.
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Page 6: Number of Individuals to Implement Changes</h3>
+					<ul>
+						<li>
+							In this page, we are trying to learn <b>how many individuals</b> need to be involved with small and large changes to systems in each step.
+						</li>
+						<li>
+							Again, in this question we are asking about the <b>typical</b> system in your organization.
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Page 7: Obstacles to ADS Adoption</h3>
+					<ul>
+						<li>
+							In this page, we are trying to understand what the <b>implementation gap</b> in adoption of ADS in the production of the CPI.
+						</li>
+						<li>
+							We also ask respondents to rank various common challenges to see if there are any challenges that are commonly faced across organizations.
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Page 8: How long changes take</h3>
+					<ul>
+						<li>
+							In this page, we are trying to understand <b>how long</b> it takes to introduce various changes to systems in each step.
+						</li>
+						<li>
+							Similar to previous questions, we are asking for this response about the <b>typical</b> system in each step.
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Page 9: General Challenges Facing CPI Teams</h3>
+					<ul>
+						<li>
+							In this page, we are trying to understand the primary challenges facing CPI teams across organizations, regardless of whether ADS are used.
+						</li>
+						<li>
+							Our hope here is to better understand if there are any common challenges facing organizations.
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Pages 10 and 11: General Feedback and Task Team Feedback</h3>
+					<ul>
+						<li>
+							Page 10 provides a plain text field where you can write any additional information about your CPI systems (<b>we will personally read this field</b> for each respondent).
+						</li>
+						<li>
+							Page 11 is for users to provide feedback about the Task Team on Scanner Data.
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>What we hope to learn</h3>
+					<ol>
+						<li>Provide descriptive statistics to characterize the state of CPI systems around the world in 2025.</li>
+						<li>Discover "archetypes" for organizations that have certain characteristics in common.</li>
+						<li>Correlate archetypes with business outcomes of interest.</li>
+						<li>Where possible (if anywhere), make inferences about changes that can lead to improved busienss outcomes.</li>
+					</ol>
+				</section>
+			</section>
+		</div>
+		</section>
 
+		</section>
+	</div>
+	</div>
 
-<div class="quarto-title-meta">
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Collin Brown and Steve Martin </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 3, 2025</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
 
-</header>
-
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>We would like to acknowledge the helpful feedback and numerous contributions from our colleagues in the Workstream on CPI Systems Architecture in the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">Task Team on Scanner Data</a> under the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics</a>.</p>
-</section>
-<section id="survey-methodology-notes" class="level1">
-<h1>Survey Methodology Notes</h1>
-<p>We follow a few standard practices for reporting on survey data.</p>
-<section id="value-suppression" class="level2">
-<h2 class="anchored" data-anchor-id="value-suppression">Value Suppression</h2>
-<p>To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.</p>
-
-
-</section>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
-      }
-    }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
-      });
-    }
-  }
-});
-</script>
-<nav class="page-navigation column-body">
-  <div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
-</div> <!-- /content -->
-
-
-
-</body></html>
+</html>
