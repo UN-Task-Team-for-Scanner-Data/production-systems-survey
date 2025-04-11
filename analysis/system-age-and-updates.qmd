@@ -325,10 +325,13 @@ One possible explanation for this observation is that monolithic systems are mor
 
 stream_aligned_dat = make_age_table(stream_aligned_df)
 stream_aligned_dat = factor(stream_aligned_dat, levels=age_levels)
+
 ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Stream Aligned)")
 
 it_only_dat = make_age_table(it_only_df)
 it_only_dat = factor(it_only_dat, levels=age_levels)
+# Drop values with low counts
+it_only_dat <- it_only_dat[it_only_dat != ">20 years"]
 ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (IT-Only)")
 
 analyst_only_dat = make_age_table(analyst_only_df)
@@ -337,6 +340,8 @@ ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="whi
 
 other_mix_dat = make_age_table(other_mix_df)
 other_mix_dat = factor(other_mix_dat, levels=age_levels)
+# Drop values with low counts
+other_mix_dat <- other_mix_dat[other_mix_dat != "2-5 years" & other_mix_dat != "11-20 years"]
 ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Other Mix)")
 
 
@@ -385,14 +390,20 @@ update_levels = c("Daily", "Weekly", "Monthly", "Quarterly", "Every six months",
 
 overall_dat = make_update_freq_table(df)
 overall_dat = factor(overall_dat, levels=update_levels)
+# Value suppression
+overall_dat <- overall_dat[overall_dat != "Daily" & overall_dat != "Weekly" & overall_dat != "Quarterly"]
 ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Overall)")
 
 monolith_dat = make_update_freq_table(monolith_df)
 monolith_dat = factor(monolith_dat, levels=update_levels)
+# Value suppression
+monolith_dat <- monolith_dat[monolith_dat != "Daily" & monolith_dat != "Weekly" & monolith_dat != "Quarterly" & monolith_dat != "Once per year" & monolith_dat != "Every six months"]
 ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Monolith)")
 
 modular_dat = make_update_freq_table(modular_df)
 modular_dat = factor(modular_dat, levels=update_levels)
+# Value suppression
+modular_dat <- modular_dat[modular_dat != "Daily" & modular_dat != "Weekly" & modular_dat != "Quarterly" & modular_dat != "Monthly" & modular_dat != "Never updated" & modular_dat != "Every six months"]
 ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Modular)")
 
 OVERALL_NEVER_UPDATE = sum(overall_dat == "Never updated")
@@ -423,18 +434,27 @@ More generally, the distribution of update frequencies seems to be left skewed, 
 
 stream_aligned_dat = make_update_freq_table(stream_aligned_df)
 stream_aligned_dat = factor(stream_aligned_dat, levels=update_levels)
+# Value suppression
+stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Daily" & stream_aligned_dat != "Weekly" & stream_aligned_dat != "Quarterly" & stream_aligned_dat != "Every six months"]
 ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Stream-Aligned)")
 
 it_only_dat = make_update_freq_table(it_only_df)
 it_only_dat = factor(it_only_dat, levels=update_levels)
+# Value suppression
+it_only_dat <- it_only_dat[it_only_dat != "Daily" & it_only_dat != "Weekly" & it_only_dat != "Quarterly" & it_only_dat != "Every six months" & it_only_dat != "Once per year"]
+
 ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (IT-Only)")
 
 analyst_only_dat = make_update_freq_table(analyst_only_df)
 analyst_only_dat = factor(analyst_only_dat, levels=update_levels)
+# Value suppression
+analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Daily" & analyst_only_dat != "Weekly" & analyst_only_dat != "Quarterly" & analyst_only_dat != "Every six months"]
 ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Analyst-Only)")
 
 other_mix_dat = make_update_freq_table(other_mix_df)
 other_mix_dat = factor(other_mix_dat, levels=update_levels)
+# Value suppression
+other_mix_dat <- other_mix_dat[other_mix_dat != "Every six months" & other_mix_dat != "Once per year"]
 ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Other Mix)")
 ```
 
