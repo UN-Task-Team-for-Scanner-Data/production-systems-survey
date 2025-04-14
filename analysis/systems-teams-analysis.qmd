@@ -1,232 +1,771 @@
-# Systems and Teams {#sec-sys-team}
+# Systems and Teams Analysis {#sec-sys-teams}
 
-```{r message=FALSE}
-#| label: fig-num-systems-each-step
-#| layout-ncol: 2
+Our first objective in this analysis is to describe the kinds of system and team organizations we encountered in our survey. We start with an explanation of our methodology, followed by some notable findings.
+
+## Steps Where Systems are Coupled
+
+One important piece of system architecture information we were interested in is cases where systems span more than one GSBPM step along the flow of change. Using our definition of "system" from @sec-concepts, a system that spans two or more GSBPM steps implies that it would not be straightforward to modify just one GSBPM step in the system without affecting the others[^12]. This relates to the concept of [coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming)) in software engineering, which measures the extent to which distinct software modules depend on each other.
+
+[^12]: For example, a single Python script that processes data using [Pandas](https://pandas.pydata.org/) and immediately performs a price index calculation on the processed data frame while it's still in memory is a system that spans the (1) Processing and the (2) Elementary Indexes GSBPM steps. Such a system has coupled the Processing logic and the Elementary Indexes logic because it is not straightforward to change just the Processing component without also needing to consider how the Elementary Indexes component is affected.
+
+![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png)
+
+We asked the following question to get a coarse-grained understanding of systems that spanned more than one GSBPM step.
+
+![Systems Spanning Multiple GSBPM Steps Question](./diagrams/cpi-systems-steps-coupling.png)
+
+```{r}
 #| echo: false
-#| out-width: "100%"
-#| fig-cap:
-#| - Ingestion Systems
-#| - Processing Systems
-#| - Elementary indexes Systems
-#| - Aggregation Systems
-#| - Finalization Systems
-#| - One or More Systems Handle One or More Steps
+#| warning: false
+# -------------------
+# Dataframe setup
+# -------------------
 
-library(ggplot2)
 library(dplyr)
 
-df <- read.csv("./data/results.csv")[,10:20]
+# Load results
+df <- read.csv("./data/results.csv")  #[,67:116]
+# Drop any incomplete responses
 df <- df[df[,2] != "",]
 
-df <- df |> rename(
-    ingestion = "Approximately.how.many.distinct.systems.exist.for.each.step.to.make.your.CPI...Data.ingestion.",
-    processing = "Approximately.how.many.distinct.systems.exist.for.each.step.to.make.your.CPI...Data.processing.",
-    elementary = "Approximately.how.many.distinct.systems.exist.for.each.step.to.make.your.CPI...Elementary.indexes.",
-    aggregation = "Approximately.how.many.distinct.systems.exist.for.each.step.to.make.your.CPI...Aggregation.",
-    finalization = "Approximately.how.many.distinct.systems.exist.for.each.step.to.make.your.CPI...Finalization.",
-    same_system = "For.any.of.your.systems..is.it.the.case.that.the.same.system.handles.more.than.one.step.for.making.your.CPI.",
-    ingestion_same = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Data.ingestion.",
-    processing_same = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Data.processing.",
-    elementary_same = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Elementary.indexes.",
-    aggregation_same = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Aggregation.",
-    finalization_same = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Finalization."
+# Helpers.
+is_yes <- function(x) x == "Yes"
+
+as_steps_matrix <- function(x, rows) {
+  dn <- list(rows, c("Ingest", "Process", "Elementals", "Aggregate", "Finalize"))
+  list(matrix(!is.na(x), ncol = 5, byrow = TRUE, dimnames = dn))
+}
+
+# Turn Q1 into a logical matrix.
+crossings_Q1 <-df[df[,15] == "Yes",] |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(c_across(16:40), paste0("System ", 1:5)))
+
+# Find 3 clusters.
+clusters <- crossings_Q1 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+
+# How many times do we see **only** Ingestion and Processing, but not the other three?
+ing_proc_crossings = 0
+proc_elem_crossings = 0
+elem_agg_crossings = 0
+agg_fin_crossings = 0
+ing_proc_elem_x = 0
+proc_elem_agg_x = 0
+elem_agg_fin_x = 0
+first_4_x = 0
+last_4_x = 0
+all_5_x = 0
+# Partition the Q3 matrices by cluster.
+for (mat in crossings_Q1$steps) {
+  for (ix in 1:5) {
+    if (all(mat[ix,] == c(TRUE, TRUE, FALSE, FALSE, FALSE))) {
+      ing_proc_crossings <- ing_proc_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, FALSE, FALSE))) {
+      proc_elem_crossings <- proc_elem_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, TRUE, TRUE, FALSE))) {
+      elem_agg_crossings <- elem_agg_crossings + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, FALSE, TRUE, TRUE))) {
+      agg_fin_crossings <- agg_fin_crossings + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, FALSE, FALSE))) {
+      ing_proc_elem_x <- ing_proc_elem_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, TRUE, FALSE))) {
+      proc_elem_agg_x <- proc_elem_agg_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, FALSE, TRUE, TRUE, TRUE))) {
+      elem_agg_fin_x <- elem_agg_fin_x + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, FALSE))) {
+      first_4_x <- first_4_x + 1
+    }
+    if (all(mat[ix,] == c(FALSE, TRUE, TRUE, TRUE, TRUE))) {
+      last_4_x <- last_4_x + 1
+    }
+    if (all(mat[ix,] == c(TRUE, TRUE, TRUE, TRUE, TRUE))) {
+      all_5_x <- all_5_x + 1
+    }
+  }
+}
+# split(crossings_Q1$steps, clusters$cluster)
+
+```
+
+We note how frequently systems cross certain GSBPM steps in @tbl-span-steps.
+
+The most common pattern we observed was that the same system handled both data ingestion and data processing. We suspect this is is fairly common as the two activities are conceptually similar, and often leverage similar tooling. For example, if an analyst wrote a web-scraping script to collect price data from a certain website, it's reasonable that they would also perform some data cleaning activities in the same script before writing the output to persistent storage.
+
+The second most common pattern we observed was the "Monolith" pattern, where one system spans all 5 GSBPM steps. We elaborate on this concept later in this section, but our suspicion is that systems like these mostly fall into one of two categories: (1) a small team and an Excel Workbook that handles everything from ingestion to finalization or (2) a single system managed by an IT team.
+
+Monolithic systems are not inherently bad. If they are carefully designed for maximum [cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science)) and minimal coupling, they can be maintainable. However, if monoliths emerge accidentally, they often involve many tightly coupled components and become very difficult to maintain in the long run.
+
+The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** and **elementary indexes-aggregation-finalization**. The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprised us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
+
+We were also surprised to learn that there are zero occurrences of a system spanning **elementary indexes-aggregation**. In the price statistics business domain, these concepts are often closely related, so we thought there would be more cases where a single system handled both steps[^13].
+
+[^13]: An example of a system that performs both elementary index calculation and aggregation would be if the same script calculated component price changes in apples, bananas, and oranges, then the same script also calculated the overall price change in fruit from these component price changes.
+
+| Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
+| ----- | ----- | ---- | ----- | ----- | ---- |
+| ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | `r proc_elem_crossings` |
+| ❌ | ❌ | ✅ | ✅ | ❌ | `r elem_agg_crossings` |
+| ❌ | ❌ | ❌ | ✅ | ✅ | `r agg_fin_crossings` |
+| ✅ | ✅ | ✅ | ❌ | ❌ | `r ing_proc_elem_x` |
+| ❌ | ✅ | ✅ | ✅ | ❌ | `r proc_elem_agg_x` |
+| ❌ | ❌ | ✅ | ✅ | ✅ | `r elem_agg_fin_x` |
+| ✅ | ✅ | ✅ | ✅ | ❌ | `r first_4_x` |
+| ❌ | ✅ | ✅ | ✅ | ✅ | `r last_4_x` |
+| ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
+
+: Systems that span across multiple GSBPM steps {#tbl-span-steps}
+
+## Team Types at Each Step
+
+The next concept we try to learn in the survey is which types of teams discussed in @sec-concepts are present at each GSBPM step in the flow of change.
+
+We present respondents with the following question.
+
+![Systems Spanning Multiple GSBPM Steps Question](./diagrams/cpi-systems-steps-teams.png)
+
+```{r}
+#| echo: false
+#| warning: false
+
+# Turn Q2 into a logical matrix.
+crossings_Q2 <- df |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(
+    c_across(42:66),
+    c(
+      "Corp. IT",
+      "Domain IT",
+      "Domain Analyst",
+      "Other Analyst",
+      "Consultant"
     )
-df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
+  ))
 
-ggplot(subset(df, ingestion != ""), aes(y=ingestion)) + geom_bar(fill="#d5e8d4")
-ggplot(subset(df, processing != ""), aes(y=processing)) + geom_bar(fill="#d5e8d4")
-ggplot(subset(df, elementary != ""), aes(y=elementary)) + geom_bar(fill="#d5e8d4")
-ggplot(subset(df, aggregation != ""), aes(y=aggregation)) + geom_bar(fill="#d5e8d4")
-ggplot(subset(df, finalization != ""), aes(y=finalization)) + geom_bar(fill="#d5e8d4")
-ggplot(subset(df, same_system != "N/A"), aes(x=same_system)) + geom_bar(fill="blue")
+# Find 3 clusters.
+clusters <- crossings_Q2 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+
+# How many times do we see **only** Ingestion and Processing, but not the other three?
+d_analyst_only = 0
+stream_aligned = 0
+cit_only = 0
+dit_only = 0
+it_only = 0
+cit_d_analyst = 0
+# Partition the Q3 matrices by cluster.
+for (mat in crossings_Q2$steps) {
+  for (ix in 1:5) {
+    if (all(mat[,ix] == c(FALSE, FALSE, TRUE, FALSE, FALSE))) {
+      d_analyst_only <- d_analyst_only + 1
+    }
+    if (all(mat[,ix] == c(FALSE, TRUE, TRUE, FALSE, FALSE))) {
+      stream_aligned <- stream_aligned + 1
+    }
+    if (all(mat[,ix] == c(TRUE, FALSE, FALSE, FALSE, FALSE))) {
+      cit_only <- cit_only + 1
+    }
+    if (all(mat[,ix] == c(FALSE, TRUE, FALSE, FALSE, FALSE))) {
+      dit_only <- dit_only + 1
+    }
+    if (all(mat[,ix] == c(TRUE, TRUE, FALSE, FALSE, FALSE))) {
+      it_only <- it_only + 1
+    }
+    if (all(mat[,ix] == c(TRUE, FALSE, TRUE, FALSE, FALSE))) {
+      cit_d_analyst <- cit_d_analyst + 1
+    }
+  }
+}
+# split(crossings_Q1$steps, clusters$cluster)
+
 ```
 
-```{r message=FALSE}
+| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
+| ----- | ----- | ---- | ----- | ----- | ---- | ---- |
+| ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analyst Only | `r d_analyst_only` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts and Domain IT | `r stream_aligned` |
+| ✅ | ❌ | ❌ | ❌ | ❌ | Corporate IT-Only | `r cit_only` |
+| ❌ | ✅ | ❌ | ❌ | ❌ | Domain IT-Only | `r dit_only` |
+| ✅ | ✅ | ❌ | ❌ | ❌ | IT-Only | `r it_only` |
+| ✅ | ❌ | ✅ | ❌ | ❌ | Corporate IT and Domain Analysts Only | `r cit_d_analyst` |
+
+: Common Team Combinations **within** GSBPM Steps {#tbl-team-steps}
+
+@tbl-team-steps shows how frequently certain team combinations were reported **within** any given GSBPM step.
+
+We were surprised to see that Corporate IT and Domain Analyst teams occurred almost twice as frequently as teams with Domain-embedded IT **and** Domain-embedded analysts. In particular, this suggests that technical expertise offered by IT personnel is often centralized outside of the domain area rather than functionally embedding IT personnel within the domain team.
+
+## Capturing System And Team Organizations Together
+
+```{r}
 #| echo: false
-#| out-width: "100%"
-#| fig-cap: Frequency of Steps Handled by the Same System
+#| warning: false
 
-df <- read.csv("./data/results.csv")[,15:40]
-df <- df[df[,2] != "",]
 
+# Filter and rename columns used in the analysis for this page
 df <- df |> rename(
-    ingestion_1 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Data.ingestion."    ,
-    processing_1 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Data.processing."   ,
-    elementary_1 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Elementary.indexes.",
-    aggregation_1 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Aggregation."       ,
-    finalization_1 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.1..Finalization."      ,
-    ingestion_2 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.2..Data.ingestion."    ,
-    processing_2 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.2..Data.processing."   ,
-    elementary_2 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.2..Elementary.indexes.",
-    aggregation_2 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.2..Aggregation."       ,
-    finalization_2 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.2..Finalization."      ,
-    ingestion_3 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.3..Data.ingestion."    ,
-    processing_3 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.3..Data.processing."   ,
-    elementary_3 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.3..Elementary.indexes.",
-    aggregation_3 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.3..Aggregation."       ,
-    finalization_3 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.3..Finalization."      ,
-    ingestion_4 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.4..Data.ingestion."    ,
-    processing_4 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.4..Data.processing."   ,
-    elementary_4 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.4..Elementary.indexes.",
-    aggregation_4 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.4..Aggregation."       ,
-    finalization_4 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.4..Finalization."      ,
-    ingestion_5 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.5..Data.ingestion."    ,
-    processing_5 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.5..Data.processing."   ,
-    elementary_5 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.5..Elementary.indexes.",
-    aggregation_5 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.5..Aggregation."       ,
-    finalization_5 = "Indicate.which.steps.are.handled.by.the.same.system..for.up.to.five.typical.systems...System.5..Finalization.",
+  sg1_ing=colnames(df)[67],
+  sg1_proc=colnames(df)[68],
+  sg1_elem=colnames(df)[69],
+  sg1_agg=colnames(df)[70],
+  sg1_fin=colnames(df)[71],
+  sg2_ing=colnames(df)[72],
+  sg2_proc=colnames(df)[73],
+  sg2_elem=colnames(df)[74],
+  sg2_agg=colnames(df)[75],
+  sg2_fin=colnames(df)[76],
+  sg3_ing=colnames(df)[77],
+  sg3_proc=colnames(df)[78],
+  sg3_elem=colnames(df)[79],
+  sg3_agg=colnames(df)[80],
+  sg3_fin=colnames(df)[81],
+  sg4_ing=colnames(df)[82],
+  sg4_proc=colnames(df)[83],
+  sg4_elem=colnames(df)[84],
+  sg4_agg=colnames(df)[85],
+  sg4_fin=colnames(df)[86],
+  sg5_ing=colnames(df)[87],
+  sg5_proc=colnames(df)[88],
+  sg5_elem=colnames(df)[89],
+  sg5_agg=colnames(df)[90],
+  sg5_fin=colnames(df)[91],
+  sg1_cit=colnames(df)[92],
+  sg1_dit=colnames(df)[93],
+  sg1_dan=colnames(df)[94],
+  sg1_ean=colnames(df)[95],
+  sg1_con=colnames(df)[96],
+  sg2_cit=colnames(df)[97],
+  sg2_dit=colnames(df)[98],
+  sg2_dan=colnames(df)[99],
+  sg2_ean=colnames(df)[100],
+  sg2_con=colnames(df)[101],
+  sg3_cit=colnames(df)[102],
+  sg3_dit=colnames(df)[103],
+  sg3_dan=colnames(df)[104],
+  sg3_ean=colnames(df)[105],
+  sg3_con=colnames(df)[106],
+  sg4_cit=colnames(df)[107],
+  sg4_dit=colnames(df)[108],
+  sg4_dan=colnames(df)[109],
+  sg4_ean=colnames(df)[110],
+  sg4_con=colnames(df)[111],
+  sg5_cit=colnames(df)[112],
+  sg5_dit=colnames(df)[113],
+  sg5_dan=colnames(df)[114],
+  sg5_ean=colnames(df)[115],
+  sg5_con=colnames(df)[116],
 )
-df$ingestion <- rowSums(df[,c("ingestion_1", "ingestion_2", "ingestion_3", "ingestion_4", "ingestion_5")], na.rm=TRUE)
-df$processing <- rowSums(df[,c("processing_1", "processing_2", "processing_3", "processing_4", "processing_5")], na.rm=TRUE)
-df$elementary <- rowSums(df[,c("elementary_1", "elementary_2", "elementary_3", "elementary_4", "elementary_5")], na.rm=TRUE)
-df$aggregation <- rowSums(df[,c("aggregation_1", "aggregation_2", "aggregation_3", "aggregation_4", "aggregation_5")], na.rm=TRUE)
-df$finalization <- rowSums(df[,c("finalization_1", "finalization_2", "finalization_3", "finalization_4", "finalization_5")], na.rm=TRUE)
+# df <- df[,67:116]
 
-# Overlay all histograms on one plot
-dat <- data.frame(
-  Frequency = c(df$ingestion, df$processing, df$elementary, df$aggregation, df$finalization),
-  Step = c(
-    rep("Inegstion", each=nrow(df)),
-    rep("Processing", each=nrow(df)),
-    rep("Elementary indexes", each=nrow(df)),
-    rep("Aggregation", each=nrow(df)),
-    rep("Finalization", each=nrow(df))
-  )
-)
+# Fill NA values with zero
+# df[,67:116] <- 0
 
-ggplot(dat,aes(x=Frequency, fill=Step)) + geom_histogram(alpha=0.6, position="stack")
+systems_matrix <- function(row) {
+  q1 <- matrix(nrow=5, ncol=5)
+  q1[1,] <- as.numeric(obs[,67:71])
+  q1[2,] <- as.numeric(obs[,72:76])
+  q1[3,] <- as.numeric(obs[,77:81])
+  q1[4,] <- as.numeric(obs[,82:86])
+  q1[5,] <- as.numeric(obs[,87:91])
+  
+  q1[is.na(q1)] = 0
+  
+  q1
+}
+
+maintainer_matrix <- function(row) {
+  q2 <- matrix(nrow=5, ncol=5)
+  q2[1,] <- as.numeric(obs[,92:96])
+  q2[2,] <- as.numeric(obs[,97:101])
+  q2[3,] <- as.numeric(obs[,102:106])
+  q2[4,] <- as.numeric(obs[,107:111])
+  q2[5,] <- as.numeric(obs[,112:116])
+  
+  q2[is.na(q2)] = 0
+  
+  q2
+}
+
+similarity_metric <- function(a, b) {
+  num <- sum(a == TRUE & b == TRUE)
+  denom <- sum(b == TRUE)
+  num / denom
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
+
+df$has_monolith = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
+
+
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
+
+df$has_hybrid_arch = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
+
+df$has_modular = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Any organization that doesn't fit one of the 3 definitions above is excluded
+# because the answers are incomplete. Drop these records from the analysis
+df <- df[df$has_monolith | df$has_hybrid_arch | df$has_modular, ]
+
+# ---------------------
+# Add a column to indicate whether the organization has stream aligned teams
+# maintaining the representative system
+# ---------------------
+
+df$has_stream_aligned_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,3] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,3] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,3] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,3] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,3] == 1)
+  if (idx) {
+    df[i, "has_stream_aligned_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has IT-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_it_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,3] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,1] == 1) |
+         (maintainers[2,3] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,1] == 1) |
+         (maintainers[3,3] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,1] == 1) |
+         (maintainers[4,3] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,1] == 1) |
+         (maintainers[5,3] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,1] == 1)
+  if (idx) {
+    df[i, "has_it_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has analyst-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_analyst_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,2] == 0 & maintainers[1,5] == 0) & (maintainers[1,3] == 1 | maintainers[1,4] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,2] == 0 & maintainers[2,5] == 0) & (maintainers[2,3] == 1 | maintainers[2,4] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,2] == 0 & maintainers[3,5] == 0) & (maintainers[3,3] == 1 | maintainers[3,4] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,2] == 0 & maintainers[4,5] == 0) & (maintainers[4,3] == 1 | maintainers[4,4] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,2] == 0 & maintainers[5,5] == 0) & (maintainers[5,3] == 1 | maintainers[5,4] == 1)
+  if (idx) {
+    df[i, "has_analyst_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has "other" teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_other_mix_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # An "Other" mix is anything that's not stream aligned, IT-only, or analyst-only.
+  # Any organization that doesn't have any of the other team types is "other".
+  if (!df[i, "has_stream_aligned_team"] & !df[i, "has_it_only_team"] & !df[i, "has_analyst_only_team"]) {
+    df[i, "has_other_mix_team"] = TRUE
+  }
+}
+
+team_arch_mat <- matrix(nrow=5, ncol=3)
+
+# mono-stream
+team_arch_mat[1,1] <- similarity_metric(df$has_monolith, df$has_stream_aligned_team)
+# mono-it-only
+team_arch_mat[2,1] <- similarity_metric(df$has_monolith, df$has_it_only_team)
+# mono-analyst-only
+team_arch_mat[3,1] <- similarity_metric(df$has_monolith, df$has_analyst_only_team)
+# Other mix teams
+team_arch_mat[4,1] <- similarity_metric(df$has_monolith, df$has_other_mix_team)
+# Sample average (i.e., all teams)
+team_arch_mat[5,1] <- similarity_metric(df$has_monolith, rep(TRUE, nrow(df)))
+
+# hybrid-stream
+team_arch_mat[1,2] <- similarity_metric(df$has_hybrid_arch, df$has_stream_aligned_team)
+# hybrid-it-only
+team_arch_mat[2,2] <- similarity_metric(df$has_hybrid_arch, df$has_it_only_team)
+# hybrid-analyst-only
+team_arch_mat[3,2] <- similarity_metric(df$has_hybrid_arch, df$has_analyst_only_team)
+# Other mix teams
+team_arch_mat[4,2] <- similarity_metric(df$has_hybrid_arch, df$has_other_mix_team)
+# Sample average (i.e., all teams)
+team_arch_mat[5,2] <- similarity_metric(df$has_hybrid_arch, rep(TRUE, nrow(df)))
+
+# modular-stream
+team_arch_mat[1,3] <- similarity_metric(df$has_modular, df$has_stream_aligned_team)
+# modular-it-only
+team_arch_mat[2,3] <- similarity_metric(df$has_modular, df$has_it_only_team)
+# modular-analyst-only
+team_arch_mat[3,3] <- similarity_metric(df$has_modular, df$has_analyst_only_team)
+# Other mix teams
+team_arch_mat[4,3] <- similarity_metric(df$has_modular, df$has_other_mix_team)
+# Sample average (i.e., all teams)
+team_arch_mat[5,3] <- similarity_metric(df$has_modular, rep(TRUE, nrow(df)))
+
+
+rownames(team_arch_mat) <- c("Stream Aligned Team", "IT-Only Team", "Analyst-Only Team", "Other Mix", "Sample Average")
+colnames(team_arch_mat) <- c("Monolith", "Hybrid", "Modular")
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
 ```
 
+## Commonly Occurring System and Team Topologies
 
-```{r message = FALSE}
-#| label: fig-steps-by-team-type
-#| layout-ncol: 2
+We begin by sharing some commonly occurring system and team topologies that occurred in our responses.
+
+```{r}
 #| echo: false
-#| out-width: "100%"
-#| fig-cap:
-#| - Steps Handled by Central IT
-#| - Steps Handled by Domain-Embedded IT
-#| - Steps Handled by Domain-Embedded Analysts
-#| - Steps Handled by Analysts Elsewhere in the Organization
-#| - Steps Handled by Contractors
 
-df <- read.csv("./data/results.csv")
-df <- df[df[,2] != "",]
+library(dplyr)
 
-df <- df |> rename(
-  ingestion_c_it = colnames(df)[42],
-  processing_c_it = colnames(df)[43],
-  elementary_c_it = colnames(df)[44],
-  agg_c_it = colnames(df)[45],
-  fin_c_it = colnames(df)[46],
-  ingestion_d_it = colnames(df)[47],
-  processing_d_it = colnames(df)[48],
-  elementary_d_it = colnames(df)[49],
-  agg_d_it = colnames(df)[50],
-  fin_d_it = colnames(df)[51],
-  ingestion_d_analyst = colnames(df)[52],
-  processing_d_analyst = colnames(df)[53],
-  elementary_d_analyst = colnames(df)[54],
-  agg_d_analyst = colnames(df)[55],
-  fin_d_analyst = colnames(df)[56],
-  ingestion_e_analyst = colnames(df)[57],
-  processing_e_analyst = colnames(df)[58],
-  elementary_e_analyst = colnames(df)[59],
-  agg_e_analyst = colnames(df)[60],
-  fin_e_analyst = colnames(df)[61],
-  ingestion_consultant = colnames(df)[62],
-  processing_consultant = colnames(df)[63],
-  elementary_consultant = colnames(df)[64],
-  agg_consultant = colnames(df)[65],
-  fin_consultant = colnames(df)[66]
-)
+# We want the same clusters every run so we can render same results from
+# the data.
+set.seed(1234)
 
-# Corporate IT
-dat <- data.frame(
-  Frequency = c(df$ingestion_c_it, df$processing_c_it, df$elementary_c_it, df$agg_c_it, df$fin_c_it),
-  Step = c(
-    rep("Inegstion", each=nrow(df)),
-    rep("Processing", each=nrow(df)),
-    rep("Elementary indexes", each=nrow(df)),
-    rep("Aggregation", each=nrow(df)),
-    rep("Finalization", each=nrow(df))
-  )
-)
+# Helpers.
+is_yes <- function(x) x == "Yes"
 
-# Fill NA with zero
-dat[is.na(dat)] = 0
+as_steps_matrix <- function(x, rows) {
+  dn <- list(rows, c("Ingest", "Process", "Elementals", "Aggregate", "Finalize"))
+  list(matrix(!is.na(x), ncol = 5, byrow = TRUE, dimnames = dn))
+}
 
-ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#dae8fc")
+# Turn Q3 into a logical matrix.
+crossings_Q3 <- df |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(c_across(sg1_ing:sg5_fin), paste0("System", 1:5)))
 
-# Domain embedded IT
+# Find 3 cluseters.
+clusters <- crossings_Q3 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
 
-dat <- data.frame(
-  Frequency = c(df$ingestion_d_it, df$processing_d_it, df$elementary_d_it, df$agg_d_it, df$fin_d_it),
-  Step = c(
-    rep("Inegstion", each=nrow(df)),
-    rep("Processing", each=nrow(df)),
-    rep("Elementary indexes", each=nrow(df)),
-    rep("Aggregation", each=nrow(df)),
-    rep("Finalization", each=nrow(df))
-  )
-)
-
-# Fill NA with zero
-dat[is.na(dat)] = 0
-
-ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#fff2cc")
-
-
-# Domain embedded analysts
-
-dat <- data.frame(
-  Frequency = c(df$ingestion_d_analyst, df$processing_d_analyst, df$elementary_d_analyst, df$agg_d_analyst, df$fin_d_analyst),
-  Step = c(
-    rep("Inegstion", each=nrow(df)),
-    rep("Processing", each=nrow(df)),
-    rep("Elementary indexes", each=nrow(df)),
-    rep("Aggregation", each=nrow(df)),
-    rep("Finalization", each=nrow(df))
-  )
-)
-
-# Fill NA with zero
-dat[is.na(dat)] = 0
-
-ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#fff2cc")
-
-# Elsewhere Analysts
-dat <- data.frame(
-  Frequency = c(df$ingestion_e_analyst, df$processing_e_analyst, df$elementary_e_analyst, df$agg_e_analyst, df$fin_e_analyst),
-  Step = c(
-    rep("Inegstion", each=nrow(df)),
-    rep("Processing", each=nrow(df)),
-    rep("Elementary indexes", each=nrow(df)),
-    rep("Aggregation", each=nrow(df)),
-    rep("Finalization", each=nrow(df))
-  )
-)
-
-# Fill NA with zero
-dat[is.na(dat)] = 0
-
-ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity", fill="#dae8fc")
-
-# Consultants
-dat <- data.frame(
-  Frequency = c(df$ingestion_consultant, df$processing_consultant, df$elementary_consultant, df$agg_consultant, df$fin_consultant),
-  Step = c(
-    rep("Inegstion", each=nrow(df)),
-    rep("Processing", each=nrow(df)),
-    rep("Elementary indexes", each=nrow(df)),
-    rep("Aggregation", each=nrow(df)),
-    rep("Finalization", each=nrow(df))
-  )
-)
-
-# Fill NA with zero
-dat[is.na(dat)] = 0
-
-ggplot(dat, aes(x=Step, y=Frequency)) + geom_bar(stat="identity")
+# Partition the Q3 matrices by cluster.
+sys_cluster_split <- split(crossings_Q3$steps, clusters$cluster)
 ```
+
+We perform k-means clustering with a cluster size of 3 on each respondent's answer the "system topology" part of the Representative System Group question[^8].
+
+We were not able to find any rule or explanation that perfectly split respondents into some number of clusters for this question.
+
+However, we were able to identify some high-level patterns that were consistent across the 3 groups. We use these patterns to characterize 3 archetypes that are explained below along with some illustrative examples from each cluster.
+
+[^8]: Due to the small sample size, we were hesitant to try and split the sample into more than 3 groups. While there are almost certainly more than 3 meaningful system topologies that describe CPI Production Systems, our concern was that using more than 3 clusters would lead to us picking up idiosyncrasies in this specific sample rather than more general patterns that are likely true in a more general setting.
+
+### One or more System Groups Span the Entire Flow of Change
+
+```{r}
+#| echo: false
+
+# Example of "monolith" cluster
+sys_cluster_split[[1]][[10]]
+```
+
+```{r}
+#| echo: false
+
+# Example of "monolith" cluster
+sys_cluster_split[[1]][[15]]
+```
+
+### There is exactly one "split point" between System Groups
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[3]][[2]]
+```
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[3]][[3]]
+```
+
+### There are two or more split points between system groups
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[2]][[6]]
+```
+
+```{r}
+#| echo: false
+
+sys_cluster_split[[3]][[14]]
+```
+
+
+## Assigning Architectures to Organizations
+
+We use responses to the Representative System Group question to assign NSOs to one of the three architecture types defined below.
+
+### Monolithic Architecture
+
+We assume that an NSO has a monolithic architecture if any of their system groups span all 5 GSBPM steps[^1],[^4].
+
+[^1]: There were also two NSOs who explicitly stated that the same system does not handle more than one step for making their CPI across all systems. We assign these two records to the "modular" architecture category regardless of their answer to the Representative System Group question.
+
+[^4]: We classify organizations where **any** system group spans all 5 GSBPM steps as monolithic because we are concerned with the precense of a system group that is plausibly monolithic, we do not have a large enough sample to distinguish between cases where there is a monolithic system group **and** another system group.
+
+Our reasoning for this assumption is that if the respondent thought a system group spanning all 5 GSBPM steps was similar enough that there was no need to split any subset of it into a second system group, it is probably due to coupling between one or more systems in the system group.
+
+It is important to note that since we do not ask questions about the quantity or span of systems, we cannot know for certain whether or not a system group spanning all 5 GSBPM steps is truly monolithic[^2].
+
+For example, a system group that spans all 5 GSBPM steps could be comprised of one system that truly is monolithic with respect to the 5 GSBPM steps, or it could be comprised of 5 or more distinct systems that the respondent felt were sufficiently representative of their typical workflow[^3].
+
+[^2]: It is probably more realistic to think about the monolithic category as "more likely to have significant coupling between systems compared to organizations categorized as modular" rather than a true monolith in the strict sense of the term.
+
+Nevertheless, we needed to make some simplifying assumptions to make the response burden of this survey realistic, and we do not believe this assumption is too far fetched.
+
+```{r}
+#| echo: false
+
+# Robustness checks for monolith assignment
+
+# Number of respondents classified as monoliths who answered "Yes" to the "is it the case that the same system handles more than one step for making your CPI?" question
+num_monolith_x_systems = sum(monolith_df[, 15] == "Yes")
+```
+
+[^3]: The number of respondents classified as monoliths who stated that the same system handles more than one step for making their CPI across **all systems** is 21/29 (8/29 skipped this question). This evidence alone is not sufficient to know one way or the other if these cases are truly monolithic, but we take it as evidence that the majority of assignments to "monolith" explicitly indicated that **at least some systems** cut across GSBPM boundaries.
+
+### Hybrid Architectures
+
+We classify any NSO that (1) is not a monolith and (2) has exactly two system groups with any split between them as having a Hybrid architecture type.
+
+Our rationale for this category is to look at cases where there is one "boundary point" between two distinct system groups.
+
+### Modular Architectures
+
+We classify any NSO that (1) is not a monolith, (2) is not a hybrid, and (3) has three or more system groups with any splits between them as having a Modular architecture type.
+
+While this kind of architecture is not necessarily perfectly modular, there are definitely two or more "boundary points" between three or more distinct systems.
+
+There are a couple of important points to note about Hybrid and Modular architectures as defined above.
+
+1. Unlike Monolithic architectures where we have to make an assumption about the internal structure of a system group, here we know for certain that there are explicit "boundary points" between two system groups that the respondent deemed sufficiently different to not be grouped together.
+
+2. Using our definition of Systems given in @sec-concepts, Hybrid and Modular architectures are guaranteed to pass output data from one system as input data to another system at least once[^5].
+
+[^5]: This is in contrast to managing data entirely **within a single system**, which **may** be happening in the monolithic architectures.
+
+## Assigning Team Types to Organizations
+
+```{r}
+#| echo: false
+
+library(dplyr)
+
+# We want the same clusters every run so we can render same results from
+# the data.
+set.seed(1234)
+
+# Helpers.
+is_yes <- function(x) x == "Yes"
+
+as_steps_matrix <- function(x, rows) {
+  dn <- list(rows, c("CIT", "DIT", "DA", "EA", "CON"))
+  list(matrix(!is.na(x), ncol = 5, byrow = TRUE, dimnames = dn))
+}
+
+# Turn Q3 into a logical matrix.
+crossings_Q3 <- df |>
+  rowwise() |>
+  mutate(steps = as_steps_matrix(c_across(sg1_cit:sg5_con), paste0("System", 1:5)))
+
+# Find 3 cluseters.
+clusters <- crossings_Q3 |>
+  pull(steps) |>
+  lapply(as.numeric) |>
+  do.call(what = rbind) |>
+  kmeans(3)
+
+# Partition the Q3 matrices by cluster.
+team_cluster_split <- split(crossings_Q3$steps, clusters$cluster)
+```
+
+
+
+We assign each organization one or more of the following team types using the following definitions.
+
+- **Stream Aligned team**: A system group is maintained by domain-analysts, domain-IT, or both.
+
+- **IT-Only team**: A system group is maintained by corporate-IT, domain-IT, or both.
+
+- **Analyst-Only team**: A system group is maintained by domain-analysts, elsewhere-analysts, or both.
+
+- **Other Mix team**: Assigned to organizations that have not been assigned to any of the above three team types.
+
+**Note**: Unlike the architecture definitions earlier in this section, these team types are **not mutually exclusive** in the way we define them.
+
+For example, an organization could have one system group maintained by a Stream Aligned team, and a second system group maintained by an IT-Only team[^7].
+
+
+```{r}
+#| echo: false
+
+# Check how often multiple teams are assigned to one NSO
+num_nsos = nrow(df)
+num_teams = sum(df$has_stream_aligned_team) + sum(df$has_it_only_team) + sum(df$has_analyst_only_team)
+```
+
+[^7]: The rationale for this decision is that we could not think of a sensible way to break ties. For example, if one system group is maintained by a Stream Aligned team and another is maintained by an IT-Only team, is the NSO more appropriately labelled as a Stream Aligned team or as an IT-Only team? We take care while presenting results to make clear that some NSOs may be classified in more than one category if more than one team type is present in their representative system description.
+
+## Are Certain Team Types Correlated with Certain Architectures?
+
+We define similarity between organizations having a particular team type **and** a representative system with a particular architecture as follows.
+
+$$
+\text{Similarity} = \frac{\sum_{\text{respondents}} \text{Has Architecture Type} == 1 \land \text{Has Team Type} == 1}{\sum_{\text{respondents}} \text{Has Team Type} == 1}
+$$
+
+The rationale for this similarity metric is that we care about what fraction of organizations with a particular team type also uses a given architecture type relative to how many instances of that team type are observed in the sample.
+
+```{r}
+#| echo: false
+
+team_arch_mat
+```
+
+There are a few notable observations to point out in the above distribution[^10].
+
+1. IT-Only teams are more likely than average to be present in NSOs with Modular representative systems.
+
+2. Stream-Aligned teams are more likely to be present in NSOs with Monolithic representative systems compared to IT-Only teams.
+
+3. Other Mix teams were **much** more likely to be present in NSOs with Monolithic representative systems compared to all other team types[^11].
+
+Throughout the remainder of this report, we look at how various practices and outcomes are associated with the presence of each architecture type and team type.
+
+[^10]: Here and throughout this report, we do not make any claims about the statistical significance of our results as we could not think of any straightforward or meaningful way to compute confidence intervals over the small sample of data we collected. Moreover, our goal with this report is **more descriptive than prescriptive**. We are aiming to describe the current state of CPI Production Systems and present notable differences that are worth investigating further, rather than claiming what **should** be done using the results of this survey alone.
+
+[^11]: It is important to note that a relatively small fraction of the sample contained Other Mix teams, so this result could be partly or entirely explained by a small number of outliers.
