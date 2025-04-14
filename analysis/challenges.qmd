@@ -11,7 +11,7 @@ We show a stacked bar chart of the 5 most commonly cited challenges below.
 #| echo: false
 #| warning: false
 #| fig-cap: Challenges Faced (Rank 1 through 5)
-#| out-width: "100%"
+#| out-width: "80%"
 
 library(forcats)
 library(dplyr)
@@ -97,7 +97,10 @@ dat <- data.frame(
 dat <- dat[dat$Challenges != "",]
 dat <- dat[!is.na(dat$Challenges),]
 
-ggplot(dat,aes(x=forcats::fct_infreq(Challenges), fill=Ranking)) +
+# Suppress low counts
+dat <- dat[dat["Challenges"] != "Version Control",]
+
+ggplot(dat,aes(x=forcats::fct_infreq(Challenges))) +
   geom_bar(alpha=1, position="stack", color="black") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Challenges Faced (Rank 1 through 5)")
 ```

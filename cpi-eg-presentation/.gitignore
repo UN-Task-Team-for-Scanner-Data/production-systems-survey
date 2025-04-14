@@ -1,0 +1,7 @@
+/.quarto/
+# Ignore presentation build folder
+pres/
+# ignore intermediate ipynb files
+*.ipynb
+# ignore local data folder
+data/

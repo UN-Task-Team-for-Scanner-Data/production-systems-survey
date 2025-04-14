@@ -350,17 +350,28 @@ lead_time_levels = c("Within 1 day", "Within 1 week", "Within 1 month", "Within 
 
 overall_dat = make_lead_times_sm_table(df)
 overall_dat = factor(overall_dat, levels=lead_time_levels)
+
+# Suppress low count values
+overall_dat <- overall_dat[overall_dat != "Within 3 months"]
+
 ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
 monolith_dat = make_lead_times_sm_table(monolith_df)
 
 monolith_dat = factor(monolith_dat, levels=lead_time_levels)
 
+# Suppress low count values
+monolith_dat <- monolith_dat[monolith_dat != "Within 3 months"]
+
 ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
 
 modular_dat = make_lead_times_sm_table(modular_df)
 modular_dat = factor(modular_dat, levels=lead_time_levels)
+
+# Suppress low count values
+modular_dat <- modular_dat[modular_dat != "Within 3 months"]
+
 ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 ```
 
@@ -387,18 +398,34 @@ In either case, our view is that "Within 1 day" and "Within 1 week" are both rea
 
 stream_aligned_dat = make_lead_times_sm_table(stream_aligned_df)
 stream_aligned_dat = factor(stream_aligned_dat, levels=lead_time_levels)
+
+# Suppress low count values
+stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Within 3 months"]
+
 ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Small Changes (Stream-Aligned)")
 
 it_only_dat = make_lead_times_sm_table(it_only_df)
 it_only_dat = factor(it_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+it_only_dat <- it_only_dat[it_only_dat != "Within 3 months"]
+
 ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Small Changes (IT-Only)")
 
 analyst_only_dat = make_lead_times_sm_table(analyst_only_df)
 analyst_only_dat = factor(analyst_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Within 3 months"]
+
 ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Small Changes (Analyst-Only)")
 
 other_mix_dat = make_lead_times_sm_table(other_mix_df)
 other_mix_dat = factor(other_mix_dat, levels=lead_time_levels)
+
+# Suppress low count values
+other_mix_dat <- other_mix_dat[other_mix_dat != "Within 3 months" & other_mix_dat != "Within 1 day" & other_mix_dat != "Within 1 week"]
+
 ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Small Changes (Other Mix)")
 ```
 
@@ -432,6 +459,10 @@ overall_dat = make_lead_times_lg_table(df)
 
 overall_dat = factor(overall_dat, levels=lead_time_levels)
 
+# Suppress low count values
+overall_dat[overall_dat == "Too complex" | overall_dat == "Can't be modified"] = "Can't be modified"
+overall_dat <- overall_dat[overall_dat != "Within 1 day"]
+
 ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Overall)")
 
 # Monolith
@@ -439,18 +470,30 @@ monolith_dat = make_lead_times_lg_table(monolith_df)
 
 monolith_dat = factor(monolith_dat, levels=lead_time_levels)
 
+# Suppress low count values
+monolith_dat[monolith_dat == "Too complex" | monolith_dat == "Can't be modified"] = "Can't be modified"
+monolith_dat <- monolith_dat[monolith_dat != "Within 1 week" & monolith_dat != "Within 3 months" & monolith_dat != "Within 1 day"]
+
+
 ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Monolith)")
 
 # Modular
 
 modular_dat = make_lead_times_lg_table(modular_df)
 modular_dat = factor(modular_dat, levels=lead_time_levels)
+
+# Suppress low count values
+modular_dat[modular_dat == "Too complex" | modular_dat == "Can't be modified"] = "Can't be modified"
+modular_dat <- modular_dat[modular_dat != "Within 1 year" & modular_dat != "More than 1 year"]
+
 ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Modular)")
 ```
 
 Overall, the lead time for large changes was very right skewed, with the most common response being that large changes happen "Within 1 month".
 
-It is interesting that, unlike with small changes, NSOs with Monolithic representative systems are more likely to report lead times of "Within 1 year" or "More than 1 year", and they are also more likely to report an answer of "Too complex" or "Can't be modified".
+It is interesting that, unlike with small changes, NSOs with Monolithic representative systems are more likely to report lead times of "Within 1 year" or "More than 1 year", and they are also more likely to report an answer of "Too complex" or "Can't be modified"[^3].
+
+[^3]: For confidentiality reasons, we grouped "Too complex" and "Can't be modified" into one category in the figures on this page.
 
 This result is consistent with industry knowledge (@ford2021software, @richards2020fundamentals) as well as earlier findings in this report (e.g., sec-age). Monolithic systems are more likely to have components that are highly coupled (inter-connected) compared to modular systems. This high degree of coupling not only makes it more difficult to reason through changes to the system, but it also requires more rigorous testing to ensure that a large change doesn't break a seemingly unrelated component. Therefore, it is not surprising to observe that NSOs with monolithic representative systems are more likely to report higher lead times compared to NSOs with Modular representative systems.
 
@@ -468,18 +511,35 @@ This result is consistent with industry knowledge (@ford2021software, @richards2
 
 stream_aligned_dat = make_lead_times_lg_table(stream_aligned_df)
 stream_aligned_dat = factor(stream_aligned_dat, levels=lead_time_levels)
+
+# Suppress low count values
+stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Within 1 day" & stream_aligned_dat != "Too complex"]
+
 ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
 it_only_dat = make_lead_times_lg_table(it_only_df)
 it_only_dat = factor(it_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+it_only_dat <- it_only_dat[it_only_dat != "Within 1 year" & it_only_dat != "Too complex" & it_only_dat != "Can't be modified"]
+
 ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
 analyst_only_dat = make_lead_times_lg_table(analyst_only_df)
 analyst_only_dat = factor(analyst_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Within 1 year" & analyst_only_dat != "Too complex" & analyst_only_dat != "Can't be modified" & analyst_only_dat != "Within 1 day"]
+
 ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
 other_mix_dat = make_lead_times_lg_table(other_mix_df)
-other_mix_dat = factor(other_mix_dat, levels=lead_time_levels)
+other_mix_dat = factor(other_mix_dat, levels=c(lead_time_levels, "1 month to 1 year", "> 1 year or unmodifiable"))
+
+# Suppress low count values
+other_mix_dat[other_mix_dat == "Within 1 month" | other_mix_dat == "Within 3 months" | other_mix_dat == "Within 1 year"] = "1 month to 1 year"
+other_mix_dat[other_mix_dat == "More than 1 year" | other_mix_dat == "Can't be modified"] = "> 1 year or unmodifiable"
+
 ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 ```
 

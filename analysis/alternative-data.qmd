@@ -43,6 +43,9 @@ Mode <- function(x) {
 
 pct_dat <- factor(df[df$pct_ads != "", 'pct_ads'], levels=c('Less than 10%.', 'Between 10% and 30%.', 'Between 30% and 50%.', 'Between 50% and 70%.', 'Between 70% and 90%.', 'Over 90%.'))
 
+# Suppress low counts
+pct_dat <- pct_dat[pct_dat != "Between 50% and 70%." & pct_dat != "Between 70% and 90%."]
+
 ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 NUM_USE_ADS = sum(df$use_ads == "Yes")
@@ -56,6 +59,9 @@ Of those NSOs that don't currently use alternative data sources, almost three qu
 #| echo: false
 
 pct_dat <- factor(df[df$want_use_ads_pct != "", 'want_use_ads_pct'], levels=c('Less than 10%.', 'Between 10% and 30%.', 'Between 30% and 50%.', 'Between 50% and 70%.', 'Between 70% and 90%.', 'Over 90%.'))
+
+# Suppress low counts
+pct_dat <- pct_dat[pct_dat != "Less than 10%." & pct_dat != "Between 70% and 90%." & pct_dat != "Over 90%."]
 
 ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
@@ -89,7 +95,7 @@ ads_methods[3,1] = "Hedonic"
 ads_methods[3,2] = sum(df$hed == "Yes")
 
 ads_methods[4,1] = "Other Multilateral"
-ads_methods[4,2] =sum(df$oth_mlt == "Yes")
+ads_methods[4,2] = "< 3"
 
 ads_methods[5,1] = "Dynamic Sample"
 ads_methods[5,2] = sum(df$dyn_smpl == "Yes")
@@ -100,7 +106,7 @@ ads_methods[6,2] = sum(df$fix_smpl == "Yes")
 ads_methods[7,1] = "Other"
 ads_methods[7,2] = sum(df$other != "")
 
-ads_methods
+knitr::kable(ads_methods)
 ```
 
 ## What Challenges are Faced in the Adoption of Alternative Data
@@ -122,28 +128,14 @@ make_challenges_table <- function(df) {
       df$rank2,
       df$rank3,
       df$rank4,
-      df$rank5,
-      df$rank6,
-      df$rank7,
-      df$rank8,
-      df$rank9,
-      df$rank10,
-      df$rank11,
-      df$rank12
+      df$rank5
     ),
     Ranking = c(
       rep("Rank 1", each=nrow(df)),
       rep("Rank 2", each=nrow(df)),
       rep("Rank 3", each=nrow(df)),
       rep("Rank 4", each=nrow(df)),
-      rep("Rank 5", each=nrow(df)),
-      rep("Rank 6", each=nrow(df)),
-      rep("Rank 7", each=nrow(df)),
-      rep("Rank 8", each=nrow(df)),
-      rep("Rank 9", each=nrow(df)),
-      rep("Rank 10", each=nrow(df)),
-      rep("Rank 11", each=nrow(df)),
-      rep("Rank 12", each=nrow(df))
+      rep("Rank 5", each=nrow(df))
     )
   )
   
@@ -202,7 +194,10 @@ df[df == "Lack of methodological knowledge to calculate price statistics from al
 
 overall_dat <- make_challenges_table(df)
 
-ggplot(overall_dat,aes(x=forcats::fct_infreq(Challenges), fill=Ranking)) +
+# Suppress low counts
+overall_dat <- overall_dat[overall_dat["Challenges"] != "No Challenges",]
+
+ggplot(overall_dat,aes(x=forcats::fct_infreq(Challenges))) +
   geom_bar(alpha=1, position="stack", color="black") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Ranked Alternative Data Challenges")
 ```

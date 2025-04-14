@@ -307,7 +307,8 @@ individual_levels = c("1 individual", "2-3 individuals", "4-6 individuals", "7-9
 overall_dat = make_individuals_sm_table(df)
 
 overall_dat = factor(overall_dat, levels=individual_levels)
-
+# Suppress low count values
+overall_dat <- overall_dat[overall_dat != "10-15 individuals" & overall_dat != "25 or more individuals"]
 ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
 # Monolith
@@ -321,6 +322,8 @@ ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 modular_dat = make_individuals_sm_table(modular_df)
 
 modular_dat = factor(modular_dat, levels=individual_levels)
+# Suppress low count values
+modular_dat <- modular_dat[modular_dat != "10-15 individuals" & modular_dat != "25 or more individuals"]
 
 ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 ```
@@ -366,12 +369,18 @@ overall_dat = make_individuals_lg_table(df)
 
 overall_dat = factor(overall_dat, levels=individual_levels)
 
+# Suppress low count values
+overall_dat <- overall_dat[overall_dat != "16-24 individuals"]
+
 ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
 # Monolith
 monolith_dat = make_individuals_lg_table(monolith_df)
 
 monolith_dat = factor(monolith_dat, levels=individual_levels)
+
+# Suppress low count values
+monolith_dat <- monolith_dat[monolith_dat != "7-9 individuals" & monolith_dat != "10-15 individuals"]
 
 ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 
@@ -380,6 +389,9 @@ ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 modular_dat = make_individuals_lg_table(modular_df)
 
 modular_dat = factor(modular_dat, levels=individual_levels)
+
+# Suppress low count values
+modular_dat <- modular_dat[modular_dat != "7-9 individuals" & modular_dat != "16-24 individuals"]
 
 ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
 ```

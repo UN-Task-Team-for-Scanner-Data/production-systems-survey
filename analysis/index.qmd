@@ -1,3 +1,11 @@
 # Preface {.unnumbered}
 
 We would like to acknowledge the helpful feedback and numerous contributions from our colleagues in the Workstream on CPI Systems Architecture in the [Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) under the [UN Committee of Experts on Big Data and Data Science for Official Statistics](https://unstats.un.org/bigdata/).
+
+# Survey Methodology Notes
+
+We follow a few standard practices for reporting on survey data.
+
+## Value Suppression
+
+To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.
