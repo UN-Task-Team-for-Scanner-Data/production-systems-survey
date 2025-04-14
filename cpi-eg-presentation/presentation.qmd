@@ -109,7 +109,7 @@ Flow of change based loosely on the General Statistical Business Process Model (
 library(dplyr)
 
 # Load results
-df <- read.csv("./data/results.csv")  #[,67:116]
+df <- read.csv("data/results.csv")  #[,67:116]
 # Drop any incomplete responses
 df <- df[df[,2] != "",]
 
