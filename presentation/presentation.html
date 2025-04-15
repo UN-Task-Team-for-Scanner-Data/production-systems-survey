@@ -383,7 +383,7 @@ Steve Martin
 </div>
 </div>
 <p><img data-src="https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png"></p>
-<p><strong>Note</strong>: The full report can be found <a href="">here</a>.</p>
+<p><strong>Note</strong>: Please consider reading the <a href="https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html">full report</a> that accompanies this presentation.</p>
 </section>
 <section id="cpi-production-systems-background" class="slide level2">
 <h2>CPI Production Systems Background</h2>
@@ -424,12 +424,17 @@ Steve Martin
 </section>
 <section id="survey-concepts---systems" class="slide level2">
 <h2>Survey Concepts - Systems</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="diagrams/gsbpm-systems.drawio.png" style="width:50.0%"></p>
 </figure>
 </div>
+</div><div class="column" style="width:50%;">
 <p>We define a <strong>system</strong> as any indivisible (atomic) software component that takes <strong>one or more data inputs</strong> and produces <strong>one or more data outputs</strong>.</p>
+</div>
+</div>
 </section>
 <section id="survey-concepts---teams" class="slide level2">
 <h2>Survey Concepts - Teams</h2>
@@ -502,6 +507,40 @@ Steve Martin
 </div>
 </div>
 </div>
+</section>
+<section id="survey-concepts---4-team-types" class="slide level2">
+<h2>Survey Concepts - 4 Team Types</h2>
+<p>We define <strong>4 team types</strong> for the purposes of this survey.</p>
+<table>
+<colgroup>
+<col style="width: 45%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Team Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stream Aligned</td>
+<td>Domain-Embedded IT and/or Domain-Embedded Analysts.</td>
+</tr>
+<tr class="even">
+<td>IT-Only</td>
+<td>Corporate IT and/or Domain-Embedded IT.</td>
+</tr>
+<tr class="odd">
+<td>Analyst-Only</td>
+<td>Domain-Embedded Analysts and/or Non-Domain Analysts.</td>
+</tr>
+<tr class="even">
+<td>Other Mix</td>
+<td>Something other than the above (e.g., domain analysts and corporate IT)</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="results---which-steps-are-systems-coupled-across" class="slide level2">
 <h2>Results - Which Steps are Systems Coupled Across?</h2>
@@ -624,8 +663,8 @@ Steve Martin
 </tbody>
 </table>
 </section>
-<section id="results---version-control-system-use" class="slide level2">
-<h2>Results - Version Control System Use</h2>
+<section id="results---version-control-system-vcs-use" class="slide level2">
+<h2>Results - Version Control System (VCS) Use</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
@@ -640,7 +679,7 @@ Steve Martin
 </div>
 </div><div class="column" style="width:50%;">
 <ul>
-<li><p>40 respondents reported <strong>not using a VCS at all</strong>, or using file-naming conventions only. E.g.,</p>
+<li><p>40 respondents reported <strong>not using a VCS at all</strong> or using <strong>file-naming conventions only</strong>. E.g.,</p>
 <ul>
 <li><p><code>analysis_v5_final_2025_03.py</code></p></li>
 <li><p><code>analysis_v6_FINAL_2025_03_edits.py</code></p></li>
@@ -730,91 +769,401 @@ Steve Martin
 </section>
 <section id="results---storage-use" class="slide level2">
 <h2>Results - Storage Use</h2>
-<p>TODO: insert chart</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-10-1.png" style="width:100.0%"></p>
+<figcaption>Choice of Storage (Overall)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Only 3 respondents use analytics optimized file formats such as <a href="https://parquet.apache.org/">Apache Parquet</a>.</p></li>
+<li><p>Approximately equal split between use of filesystem and database management system (DBMS) for data storage.</p></li>
+<li><p>Only 3 respondents use an object storage solution such as <a href="https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction">Azure Data Lake Storage</a> or <a href="https://aws.amazon.com/s3/">AWS S3</a>.</p></li>
+</ul>
+</div>
+</div>
 </section>
 <section id="results---system-age" class="slide level2">
 <h2>Results - System Age</h2>
-<p>TODO: insert figures</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-12-1.png" style="width:100.0%"></p>
+<figcaption>System Age Distribution (Entire Sample)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li><p>Monolithic architectures most likely to have systems between 6-10 years or 11-20 years old.</p></li>
-<li><p>IT-Only teams less likely to have systems older than 20 years compared to Stream Aligned teams.</p></li>
-<li><p>By far most common answer for Other Mix teams is system age between 6-10 years.</p></li>
+<li><p>Monolithic architectures most likely to have systems aged <code>Between 6-10 years</code> or <code>Between 11-20 years</code> old.</p></li>
+<li><p>IT-Only teams are less likely to have systems <code>&gt; 20 years</code> old compared to Stream Aligned teams.</p></li>
+<li><p>By far most common answer for Other Mix teams is system age <code>Between 6-10 years</code> old.</p></li>
 </ul>
+</div>
+</div>
+</section>
+<section id="results---system-age-monolith-vs.-modular" class="slide level2">
+<h2>Results - System Age (Monolith vs.&nbsp;Modular)</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-13-1.png"></p>
+<figcaption>System Age Distribution (Monolith)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-13-2.png"></p>
+<figcaption>System Age Distribution (Modular)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="results---update-frequency" class="slide level2">
 <h2>Results - Update Frequency</h2>
-<p>TODO: insert figures</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:100.0%"></p>
+<figcaption>Update Frequency Distribution (Overall)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li><p>Non-trivial fraction of respondents never update the majority of systems</p></li>
-<li><p>Monolithic systems more likely to never update than modular systems.</p></li>
-<li><p>IT-Only teams more likely to update systems frequently than other team types.</p></li>
-<li><p>Other Mix teams most likely to never update or update very infrequently.</p></li>
-<li><p><strong>All team types</strong> reported multiple “never update” answers.</p></li>
+<li><p>10 respondents <strong>never update</strong> the majority of systems</p></li>
+<li><p>Monolithic systems more likely to <strong>never be updated</strong> than modular systems.</p></li>
+<li><p>IT-Only teams more likely to <strong>update systems frequently</strong> than other team types.</p></li>
+<li><p>Other Mix teams most likely to <strong>never update or update very infrequently</strong>.</p></li>
+<li><p><strong>All team types</strong> reported multiple <code>Never updated</code> answers.</p></li>
 </ul>
+</div>
+</div>
+</section>
+<section id="results---update-frequency-monolith-vs.-modular" class="slide level2">
+<h2>Results - Update Frequency (Monolith vs.&nbsp;Modular)</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-15-1.png"></p>
+<figcaption>Update Frequency Distribution (Monolith)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-15-2.png"></p>
+<figcaption>Update Frequency Distribution (Modular)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="results---update-frequency-4-team-types" class="slide level2">
+<h2>Results - Update Frequency (4 Team Types)</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-1.png"></p>
+<figcaption>Update Frequency Distribution (Stream-Aligned)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-2.png"></p>
+<figcaption>Update Frequency Distribution (IT-Only)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-3.png"></p>
+<figcaption>Update Frequency Distribution (Analyst-Only)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-4.png"></p>
+<figcaption>Update Frequency Distribution (Other Mix)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="results---number-of-individuals" class="slide level2">
 <h2>Results - Number of Individuals</h2>
 <ul>
-<li>Most NSOs require 2-3 individuals or 4-6 individuals to complete <strong>small changes</strong> and <strong>large changes</strong> to systems.</li>
+<li>Most NSOs require 2-3 individuals to complete <strong>small changes</strong> to systems, and between 2-6 individuals to complete <strong>large changes</strong> to systems.</li>
 </ul>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-17-1.png"></p>
+<figcaption>Number of Individuals for Small Changes (Overall)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-17-2.png"></p>
+<figcaption>Number of Individuals for Large Changes (Overall)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="results---lead-time" class="slide level2">
 <h2>Results - Lead Time</h2>
-<p><a href="https://en.wikipedia.org/wiki/Lead_time">Lead time</a>: the amount of time required to get an end-to-end change to a CPI Production System implemented.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-19-1.png"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-19-2.png"></p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li><p>Most NSOs reported lead time of “within 1 day” or “within 1 week” for <strong>small changes</strong> (a non-trivial fraction reported “within 1 month”).</p></li>
-<li><p>Monolithic systems more likely to report “within 1 year” or “more than 1 year” for <strong>large changes</strong> compared to modular systems.</p></li>
-<li><p>Modular systems never reported “can’t be modified” or “too complex” for the <strong>large changes</strong> lead time question.</p></li>
-<li><p>Stream-aligned teams and analyst-only teams were most likely to report “within 1 month” for <strong>large changes</strong> compared to any other answer.</p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/Lead_time">Lead time</a>: the amount of time required to get an <strong>end-to-end change</strong> to a CPI Production System <strong>implemented</strong>.</p></li>
+<li><p>38 respondents reported lead times of <code>Within 1 day</code> or <code>Within 1 week</code> for <strong>small changes</strong>.</p></li>
+<li><p>11 reported lead times of <code>Within 1 month</code> for <strong>small changes</strong>.</p></li>
+<li><p>Lead time responses for <strong>large changes</strong> range anywhere from <code>Within 1 week</code> to <code>Can't be modified</code>.</p></li>
 </ul>
+</div>
+</div>
 </section>
-<section id="results---alternative-data-usage" class="slide level2">
-<h2>Results - Alternative Data Usage</h2>
+<section id="results---lead-time-monolith-vs.-modular" class="slide level2">
+<h2>Results - Lead Time (Monolith vs.&nbsp;Modular)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-20-1.png"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-20-2.png"></p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li><p>Almost 2/3 of respondents don’t use Alternative Data Sources (ADS) at all.</p></li>
-<li><p>Of those who use ADS, their CPIs are comprised of “less than 10%” or “between 10% and 30%” alternative data by expenditure weight.</p></li>
-<li><p>Of those respondents who do not use ADS, most of them would like “between 10% and 30%” or “between 30% and 50%” of their CPI to be comprised of alternative data by expenditure weight.</p></li>
+<li><p>Monolithic systems more likely to report <code>Within 1 year</code> or <code>More than 1 year</code> for <strong>large changes</strong> compared to modular systems.</p></li>
+<li><p>Modular systems never reported <code>Can't be modified</code> or <code>Too complex</code> for the <strong>large changes</strong> lead time question, whereas Monolithic systems reported one of these values 4 times.</p></li>
 </ul>
+</div>
+</div>
 </section>
-<section id="results---alternative-data-challenges" class="slide level2">
-<h2>Results - Alternative Data Challenges</h2>
-<p>In the following order, the most commonly cited ADS challenges are:</p>
-<ol type="1">
-<li><p>Lack of data provider cooperation</p></li>
-<li><p>Insufficient capacity</p></li>
-<li><p>Insufficient technical skills to make use of ADS</p></li>
-<li><p>Lack of methodology knowledge to make use of ADS</p></li>
-<li><p>Appropriate data are not available</p></li>
-</ol>
+<section id="results---lead-time-4-team-types" class="slide level2">
+<h2>Results - Lead Time (4 Team Types)</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-1.png"></p>
+<figcaption>Lead Time for Small Changes (Stream-Aligned)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-2.png"></p>
+<figcaption>Lead Time for Small Changes (IT-Only)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-3.png"></p>
+<figcaption>Lead Time for Small Changes (Analyst-Only)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-4.png"></p>
+<figcaption>Lead Time for Small Changes (Other Mix)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="results---alternative-data-source-ads-usage" class="slide level2">
+<h2>Results - Alternative Data Source (ADS) Usage</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-22-1.png"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-22-2.png"></p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>43 respondents don’t use Alternative Data Sources (ADS) at all.</p></li>
+<li><p>Of those respondents who <strong>do not use ADS</strong>, most of them would like <code>Between 10% and 30%</code> or <code>Between 30% and 70%</code> of their CPIs to be comprised of ADS by expenditure weight.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="results---methods-applied-to-ads" class="slide level2">
+<h2>Results - Methods Applied to ADS</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GEKS</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Time Dummy Hedonic</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hedonic</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Other Multilateral</td>
+<td style="text-align: left;">&lt; 3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dynamic Sample</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fixed Sample</td>
+<td style="text-align: left;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Other</td>
+<td style="text-align: left;">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Fixed Sample is the most commonly used method.</p></li>
+<li><p>GEKS and hedonic methods second most common.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="results---challenges-in-using-ads" class="slide level2">
+<h2>Results - Challenges in Using ADS</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-24-1.png"></p>
+</div>
+</div>
+</div>
 </section>
 <section id="results---system-development-challenges-in-general" class="slide level2">
 <h2>Results - System Development Challenges (In General)</h2>
-<p>In the following order, the most commonly cited challenges are:</p>
-<ol type="1">
-<li><p>Lack of staff</p></li>
-<li><p>Insufficient technical skills</p></li>
-<li><p>Managing complexity of system interactions (e.g., passing data between systems)</p></li>
-<li><p>Managing complexity of the system itself (e.g., managing a complex codebase)</p></li>
-<li><p>Verifying the correct behaviour of a system</p></li>
-</ol>
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-25-1.png" style="width:100.0%"></p>
+</div>
+</div>
 </section>
 <section id="practical-suggestions" class="slide level2">
 <h2>Practical Suggestions</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li><p>Think explicitly about system boundaries.</p></li>
-<li><p>Think explicitly about data interchange between systems.</p></li>
-<li><p>Embed technical expertise in business domain teams.</p></li>
-<li><p>Version control all the things.</p></li>
-<li><p>Practice updating systems more frequently.</p></li>
+<li><p>Think explicitly about <strong>system boundaries</strong>.</p></li>
+<li><p>Think explicitly about <strong>data interchange between systems</strong> (e.g., <a href="https://datacontract.com/">Data Contracts</a>).</p></li>
+<li><p>Embed technical expertise <strong>within business domain teams</strong>.</p></li>
+<li><p>Version control all the things!</p></li>
 </ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Use <strong>analytics-optimized</strong> file formats like <a href="https://parquet.apache.org/">Apache Parquet</a>.</p></li>
+<li><p>Organize systems around <strong>one-way</strong> data flows and <strong>idempotent</strong> operations.</p></li>
+<li><p>Update systems <strong>frequently</strong>.</p></li>
+<li><p>Have a <strong>separate development environment</strong> for <strong>rapid iteration</strong>.</p></li>
+</ul>
+</div>
+</div>
 </section>
 <section id="future-work" class="slide level2">
 <h2>Future Work</h2>
 <p>Two main follow-questions from our survey.</p>
 <ol type="1">
-<li><p>Effectively managing the complexity of CPI Production Systems <strong>in practice</strong> is far from a solved problem, despite viable solutions existing for all of the component problems. <strong>How can this gap be bridged</strong>?</p></li>
-<li><p>Are lessons about system architecture and team organization from software engineering applicable to complex analytical systems like the CPI Production Systems studied in this survey?</p></li>
+<li><p>Effectively managing the complexity of CPI Production Systems <strong>in practice</strong> is <strong>far from a solved problem</strong>, despite viable solutions existing for all of the component problems. <strong>How can this gap be bridged</strong>?</p></li>
+<li><p>Are lessons about <strong>system architecture and team organization</strong> from software engineering applicable to complex analytical systems like the CPI Production Systems studied in this survey?</p></li>
 </ol>
+</section>
+<section id="thanks-for-listening" class="slide level2">
+<h2>Thanks for Listening!</h2>
+<p><br><br><br></p>
+<p>Please consider reading the <a href="https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html">full report</a> that accompanies this presentation.</p>
 </section>
 <section id="references" class="slide level2 unnumbered smaller scrollable">
 <h2>References</h2>
