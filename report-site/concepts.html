@@ -312,7 +312,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p><a href="#fig-flow-of-work">Figure&nbsp;<span class="quarto-unresolved-ref">fig-flow-of-work</span></a> overlays all of the concepts discussed so far onto a single diagram. The flow of work (raw data to final CPI) can be read from left to right, with the green ovals representing systems and the boxes drawn around one or more systems representing the teams that own them.</p>
+<p><a href="#fig-flow-of-work">Figure&nbsp;<span>2.1</span></a> overlays all of the concepts discussed so far onto a single diagram. The flow of work (raw data to final CPI) can be read from left to right, with the green ovals representing systems and the boxes drawn around one or more systems representing the teams that own them.</p>
 <p>The systems in these diagrams can be “piped” together, implying that the output of one system becomes the input to the next system. To simplify the notation, the intermediate input/output boxes are simply shown as an arrow from one system node to the next system node.</p>
 <p>In the event that multiple teams collectively maintain a very large system, a team can be interpreted as the larger organizational unit that oversees the various sub-teams involved.</p>
 </section>
@@ -324,7 +324,7 @@ ul.task-list li input[type="checkbox"] {
 <figcaption class="figure-caption">Figure&nbsp;2.2: Putting it All Together</figcaption>
 </figure>
 </div>
-<p><a href="#fig-putting-it-all-together">Figure&nbsp;<span class="quarto-unresolved-ref">fig-putting-it-all-together</span></a> shows an example of what one of these diagrams could look like for a real NSO. A description of team/system organization that could correspond to this example is described below.</p>
+<p><a href="#fig-putting-it-all-together">Figure&nbsp;<span>2.2</span></a> shows an example of what one of these diagrams could look like for a real NSO. A description of team/system organization that could correspond to this example is described below.</p>
 <ul>
 <li><p>A <strong>corporate IT</strong> team maintains a large Java application with an application-specific database that handles ingestion of most data sources<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p></li>
 <li><p>A team of <strong>domain-embedded analysts</strong> (e.g., economists and statisticians) maintain a system written in Python, using <a href="https://pandas.pydata.org/">pandas</a> to ingest data from one source that does not integrate with the corporate system<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p></li>
@@ -345,7 +345,7 @@ ul.task-list li input[type="checkbox"] {
 <figcaption class="figure-caption">Figure&nbsp;2.3: Perfect Monolith Example</figcaption>
 </figure>
 </div>
-<p><a href="#fig-monolith">Figure&nbsp;<span class="quarto-unresolved-ref">fig-monolith</span></a> and <a href="#fig-modular">Figure&nbsp;<span class="quarto-unresolved-ref">fig-modular</span></a> show contrasting examples of two extreme scenarios. <a href="#fig-monolith">Figure&nbsp;<span class="quarto-unresolved-ref">fig-monolith</span></a> is an example where there is one system owned by one team that handles all 5 GSBPM steps for all inputs. In contrast, <a href="#fig-modular">Figure&nbsp;<span class="quarto-unresolved-ref">fig-modular</span></a> shows the scenario where each GSBPM step has a dedicated system that does not cross between GSBPM steps.</p>
+<p><a href="#fig-monolith">Figure&nbsp;<span>2.3</span></a> and <a href="#fig-modular">Figure&nbsp;<span>2.4</span></a> show contrasting examples of two extreme scenarios. <a href="#fig-monolith">Figure&nbsp;<span>2.3</span></a> is an example where there is one system owned by one team that handles all 5 GSBPM steps for all inputs. In contrast, <a href="#fig-modular">Figure&nbsp;<span>2.4</span></a> shows the scenario where each GSBPM step has a dedicated system that does not cross between GSBPM steps.</p>
 <div id="fig-modular" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="./diagrams/gsbpm-modular.drawio.svg" class="img-fluid figure-img"></p>
@@ -357,7 +357,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="representative-groups-of-systems" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="representative-groups-of-systems"><span class="header-section-number">2.5</span> Representative Groups of Systems</h2>
 <p>To get a complete understanding of each NSO’s team organization and system topology, we would need to have a comprehensive whiteboarding session with representatives from each NSO to fully articulate their CPI team structures and system architectures. This is obviously not feasible.</p>
-<p>To get around this impracticality, we introduce the concept of a <strong>representative system group</strong> to the survey, which lets respondents describe one or more groups of systems that follow a typical pattern in their organization. <a href="#fig-rep-sys-group">Figure&nbsp;<span class="quarto-unresolved-ref">fig-rep-sys-group</span></a> shows what one such system group might look like using the example shown earlier in <a href="#fig-putting-it-all-together">Figure&nbsp;<span class="quarto-unresolved-ref">fig-putting-it-all-together</span></a>.</p>
+<p>To get around this impracticality, we introduce the concept of a <strong>representative system group</strong> to the survey, which lets respondents describe one or more groups of systems that follow a typical pattern in their organization. <a href="#fig-rep-sys-group">Figure&nbsp;<span>2.5</span></a> shows what one such system group might look like using the example shown earlier in <a href="#fig-putting-it-all-together">Figure&nbsp;<span>2.2</span></a>.</p>
 <div id="fig-rep-sys-group" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="./diagrams/gsbpm-systems-3-highlight.drawio.svg" class="img-fluid figure-img"></p>
