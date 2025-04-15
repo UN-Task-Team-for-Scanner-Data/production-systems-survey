@@ -19,7 +19,7 @@ Thank you for the helpful feedback and numerous contributions from our colleague
 
 ![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
 
-**Note**: The full report can be found [here]().
+**Note**: Please consider reading the [full report](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html) that accompanies this presentation.
 
 
 ## CPI Production Systems Background
@@ -61,10 +61,18 @@ A lot of related work is from the world of software engineering. **Notable Examp
 > Need to introduce a simple conceptual model to communicate key system ideas.
 
 ## Survey Concepts - Systems
+:::: {.columns}
 
+::: {.column width="50%"}
 ![](diagrams/gsbpm-systems.drawio.png){width=50% fig-align="center"}
+:::
 
+::: {.column width="50%"}
 We define a **system** as any indivisible (atomic) software component that takes **one or more data inputs** and produces **one or more data outputs**.
+:::
+
+::::
+
 
 ## Survey Concepts - Teams
 
@@ -93,6 +101,17 @@ Flow of change based loosely on the General Statistical Business Process Model (
 
 ![Perfect Modular Example](./diagrams/gsbpm-modular.drawio.svg){#fig-modular height="30%"}
 :::
+
+## Survey Concepts - 4 Team Types
+
+We define **4 team types** for the purposes of this survey.
+
+| Team Type | Description |
+| --------- | ----------- |
+| Stream Aligned | Domain-Embedded IT and/or Domain-Embedded Analysts. |
+| IT-Only | Corporate IT and/or Domain-Embedded IT. |
+| Analyst-Only | Domain-Embedded Analysts and/or Non-Domain Analysts. |
+| Other Mix | Something other than the above (e.g., domain analysts and corporate IT) |
 
 ## Results - Which Steps are Systems Coupled Across?
 
@@ -260,7 +279,7 @@ for (mat in crossings_Q2$steps) {
 | ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts & Domain IT | `r stream_aligned` |
 | ✅ | ❌ | ✅ | ❌ | ❌ | Corp. IT & Domain Analysts | `r cit_d_analyst` |
 
-## Results - Version Control System Use
+## Results - Version Control System (VCS) Use
 
 :::: {.columns}
 
@@ -650,7 +669,7 @@ GIT_OR_GITHUB = sum(df$vc_git == "Yes" | df$vc_github == "Yes")
 :::
 
 ::: {.column width="50%"}
-- `r NUM_NONE_OR_FILE_NAMING_CONVENTION` respondents reported **not using a VCS at all**, or using file-naming conventions only. E.g.,
+- `r NUM_NONE_OR_FILE_NAMING_CONVENTION` respondents reported **not using a VCS at all** or using **file-naming conventions only**. E.g.,
 
     - `analysis_v5_final_2025_03.py`
     
@@ -934,103 +953,1604 @@ ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE
 
 ## Results - Storage Use
 
-TODO: insert chart
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.width=10,fig.height=10}
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap: Choice of Storage (Overall)
+
+library(dplyr)
+library(ggplot2)
+
+# df <- read.csv("./data/results.csv")
+# df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  obj_stor=colnames(df)[183],
+  dbms=colnames(df)[184],
+  olap_fmt=colnames(df)[185],
+  fs=colnames(df)[186],
+  other_ds=colnames(df)[187]
+)
+
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    df$obj_stor,
+    df$dbms,
+    df$olap_fmt,
+    df$fs
+  ),
+  Storage = c(
+    rep("Object Storage", each=nrow(df)),
+    rep("DBMS", each=nrow(df)),
+    rep("Analytics File Format", each=nrow(df)),
+    rep("Filesystem", each=nrow(df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Storage Systems Used")
+
+
+OLAP_FMT = sum(df$olap_fmt == "Yes")
+
+OBJ_STOR = sum(df$obj_stor == "Yes")
+```
+:::
+
+::: {.column width="50%"}
+- Only `r OLAP_FMT` respondents use analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/).
+
+- Approximately equal split between use of filesystem and database management system (DBMS) for data storage.
+
+- Only `r OBJ_STOR` respondents use an object storage solution such as [Azure Data Lake Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction) or [AWS S3](https://aws.amazon.com/s3/).
+:::
+
+::::
 
 ## Results - System Age
+```{r}
+#| echo: false
+#| warning: false
 
-TODO: insert figures
+library(dplyr)
+library(ggplot2)
 
-- Monolithic architectures most likely to have systems between 6-10 years or 11-20 years old.
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
 
-- IT-Only teams less likely to have systems older than 20 years compared to Stream Aligned teams.
+df <- df |> rename(
+  age_ing=colnames(df)[188],
+  age_proc=colnames(df)[189],
+  age_elem=colnames(df)[190],
+  age_agg=colnames(df)[191],
+  age_fin=colnames(df)[192],
+  share_cpi_sys=colnames(df)[193],
+  update_ing=colnames(df)[194],
+  update_proc=colnames(df)[195],
+  update_elem=colnames(df)[196],
+  update_agg=colnames(df)[197],
+  update_fin=colnames(df)[198]
+)
 
-- By far most common answer for Other Mix teams is system age between 6-10 years.
+systems_matrix <- function(row) {
+  q1 <- matrix(nrow=5, ncol=5)
+  q1[1,] <- as.numeric(obs[,67:71])
+  q1[2,] <- as.numeric(obs[,72:76])
+  q1[3,] <- as.numeric(obs[,77:81])
+  q1[4,] <- as.numeric(obs[,82:86])
+  q1[5,] <- as.numeric(obs[,87:91])
+  
+  q1[is.na(q1)] = 0
+  
+  q1
+}
+
+maintainer_matrix <- function(row) {
+  q2 <- matrix(nrow=5, ncol=5)
+  q2[1,] <- as.numeric(obs[,92:96])
+  q2[2,] <- as.numeric(obs[,97:101])
+  q2[3,] <- as.numeric(obs[,102:106])
+  q2[4,] <- as.numeric(obs[,107:111])
+  q2[5,] <- as.numeric(obs[,112:116])
+  
+  q2[is.na(q2)] = 0
+  
+  q2
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
+
+df$has_monolith = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
+
+
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
+
+df$has_hybrid_arch = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
+
+df$has_modular = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Any organization that doesn't fit one of the 3 definitions above is excluded
+# because the answers are incomplete. Drop these records from the analysis
+df <- df[df$has_monolith | df$has_hybrid_arch | df$has_modular, ]
+
+# ---------------------
+# Add a column to indicate whether the organization has stream aligned teams
+# maintaining the representative system
+# ---------------------
+
+df$has_stream_aligned_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,3] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,3] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,3] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,3] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,3] == 1)
+  if (idx) {
+    df[i, "has_stream_aligned_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has IT-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_it_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,3] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,1] == 1) |
+         (maintainers[2,3] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,1] == 1) |
+         (maintainers[3,3] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,1] == 1) |
+         (maintainers[4,3] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,1] == 1) |
+         (maintainers[5,3] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,1] == 1)
+  if (idx) {
+    df[i, "has_it_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has analyst-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_analyst_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,2] == 0 & maintainers[1,5] == 0) & (maintainers[1,3] == 1 | maintainers[1,4] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,2] == 0 & maintainers[2,5] == 0) & (maintainers[2,3] == 1 | maintainers[2,4] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,2] == 0 & maintainers[3,5] == 0) & (maintainers[3,3] == 1 | maintainers[3,4] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,2] == 0 & maintainers[4,5] == 0) & (maintainers[4,3] == 1 | maintainers[4,4] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,2] == 0 & maintainers[5,5] == 0) & (maintainers[5,3] == 1 | maintainers[5,4] == 1)
+  if (idx) {
+    df[i, "has_analyst_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has "other" teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_other_mix_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # An "Other" mix is anything that's not stream aligned, IT-only, or analyst-only.
+  # Any organization that doesn't have any of the other team types is "other".
+  if (!df[i, "has_stream_aligned_team"] & !df[i, "has_it_only_team"] & !df[i, "has_analyst_only_team"]) {
+    df[i, "has_other_mix_team"] = TRUE
+  }
+}
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+make_age_table <- function(df) {
+    factor_df = as.data.frame(lapply(df[, c('age_ing', "age_proc", 'age_elem', 'age_agg', 'age_fin')], factor, levels=age_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+make_update_freq_table <- function(df) {
+      factor_df = as.data.frame(lapply(df[, c('update_ing', "update_proc", 'update_elem', 'update_agg', 'update_fin')], factor, levels=update_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
+
+# Order of the factor variable
+age_levels = c("<1 year", "2-5 years", "6-10 years", "11-20 years", ">20 years", "Don't know", "No answer")
+```
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.width=10,fig.height=10}
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - System Age Distribution (Entire Sample)
+
+overall_dat = make_age_table(df)
+overall_dat = factor(overall_dat, levels=age_levels)
+
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Overall)")
+```
+:::
+
+::: {.column width="50%"}
+
+- Monolithic architectures most likely to have systems aged `Between 6-10 years` or `Between 11-20 years` old.
+
+- IT-Only teams are less likely to have systems `> 20 years` old compared to Stream Aligned teams.
+
+- By far most common answer for Other Mix teams is system age `Between 6-10 years` old.
+
+:::
+::::
+
+## Results - System Age (Monolith vs. Modular)
+
+```{r, fig.height=10}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - System Age Distribution (Monolith)
+#| - System Age Distribution (Modular)
+
+monolith_dat = make_age_table(monolith_df)
+
+monolith_dat = factor(monolith_dat, levels=age_levels)
+
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Monolith)")
+
+modular_dat = make_age_table(modular_df)
+
+modular_dat = factor(modular_dat, levels=age_levels)
+
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Modular)")
+```
 
 ## Results - Update Frequency
 
-TODO: insert figures
+:::: {.columns}
 
-- Non-trivial fraction of respondents never update the majority of systems 
+::: {.column width="50%"}
+```{r, fig.width=10,fig.height=10}
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+#| fig-cap:
+#| - Update Frequency Distribution (Overall)
 
-- Monolithic systems more likely to never update than modular systems.
+# Order of the factor variable
+update_levels = c("Daily", "Weekly", "Monthly", "Quarterly", "Every six months", "Once per year", "Less than once per year", "Never updated", "No answer")
 
-- IT-Only teams more likely to update systems frequently than other team types.
+overall_dat = make_update_freq_table(df)
+overall_dat = factor(overall_dat, levels=update_levels)
+# Value suppression
+overall_dat <- overall_dat[overall_dat != "Daily" & overall_dat != "Weekly" & overall_dat != "Quarterly"]
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Overall)")
 
-- Other Mix teams most likely to never update or update very infrequently.
+NEVER_UPDATE = sum(overall_dat == "Never updated")
+```
+:::
 
-- **All team types** reported multiple "never update" answers.
+::: {.column width="50%"}
+- `r NEVER_UPDATE` respondents **never update** the majority of systems 
+
+- Monolithic systems more likely to **never be updated** than modular systems.
+
+- IT-Only teams more likely to **update systems frequently** than other team types.
+
+- Other Mix teams most likely to **never update or update very infrequently**.
+
+- **All team types** reported multiple `Never updated` answers.
+:::
+
+::::
+
+## Results - Update Frequency (Monolith vs. Modular)
+
+```{r, fig.height=10}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Update Frequency Distribution (Monolith)
+#| - Update Frequency Distribution (Modular)
+
+# Order of the factor variable
+update_levels = c("Daily", "Weekly", "Monthly", "Quarterly", "Every six months", "Once per year", "Less than once per year", "Never updated", "No answer")
+
+monolith_dat = make_update_freq_table(monolith_df)
+monolith_dat = factor(monolith_dat, levels=update_levels)
+# Value suppression
+monolith_dat <- monolith_dat[monolith_dat != "Daily" & monolith_dat != "Weekly" & monolith_dat != "Quarterly" & monolith_dat != "Once per year" & monolith_dat != "Every six months"]
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Monolith)")
+
+modular_dat = make_update_freq_table(modular_df)
+modular_dat = factor(modular_dat, levels=update_levels)
+# Value suppression
+modular_dat <- modular_dat[modular_dat != "Daily" & modular_dat != "Weekly" & modular_dat != "Quarterly" & modular_dat != "Monthly" & modular_dat != "Never updated" & modular_dat != "Every six months"]
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Modular)")
+
+OVERALL_NEVER_UPDATE = sum(overall_dat == "Never updated")
+OVERALL_ROW_COUNT = length(overall_dat)  # Note that some respondents left this one blank, so the row count doesn't match the overall number of people who submitted the survey.
+```
+
+## Results - Update Frequency (4 Team Types)
+
+```{r, fig.height=4}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Update Frequency Distribution (Stream-Aligned)
+#| - Update Frequency Distribution (IT-Only)
+#| - Update Frequency Distribution (Analyst-Only)
+#| - Update Frequency Distribution (Other Mix)
+
+stream_aligned_dat = make_update_freq_table(stream_aligned_df)
+stream_aligned_dat = factor(stream_aligned_dat, levels=update_levels)
+# Value suppression
+stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Daily" & stream_aligned_dat != "Weekly" & stream_aligned_dat != "Quarterly" & stream_aligned_dat != "Every six months"]
+ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Stream-Aligned)")
+
+it_only_dat = make_update_freq_table(it_only_df)
+it_only_dat = factor(it_only_dat, levels=update_levels)
+# Value suppression
+it_only_dat <- it_only_dat[it_only_dat != "Daily" & it_only_dat != "Weekly" & it_only_dat != "Quarterly" & it_only_dat != "Every six months" & it_only_dat != "Once per year"]
+
+ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (IT-Only)")
+
+analyst_only_dat = make_update_freq_table(analyst_only_df)
+analyst_only_dat = factor(analyst_only_dat, levels=update_levels)
+# Value suppression
+analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Daily" & analyst_only_dat != "Weekly" & analyst_only_dat != "Quarterly" & analyst_only_dat != "Every six months"]
+ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Analyst-Only)")
+
+other_mix_dat = make_update_freq_table(other_mix_df)
+other_mix_dat = factor(other_mix_dat, levels=update_levels)
+# Value suppression
+other_mix_dat <- other_mix_dat[other_mix_dat != "Every six months" & other_mix_dat != "Once per year"]
+ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Other Mix)")
+```
 
 ## Results - Number of Individuals
 
-- Most NSOs require 2-3 individuals or 4-6 individuals to complete **small changes** and **large changes** to systems.
+- Most NSOs require 2-3 individuals to complete **small changes** to systems, and between 2-6 individuals to complete **large changes** to systems.
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Number of Individuals for Small Changes (Overall)
+#| - Number of Individuals for Large Changes (Overall)
+library(dplyr)
+library(ggplot2)
+
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
+
+# df[,199:203]  # how many individuals small change
+# df[,204:208]  # how many individuals large change
+# df[,209:213]  # lead time small change
+# df[,214:218]  # lead time large change
+
+make_individuals_sm_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('ind_ing_sm', "ind_proc_sm", 'ind_elem_sm', 'ind_agg_sm', 'ind_fin_sm')], factor, levels=individual_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+df <- df |> rename(
+  ind_ing_sm=colnames(df)[199],
+  ind_proc_sm=colnames(df)[200],
+  ind_elem_sm=colnames(df)[201],
+  ind_agg_sm=colnames(df)[202],
+  ind_fin_sm=colnames(df)[203],
+  ind_ing_lg=colnames(df)[204],
+  ind_proc_lg=colnames(df)[205],
+  ind_elem_lg=colnames(df)[206],
+  ind_agg_lg=colnames(df)[207],
+  ind_fin_lg=colnames(df)[208],
+  lead_t_ing_sm=colnames(df)[209],
+  lead_t_proc_sm=colnames(df)[210],
+  lead_t_elem_sm=colnames(df)[211],
+  lead_t_agg_sm=colnames(df)[212],
+  lead_t_fin_sm=colnames(df)[213],
+  lead_t_ing_lg=colnames(df)[214],
+  lead_t_proc_lg=colnames(df)[215],
+  lead_t_elem_lg=colnames(df)[216],
+  lead_t_agg_lg=colnames(df)[217],
+  lead_t_fin_lg=colnames(df)[218],
+)
+
+systems_matrix <- function(row) {
+  q1 <- matrix(nrow=5, ncol=5)
+  q1[1,] <- as.numeric(obs[,67:71])
+  q1[2,] <- as.numeric(obs[,72:76])
+  q1[3,] <- as.numeric(obs[,77:81])
+  q1[4,] <- as.numeric(obs[,82:86])
+  q1[5,] <- as.numeric(obs[,87:91])
+  
+  q1[is.na(q1)] = 0
+  
+  q1
+}
+
+maintainer_matrix <- function(row) {
+  q2 <- matrix(nrow=5, ncol=5)
+  q2[1,] <- as.numeric(obs[,92:96])
+  q2[2,] <- as.numeric(obs[,97:101])
+  q2[3,] <- as.numeric(obs[,102:106])
+  q2[4,] <- as.numeric(obs[,107:111])
+  q2[5,] <- as.numeric(obs[,112:116])
+  
+  q2[is.na(q2)] = 0
+  
+  q2
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
+
+df$has_monolith = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
+
+
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
+
+df$has_hybrid_arch = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
+
+df$has_modular = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Any organization that doesn't fit one of the 3 definitions above is excluded
+# because the answers are incomplete. Drop these records from the analysis
+df <- df[df$has_monolith | df$has_hybrid_arch | df$has_modular, ]
+
+# ---------------------
+# Add a column to indicate whether the organization has stream aligned teams
+# maintaining the representative system
+# ---------------------
+
+df$has_stream_aligned_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,3] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,3] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,3] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,3] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,3] == 1)
+  if (idx) {
+    df[i, "has_stream_aligned_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has IT-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_it_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,3] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,1] == 1) |
+         (maintainers[2,3] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,1] == 1) |
+         (maintainers[3,3] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,1] == 1) |
+         (maintainers[4,3] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,1] == 1) |
+         (maintainers[5,3] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,1] == 1)
+  if (idx) {
+    df[i, "has_it_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has analyst-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_analyst_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,2] == 0 & maintainers[1,5] == 0) & (maintainers[1,3] == 1 | maintainers[1,4] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,2] == 0 & maintainers[2,5] == 0) & (maintainers[2,3] == 1 | maintainers[2,4] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,2] == 0 & maintainers[3,5] == 0) & (maintainers[3,3] == 1 | maintainers[3,4] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,2] == 0 & maintainers[4,5] == 0) & (maintainers[4,3] == 1 | maintainers[4,4] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,2] == 0 & maintainers[5,5] == 0) & (maintainers[5,3] == 1 | maintainers[5,4] == 1)
+  if (idx) {
+    df[i, "has_analyst_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has "other" teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_other_mix_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # An "Other" mix is anything that's not stream aligned, IT-only, or analyst-only.
+  # Any organization that doesn't have any of the other team types is "other".
+  if (!df[i, "has_stream_aligned_team"] & !df[i, "has_it_only_team"] & !df[i, "has_analyst_only_team"]) {
+    df[i, "has_other_mix_team"] = TRUE
+  }
+}
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+make_age_table <- function(df) {
+    factor_df = as.data.frame(lapply(df[, c('age_ing', "age_proc", 'age_elem', 'age_agg', 'age_fin')], factor, levels=age_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+make_update_freq_table <- function(df) {
+      factor_df = as.data.frame(lapply(df[, c('update_ing', "update_proc", 'update_elem', 'update_agg', 'update_fin')], factor, levels=update_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
+
+# Order of the factor variable
+individual_levels = c("1 individual", "2-3 individuals", "4-6 individuals", "7-9 individuals", "10-15 individuals", "16-24 individuals", "25 or more individuals", "No answer")
+
+# Overall
+overall_dat = make_individuals_sm_table(df)
+
+overall_dat = factor(overall_dat, levels=individual_levels)
+# Suppress low count values
+overall_dat <- overall_dat[overall_dat != "10-15 individuals" & overall_dat != "25 or more individuals"]
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+make_individuals_lg_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('ind_ing_lg', "ind_proc_lg", 'ind_elem_lg', 'ind_agg_lg', 'ind_fin_lg')], factor, levels=individual_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Order of the factor variable
+individual_levels = c("1 individual", "2-3 individuals", "4-6 individuals", "7-9 individuals", "10-15 individuals", "16-24 individuals", "25 or more individuals", "No answer")
+
+# Overall 
+overall_dat = make_individuals_lg_table(df)
+
+overall_dat = factor(overall_dat, levels=individual_levels)
+
+# Suppress low count values
+overall_dat <- overall_dat[overall_dat != "16-24 individuals"]
+
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+```
 
 ## Results - Lead Time
+```{r}
+#| echo: false
+#| warning: false
 
-[Lead time](https://en.wikipedia.org/wiki/Lead_time): the amount of time required to get an end-to-end change to a CPI Production System implemented.
+library(dplyr)
+library(ggplot2)
 
-- Most NSOs reported lead time of "within 1 day" or "within 1 week" for **small changes** (a non-trivial fraction reported "within 1 month").
+# df[,199:203]  # how many individuals small change
+# df[,204:208]  # how many individuals large change
+# df[,209:213]  # lead time small change
+# df[,214:218]  # lead time large change
 
-- Monolithic systems more likely to report "within 1 year" or "more than 1 year" for **large changes** compared to modular systems.
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
 
-- Modular systems never reported "can't be modified" or "too complex" for the **large changes** lead time question.
+df <- df |> rename(
+  age_ing=colnames(df)[188],
+  age_proc=colnames(df)[189],
+  age_elem=colnames(df)[190],
+  age_agg=colnames(df)[191],
+  age_fin=colnames(df)[192],
+  share_cpi_sys=colnames(df)[193],
+  update_ing=colnames(df)[194],
+  update_proc=colnames(df)[195],
+  update_elem=colnames(df)[196],
+  update_agg=colnames(df)[197],
+  update_fin=colnames(df)[198]
+)
 
-- Stream-aligned teams and analyst-only teams were most likely to report "within 1 month" for **large changes** compared to any other answer.
+systems_matrix <- function(row) {
+  q1 <- matrix(nrow=5, ncol=5)
+  q1[1,] <- as.numeric(obs[,67:71])
+  q1[2,] <- as.numeric(obs[,72:76])
+  q1[3,] <- as.numeric(obs[,77:81])
+  q1[4,] <- as.numeric(obs[,82:86])
+  q1[5,] <- as.numeric(obs[,87:91])
+  
+  q1[is.na(q1)] = 0
+  
+  q1
+}
 
-## Results - Alternative Data Usage
+maintainer_matrix <- function(row) {
+  q2 <- matrix(nrow=5, ncol=5)
+  q2[1,] <- as.numeric(obs[,92:96])
+  q2[2,] <- as.numeric(obs[,97:101])
+  q2[3,] <- as.numeric(obs[,102:106])
+  q2[4,] <- as.numeric(obs[,107:111])
+  q2[5,] <- as.numeric(obs[,112:116])
+  
+  q2[is.na(q2)] = 0
+  
+  q2
+}
 
-- Almost 2/3 of respondents don't use Alternative Data Sources (ADS) at all.
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
 
-- Of those who use ADS, their CPIs are comprised of "less than 10%" or "between 10% and 30%" alternative data by expenditure weight.
+df$has_monolith = FALSE
 
-- Of those respondents who do not use ADS, most of them would like "between 10% and 30%" or "between 30% and 50%" of their CPI to be comprised of alternative data by expenditure weight.
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
 
-## Results - Alternative Data Challenges
 
-In the following order, the most commonly cited ADS challenges are:
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
 
-1. Lack of data provider cooperation
+df$has_hybrid_arch = FALSE
 
-2. Insufficient capacity
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
 
-3. Insufficient technical skills to make use of ADS
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
 
-4. Lack of methodology knowledge to make use of ADS
+df$has_modular = FALSE
 
-5. Appropriate data are not available
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Any organization that doesn't fit one of the 3 definitions above is excluded
+# because the answers are incomplete. Drop these records from the analysis
+df <- df[df$has_monolith | df$has_hybrid_arch | df$has_modular, ]
+
+# ---------------------
+# Add a column to indicate whether the organization has stream aligned teams
+# maintaining the representative system
+# ---------------------
+
+df$has_stream_aligned_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,3] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,3] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,3] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,3] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,3] == 1)
+  if (idx) {
+    df[i, "has_stream_aligned_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has IT-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_it_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,3] == 0 & maintainers[1,4] == 0 & maintainers[1,5] == 0) & (maintainers[1,2] == 1 | maintainers[1,1] == 1) |
+         (maintainers[2,3] == 0 & maintainers[2,4] == 0 & maintainers[2,5] == 0) & (maintainers[2,2] == 1 | maintainers[2,1] == 1) |
+         (maintainers[3,3] == 0 & maintainers[3,4] == 0 & maintainers[3,5] == 0) & (maintainers[3,2] == 1 | maintainers[3,1] == 1) |
+         (maintainers[4,3] == 0 & maintainers[4,4] == 0 & maintainers[4,5] == 0) & (maintainers[4,2] == 1 | maintainers[4,1] == 1) |
+         (maintainers[5,3] == 0 & maintainers[5,4] == 0 & maintainers[5,5] == 0) & (maintainers[5,2] == 1 | maintainers[5,1] == 1)
+  if (idx) {
+    df[i, "has_it_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has analyst-only teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_analyst_only_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the stream aligned team condition as one or more maintainer groups being comprised of either
+  # domain-analysts only, domain-IT only, or both domain analysts and domain IT (but no other groups).
+  idx <- (maintainers[1,1] == 0 & maintainers[1,2] == 0 & maintainers[1,5] == 0) & (maintainers[1,3] == 1 | maintainers[1,4] == 1) |
+         (maintainers[2,1] == 0 & maintainers[2,2] == 0 & maintainers[2,5] == 0) & (maintainers[2,3] == 1 | maintainers[2,4] == 1) |
+         (maintainers[3,1] == 0 & maintainers[3,2] == 0 & maintainers[3,5] == 0) & (maintainers[3,3] == 1 | maintainers[3,4] == 1) |
+         (maintainers[4,1] == 0 & maintainers[4,2] == 0 & maintainers[4,5] == 0) & (maintainers[4,3] == 1 | maintainers[4,4] == 1) |
+         (maintainers[5,1] == 0 & maintainers[5,2] == 0 & maintainers[5,5] == 0) & (maintainers[5,3] == 1 | maintainers[5,4] == 1)
+  if (idx) {
+    df[i, "has_analyst_only_team"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has "other" teams maintaining
+# any of its representative systems
+# ---------------------
+
+df$has_other_mix_team = FALSE
+
+# This is the order of the maintainer columns
+# c("Corporate IT", "Domain-Embedded IT", "Domain-Embedded Analysts", "Elsewhere Analysts", "Consultants")
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # An "Other" mix is anything that's not stream aligned, IT-only, or analyst-only.
+  # Any organization that doesn't have any of the other team types is "other".
+  if (!df[i, "has_stream_aligned_team"] & !df[i, "has_it_only_team"] & !df[i, "has_analyst_only_team"]) {
+    df[i, "has_other_mix_team"] = TRUE
+  }
+}
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+make_age_table <- function(df) {
+    factor_df = as.data.frame(lapply(df[, c('age_ing', "age_proc", 'age_elem', 'age_agg', 'age_fin')], factor, levels=age_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+make_update_freq_table <- function(df) {
+      factor_df = as.data.frame(lapply(df[, c('update_ing', "update_proc", 'update_elem', 'update_agg', 'update_fin')], factor, levels=update_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
+
+
+make_lead_times_sm_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('lead_t_ing_sm', "lead_t_proc_sm", 'lead_t_elem_sm', 'lead_t_agg_sm', 'lead_t_fin_sm')], factor, levels=lead_time_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+df <- df |> rename(
+  ind_ing_sm=colnames(df)[199],
+  ind_proc_sm=colnames(df)[200],
+  ind_elem_sm=colnames(df)[201],
+  ind_agg_sm=colnames(df)[202],
+  ind_fin_sm=colnames(df)[203],
+  ind_ing_lg=colnames(df)[204],
+  ind_proc_lg=colnames(df)[205],
+  ind_elem_lg=colnames(df)[206],
+  ind_agg_lg=colnames(df)[207],
+  ind_fin_lg=colnames(df)[208],
+  lead_t_ing_sm=colnames(df)[209],
+  lead_t_proc_sm=colnames(df)[210],
+  lead_t_elem_sm=colnames(df)[211],
+  lead_t_agg_sm=colnames(df)[212],
+  lead_t_fin_sm=colnames(df)[213],
+  lead_t_ing_lg=colnames(df)[214],
+  lead_t_proc_lg=colnames(df)[215],
+  lead_t_elem_lg=colnames(df)[216],
+  lead_t_agg_lg=colnames(df)[217],
+  lead_t_fin_lg=colnames(df)[218],
+)
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+stream_aligned_df = df[df$has_stream_aligned_team,]
+it_only_df = df[df$has_it_only_team,]
+analyst_only_df = df[df$has_analyst_only_team,]
+other_mix_df = df[df$has_other_mix_team,]
+
+# Order of the factor variable
+lead_time_levels = c("Within 1 day", "Within 1 week", "Within 1 month", "Within 3 months", "Within 1 year", "More than 1 year", "Too complex", "Can't be modified")
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 1
+#| out-width: "100%"
+
+sm_overall_dat = make_lead_times_sm_table(df)
+sm_overall_dat = factor(sm_overall_dat, levels=lead_time_levels)
+
+# Suppress low count values
+sm_overall_dat <- sm_overall_dat[sm_overall_dat != "Within 3 months"]
+
+ggplot() + aes(sm_overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="Lead Time for Small Changes (Overall)")
+
+make_lead_times_lg_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('lead_t_ing_lg', "lead_t_proc_lg", 'lead_t_elem_lg', 'lead_t_agg_lg', 'lead_t_fin_lg')], factor, levels=lead_time_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+# Overall
+overall_dat = make_lead_times_lg_table(df)
+
+overall_dat = factor(overall_dat, levels=lead_time_levels)
+
+# Suppress low count values
+overall_dat[overall_dat == "Too complex" | overall_dat == "Can't be modified"] = "Can't be modified"
+overall_dat <- overall_dat[overall_dat != "Within 1 day"]
+
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Overall)")
+
+SMALL_LEAD_T_1 = sum(sm_overall_dat == "Within 1 day" | sm_overall_dat == "Within 1 week")
+SMALL_LEAD_T_2 = sum(sm_overall_dat == "Within 1 month")
+```
+:::
+
+::: {.column width="50%"}
+- [Lead time](https://en.wikipedia.org/wiki/Lead_time): the amount of time required to get an **end-to-end change** to a CPI Production System **implemented**.
+
+- `r SMALL_LEAD_T_1` respondents reported lead times of `Within 1 day` or `Within 1 week` for **small changes**.
+
+- `r SMALL_LEAD_T_2` reported lead times of `Within 1 month` for **small changes**.
+
+- Lead time responses for **large changes** range anywhere from `Within 1 week` to `Can't be modified`.
+:::
+
+::::
+
+## Results - Lead Time (Monolith vs. Modular)
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 1
+#| out-width: "100%"
+
+make_lead_times_lg_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('lead_t_ing_lg', "lead_t_proc_lg", 'lead_t_elem_lg', 'lead_t_agg_lg', 'lead_t_fin_lg')], factor, levels=lead_time_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+
+# Monolith
+monolith_dat = make_lead_times_lg_table(monolith_df)
+
+monolith_dat = factor(monolith_dat, levels=lead_time_levels)
+
+# Suppress low count values
+monolith_dat[monolith_dat == "Too complex" | monolith_dat == "Can't be modified"] = "Can't be modified"
+monolith_dat <- monolith_dat[monolith_dat != "Within 1 week" & monolith_dat != "Within 3 months" & monolith_dat != "Within 1 day"]
+
+
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Monolith)")
+
+# Modular
+
+modular_dat = make_lead_times_lg_table(modular_df)
+modular_dat = factor(modular_dat, levels=lead_time_levels)
+
+# Suppress low count values
+modular_dat <- modular_dat[modular_dat != "Within 1 year" & modular_dat != "More than 1 year"]
+
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Modular)")
+
+MONOLITH_UNMODIFIABLE = sum(monolith_dat == "Too complex" | monolith_dat == "Can't be modified")
+```
+:::
+
+::: {.column width="50%"}
+- Monolithic systems more likely to report `Within 1 year` or `More than 1 year` for **large changes** compared to modular systems.
+
+- Modular systems never reported `Can't be modified` or `Too complex` for the **large changes** lead time question, whereas Monolithic systems reported one of these values `r MONOLITH_UNMODIFIABLE` times.
+:::
+
+::::
+
+
+## Results - Lead Time (4 Team Types)
+
+```{r, fig.height=4}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Lead Time for Small Changes (Stream-Aligned)
+#| - Lead Time for Small Changes (IT-Only)
+#| - Lead Time for Small Changes (Analyst-Only)
+#| - Lead Time for Small Changes (Other Mix)
+
+stream_aligned_dat = make_lead_times_lg_table(stream_aligned_df)
+stream_aligned_dat = factor(stream_aligned_dat, levels=lead_time_levels)
+
+# Suppress low count values
+stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Within 1 day" & stream_aligned_dat != "Too complex"]
+
+ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+it_only_dat = make_lead_times_lg_table(it_only_df)
+it_only_dat = factor(it_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+it_only_dat <- it_only_dat[it_only_dat != "Within 1 year" & it_only_dat != "Too complex" & it_only_dat != "Can't be modified"]
+
+ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+analyst_only_dat = make_lead_times_lg_table(analyst_only_df)
+analyst_only_dat = factor(analyst_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Within 1 year" & analyst_only_dat != "Too complex" & analyst_only_dat != "Can't be modified" & analyst_only_dat != "Within 1 day"]
+
+ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+
+other_mix_dat = make_lead_times_lg_table(other_mix_df)
+other_mix_dat = factor(other_mix_dat, levels=c(lead_time_levels, "1 month to 1 year", "> 1 year or unmodifiable"))
+
+# Suppress low count values
+other_mix_dat[other_mix_dat == "Within 1 month" | other_mix_dat == "Within 3 months" | other_mix_dat == "Within 1 year"] = "1 month to 1 year"
+other_mix_dat[other_mix_dat == "More than 1 year" | other_mix_dat == "Can't be modified"] = "> 1 year or unmodifiable"
+
+ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+```
+
+## Results - Alternative Data Source (ADS) Usage
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 1
+#| out-width: "100%"
+
+library(dplyr)
+library(ggplot2)
+
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  use_ads=colnames(df)[219],
+  geks=colnames(df)[220],
+  tdh=colnames(df)[221],
+  hedonic=colnames(df)[222],
+  oth_mlt=colnames(df)[223],
+  dyn_smpl=colnames(df)[224],
+  fix_smpl=colnames(df)[225],
+  other=colnames(df)[226],
+  pct_ads=colnames(df)[227],
+  want_use_ads_if_not_already=colnames(df)[228],
+  want_use_ads_pct=colnames(df)[229],
+)
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+pct_dat <- factor(df[df$pct_ads != "", 'pct_ads'], levels=c('Less than 10%.', 'Between 10% and 30%.', 'Between 30% and 50%.', 'Between 50% and 70%.', 'Between 70% and 90%.', 'Over 90%.'))
+
+# Suppress low counts
+pct_dat <- pct_dat[pct_dat != "Between 50% and 70%." & pct_dat != "Between 70% and 90%."]
+
+ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Actual)")
+
+NUM_USE_ADS = sum(df$use_ads == "Yes")
+NUM_NOT_USE_ADS = sum(nrow(df) - NUM_USE_ADS)
+NUM_WANT_USE_ADS = sum(df$want_use_ads_if_not_already == "Yes")
+
+pct_dat <- factor(df[df$want_use_ads_pct != "", 'want_use_ads_pct'], levels=c('Less than 10%.', 'Between 10% and 30%.', 'Between 30% and 50%.', 'Between 50% and 70%.', 'Between 70% and 90%.', 'Over 90%.'))
+
+# Suppress low counts
+pct_dat <- pct_dat[pct_dat != "Less than 10%." & pct_dat != "Between 70% and 90%." & pct_dat != "Over 90%."]
+
+ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Aspirational)")
+
+```
+:::
+
+::: {.column width="50%"}
+- `r NUM_NOT_USE_ADS` respondents don't use Alternative Data Sources (ADS) at all.
+
+- Of those respondents who **do not use ADS**, most of them would like `Between 10% and 30%` or `Between 30% and 70%` of their CPIs to be comprised of ADS by expenditure weight.
+:::
+
+::::
+
+## Results - Methods Applied to ADS
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| warning: false
+
+ads_methods <- matrix(nrow=7, ncol=2)
+
+ads_methods[1,1] = "GEKS"
+ads_methods[1,2] = sum(df$geks == "Yes")
+
+ads_methods[2,1] = "Time Dummy Hedonic"
+ads_methods[2,2] = sum(df$tdh == "Yes")
+
+ads_methods[3,1] = "Hedonic"
+ads_methods[3,2] = sum(df$hed == "Yes")
+
+ads_methods[4,1] = "Other Multilateral"
+ads_methods[4,2] = "< 3"
+
+ads_methods[5,1] = "Dynamic Sample"
+ads_methods[5,2] = sum(df$dyn_smpl == "Yes")
+
+ads_methods[6,1] = "Fixed Sample"
+ads_methods[6,2] = sum(df$fix_smpl == "Yes")
+
+ads_methods[7,1] = "Other"
+ads_methods[7,2] = sum(df$other != "")
+
+knitr::kable(ads_methods)
+```
+:::
+
+::: {.column width="50%"}
+
+- Fixed Sample is the most commonly used method.
+
+- GEKS and hedonic methods second most common.
+
+:::
+
+::::
+
+## Results - Challenges in Using ADS
+
+```{r, fig.width=10,fig.height=5}
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+
+make_challenges_table <- function(df) {
+  dat <- data.frame(
+    Challenges = c(
+      df$rank1,
+      df$rank2,
+      df$rank3,
+      df$rank4,
+      df$rank5
+    ),
+    Ranking = c(
+      rep("Rank 1", each=nrow(df)),
+      rep("Rank 2", each=nrow(df)),
+      rep("Rank 3", each=nrow(df)),
+      rep("Rank 4", each=nrow(df)),
+      rep("Rank 5", each=nrow(df))
+    )
+  )
+  
+  # Replace empty string with NA
+  dat <- dat[dat$Challenges != "",]
+  dat <- dat[!is.na(dat$Challenges),]
+  
+  dat
+}
+
+# ADS Challenges
+
+df <- df |> rename(
+  rank1=colnames(df)[230],
+  rank2=colnames(df)[231],
+  rank3=colnames(df)[232],
+  rank4=colnames(df)[233],
+  rank5=colnames(df)[234],
+  rank6=colnames(df)[235],
+  rank7=colnames(df)[236],
+  rank8=colnames(df)[237],
+  rank9=colnames(df)[238],
+  rank10=colnames(df)[239],
+  rank11=colnames(df)[240],
+  rank12=colnames(df)[241],
+)
+
+# Shorten value names
+df[df == "Lack of cooperation with owners of alternative data sources."] = "Lack of Provider Cooperation"
+
+df[df == "Lack of organizational capacity (e.g., corporate IT could assist, but there is no capacity)."] = "Insufficient Capacity"
+
+df[df == "So costly that it is not worth implementing."] = "Too Costly"
+
+df[df == "Concerns about data quality from alternative sources."] = "Data Quality Issues"
+
+df[df == "Lack of funding to procure alternative data."] = "Insufficient Funding"
+
+df[df == "None of these (we do not face any challenges)."] = "No Challenges"
+
+df[df == "Lack of availability of alternative data."] = "Data Availability"
+
+df[df == "Concerns about legal challenges to acquiring alternative data (e.g., lack of authority to web scrape prices)."] = "Insufficient Authority"
+
+df[df == "None of these (we do not face any challenges)."] = "No Challenges"
+
+df[df == "Lack of skills within the domain team to make use of alternative data."] = "Insufficient Skills"
+
+df[df ==  "No legal mechanism to require sharing data with your office, or no willingness to compel sharing data."] = "No Willingness"
+
+df[df == "Lack of availability of alternative data."] = "Insufficient Availability"
+
+df[df == "Lack of mandate (not a priority)."] = "Not a Priority"
+
+df[df == "Lack of methodological knowledge to calculate price statistics from alternative data."] = "Methodology Knowledge"
+
+overall_dat <- make_challenges_table(df)
+
+# Suppress low counts
+overall_dat <- overall_dat[overall_dat["Challenges"] != "No Challenges",]
+
+ggplot(overall_dat,aes(x=forcats::fct_infreq(Challenges))) +
+  geom_bar(alpha=1, position="stack", color="black") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Ranked Alternative Data Challenges")
+```
+
 
 ## Results - System Development Challenges (In General)
 
-In the following order, the most commonly cited challenges are:
+```{r, fig.width=10,fig.height=5}
+#| echo: false
+#| warning: false
+#| out-width: "100%"
 
-1. Lack of staff
+library(forcats)
+library(dplyr)
+library(ggplot2)
 
-2. Insufficient technical skills
+df <- read.csv("./data/results.csv")
+df <- df[df[,2] != "",]
 
-3. Managing complexity of system interactions (e.g., passing data between systems)
+# Overall Challenges
 
-4. Managing complexity of the system itself (e.g., managing a complex codebase)
+df <- df |> rename(
+  rank1=colnames(df)[242],
+  rank2=colnames(df)[243],
+  rank3=colnames(df)[244],
+  rank4=colnames(df)[245],
+  rank5=colnames(df)[246],
+  rank6=colnames(df)[247],
+  rank7=colnames(df)[248],
+  rank8=colnames(df)[249],
+  rank9=colnames(df)[250],
+  rank10=colnames(df)[251],
+  rank11=colnames(df)[252],
+  rank12=colnames(df)[253],
+  rank13=colnames(df)[254],
+  rank14=colnames(df)[255],
+  rank15=colnames(df)[256],
+  rank16=colnames(df)[257],
+)
 
-5. Verifying the correct behaviour of a system
+# Shorten value names
+df[df == "Lack of skills (e.g., people do not have the skills to maintain complex systems)."] = "Lack of Skills"
+
+df[df == "Lots of manual tasks that are not automated/cannot be automated (e.g., a person has to manually review system outputs to validate them)."] = "Manual Tasks"
+
+df[df == "Managing the interaction between systems (e.g., integration challenges, passing inputs/outputs between systems)."] = "System Interactions"
+
+df[df == "Staff/resourcing challenges (e.g., not enough people to do the work, all of our time is spent maintaining existing systems, so there is little/no capacity to develop new systems)."] = "Lack of Staff"
+
+df[df == "Communication challenges between teams (e.g., prices domain team struggles to communicate requirements with corporate IT)."] = "Cross-Domain Communication"
+
+df[df == "Complexity within a system (e.g., managing complex code, managing large quantities of code)."] = "System Complexity"
+
+df[df == "Human coordination/communication overhead (e.g., lots of people need to be involved with every decision)."] = "Too Much Coordination"
+
+df[df == "We don't have a \"testing\" environment, so we have to be really confident that our changes are correct before testing them live in our production system."] = "No Testing Environment"
+
+df[df == "None of these (we do not face any challenges)."] = "No Challenges"
+
+df[df == "Lack of software tools (e.g., certain necessary software is not approved by corporate IT, a commercial software product cannot be procured)."] = "Insufficient Software"
+
+df[df ==  "Verifying the correctness of data (e.g., input data often contains mistakes, significant time is spent negotiating error fixes with the data provider)."] = "Validating Data"
+
+df[df == "Lack of hardware (e.g., the only device provided is a single work computer, and this device does not have enough CPU/memory/storage to work with large volumes of data)."] = "Insufficient Hardware"
+
+df[df == "Verifying that a system behaves correctly (e.g., the price index calculation logic is correct)."] = "Verifying Correctness"
+
+df[df == "Keeping track of which version of a system was used to produce a certain version of an output."] = "Version Control"
+
+df[df == "Organizational politics (e.g., mandate conflicts between corporate IT and the prices domain team)."] = "Organizational Politics"
+
+df[df == "Bureaucratic and process challenges (e.g., many \"approval\" steps are required to move work forward)."] = "Bureaucracy Challenges"
+
+
+# Overlay all histograms on one plot
+dat <- data.frame(
+  Challenges = c(
+    df$rank1,
+    df$rank2,
+    df$rank3,
+    df$rank4,
+    df$rank5
+  ),
+  Ranking = c(
+    rep("Rank 1", each=nrow(df)),
+    rep("Rank 2", each=nrow(df)),
+    rep("Rank 3", each=nrow(df)),
+    rep("Rank 4", each=nrow(df)),
+    rep("Rank 5", each=nrow(df))
+  )
+)
+
+# Replace empty string with NA
+dat <- dat[dat$Challenges != "",]
+dat <- dat[!is.na(dat$Challenges),]
+
+# Suppress low counts
+dat <- dat[dat["Challenges"] != "Version Control",]
+
+ggplot(dat,aes(x=forcats::fct_infreq(Challenges))) +
+  geom_bar(alpha=1, position="stack", color="black") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Challenges Faced (Rank 1 through 5)")
+```
 
 ## Practical Suggestions
 
-- Think explicitly about system boundaries.
+:::: {.columns}
 
-- Think explicitly about data interchange between systems.
+::: {.column width="50%"}
+- Think explicitly about **system boundaries**.
 
-- Embed technical expertise in business domain teams.
+- Think explicitly about **data interchange between systems** (e.g., [Data Contracts](https://datacontract.com/)).
 
-- Version control all the things.
+- Embed technical expertise **within business domain teams**.
 
-- Practice updating systems more frequently.
+- Version control all the things!
+:::
+
+::: {.column width="50%"}
+- Use **analytics-optimized** file formats like [Apache Parquet](https://parquet.apache.org/).
+
+- Organize systems around **one-way** data flows and **idempotent** operations.
+
+- Update systems **frequently**.
+
+- Have a **separate development environment** for **rapid iteration**.
+:::
+
+::::
 
 ## Future Work
 
 Two main follow-questions from our survey.
 
-1. Effectively managing the complexity of CPI Production Systems **in practice** is far from a solved problem, despite viable solutions existing for all of the component problems. **How can this gap be bridged**?
+1. Effectively managing the complexity of CPI Production Systems **in practice** is **far from a solved problem**, despite viable solutions existing for all of the component problems. **How can this gap be bridged**?
 
-2. Are lessons about system architecture and team organization from software engineering applicable to complex analytical systems like the CPI Production Systems studied in this survey?
+2. Are lessons about **system architecture and team organization** from software engineering applicable to complex analytical systems like the CPI Production Systems studied in this survey?
+
+## Thanks for Listening!
+
+<br/><br/><br/>
+
+Please consider reading the [full report](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html) that accompanies this presentation.
 
 ## References {.unnumbered}
 
