@@ -2529,9 +2529,11 @@ ggplot(dat,aes(x=forcats::fct_infreq(Challenges))) +
 
 - Think explicitly about **data interchange between systems** (e.g., [Data Contracts](https://datacontract.com/)).
 
-- Embed technical expertise **within business domain teams**.
+- Embed software engineering technical expertise **within business domain teams**.
 
 - Version control all the things!
+
+- Aim for [high cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science)) and [low coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming)) in system development.
 :::
 
 ::: {.column width="50%"}
