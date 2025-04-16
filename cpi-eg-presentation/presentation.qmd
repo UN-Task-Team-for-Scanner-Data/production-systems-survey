@@ -73,19 +73,6 @@ We define a **system** as any indivisible (atomic) software component that takes
 
 ::::
 
-
-## Survey Concepts - Teams
-
-A **team** is defined as a **group of individuals** who **maintain** one or more **systems**. 
-
-| Team Type | Description |
-| --------- | ----------- |
-| Corporate IT | IT professionals **not in** the price statistics team. |
-| Domain-Embedded IT | IT professionals **in** the price statistics team. |
-| Domain-Embedded Analysts | non-IT professionals **in** the price statistics team. |
-| Non-Domain Analysts | non-IT professionals **not in** the price statistics team.
-| External Consultants or Contractors | Professionals outside of the organization to whom work is contracted. |
-
 ## Survey Concepts - Flow of Change
 
 From left to right, we go from raw data to the production of the CPI.
@@ -101,6 +88,19 @@ Flow of change based loosely on the General Statistical Business Process Model (
 
 ![Perfect Modular Example](./diagrams/gsbpm-modular.drawio.svg){#fig-modular height="30%"}
 :::
+
+## Survey Concepts - Teams
+
+A **team** is defined as a **group of individuals** who **maintain** one or more **systems**. 
+
+| Team Type | Description |
+| --------- | ----------- |
+| Corporate IT | IT professionals **not in** the price statistics team. |
+| Domain-Embedded IT | IT professionals **in** the price statistics team. |
+| Domain-Embedded Analysts | non-IT professionals **in** the price statistics team. |
+| Non-Domain Analysts | non-IT professionals **not in** the price statistics team.
+| External Consultants or Contractors | Professionals outside of the organization to whom work is contracted. |
+
 
 ## Survey Concepts - 4 Team Types
 
