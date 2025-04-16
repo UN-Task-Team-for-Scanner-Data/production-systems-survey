@@ -131,4 +131,4 @@ Our suspicion is that the concept of learning how to use a tool like [Git](https
 
 [^2]: For example, adopting a few simple ideas such as grouping related functions into the same module or separating configuration information source code can lead to significant simplifications to code bases that don't currently leverage these ideas.
 
-[^4]: For example, a 1,000 line Python script that performs multiple operations on a [Pandas](https://pandas.pydata.org/) data frame entirely in the global scope will not integrate nicely with a testing framework like [PyTest](https://docs.pytest.org/en/stable/). This is because there is no straightforward way to identify and group a section of the code to be run in a test. 
+[^3]: For example, a 1,000 line Python script that performs multiple operations on a [Pandas](https://pandas.pydata.org/) data frame entirely in the global scope will not integrate nicely with a testing framework like [PyTest](https://docs.pytest.org/en/stable/). This is because there is no straightforward way to identify and group a section of the code to be run in a test. 
