@@ -1,7 +1,6 @@
 # Introduction {#sec-intro}
 
-::: {layout-ncol=2}
-
+::: {layout-ncol="2"}
 We created this survey about the state of Consumer Price Index (CPI) Production Systems on behalf of the [Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) under the [UN Committee of Experts on Big Data and Data Science for Official Statistics](https://unstats.un.org/bigdata/).
 
 ![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
@@ -15,10 +14,12 @@ In our time working at National Statistics Organizations (NSOs), we have encount
 
 Complex Analytical Systems involve significant amounts of code, documentation, and other non-code artifacts such as Excel Workbooks that carry out complex business logic in order to transform input data into output data. Additionally, they are often developed entirely or in large part by people with backgrounds in Economics, Statistics, Mathematics, or another area related to the domain of Official Statistics.
 
-These Complex Analytical Systems differ from traditional software systems in a number of important aspects[^3]:
+These Complex Analytical Systems differ from traditional software systems in a number of important aspects[^intro-1]:
+
+[^intro-1]: We are not implying that all "traditional" software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would often develop and maintain.
 
 | Complex Analytical Systems | Typical Software System |
-| -------------------------- | ----------------------- |
+|--------------------------------------|----------------------------------|
 | Multiple distinct scripts that are run sequentially and perform complex data manipulations. | One code base representing an entire application. |
 | Running time measured in minutes/hours | Running time measured in milliseconds. |
 | Human in the loop activities to interpret results. | Completely autonomous system. |
@@ -26,13 +27,11 @@ These Complex Analytical Systems differ from traditional software systems in a n
 | Batch workloads that are run manually (or semi-manually). | System running continuously in an event loop waiting for user input. |
 | Operate on a large fraction of an entire table quickly. | Search for one specific record in a large table quickly. |
 
-[^3]: We are not implying that all "traditional" software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would often develop and maintain.
-
 Due to differences like those mentioned above, there is not a perfect mapping between best practices from the software engineering world and pain points currently experienced by teams maintaining Complex Analytical Systems. However, there are certainly some best practices from software engineering that are highly appropriate to solve some of the problems faced in the development and maintenance of Complex Analytical Systems.
 
 To this end, we hope our survey can help bridge the gap between well-understood industry best practices from the world of software engineering, and those aspects of Complex Analytical Systems that could benefit from these best practices. Our hope is that the insights gained and the survey methodology deployed may be valuable for other Complex Analytical Systems facing similar challenges.
 
-## 	Why Did We Run This Survey? {#sec-why-run-this-survey}
+## Why Did We Run This Survey? {#sec-why-run-this-survey}
 
 In our experience, we've noticed that many teams who are responsible for Complex Analytical Systems struggle with managing many aspects of system complexity.
 
@@ -42,30 +41,29 @@ We have also found that individuals in these business domains are often missing 
 
 In this survey, we ask questions that capture several germane aspects of system organization, team organization, technology choices, and business outcomes using language, terms, and conceptual models that are more familiar to individuals on these business domain teams. Our rationale for doing this is threefold.
 
-1. Measure and describe the state of many Complex Analytical Systems around the world within a specific business domain (CPI Production Systems).
+1.  Measure and describe the state of many Complex Analytical Systems around the world within a specific business domain (CPI Production Systems).
 
-2. Provide some concrete and practical suggestions to address common areas of struggle within this domain across many NSOs.
+2.  Provide some concrete and practical suggestions to address common areas of struggle within this domain across many NSOs.
 
-3. Expose people from these business domain teams to software engineering concepts that are relevant in the development and maintenance of Complex Analytical Systems.
+3.  Expose people from these business domain teams to software engineering concepts that are relevant in the development and maintenance of Complex Analytical Systems.
 
 While this report is tailored towards a Consumer Prices domain audience, we welcome and encourage readers from different domains to read through this report. We make significant efforts to avoid using too much domain-specific jargon, and present findings in a way that should comprehensible to a more general audience. In @sec-findings, we elaborate on aspects of our survey we believe to have high external validity, provide some practical suggestions that are applicable to Complex Analytical Systems in general, and describe some productive areas of future exploration that are not limited to the Consumer Prices business domain.
 
 ## Overview of CPI Production Systems
 
-With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in @sec-motivation. More precisely, these systems take data on the price of consumer goods purchased throughout an economy and calculate period-over-period price changes of these goods. These price changes are ultimately mapped to a taxonomy of product categories, with the highest level of the taxonomy being the monthly "all items" CPI that is commonly used when discussing the overall level of inflation.
+With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in @sec-motivation. More precisely, these systems take data on the price of consumer goods purchased throughout an economy and calculate period-over-period price changes of these goods. These price changes are ultimately aggregated leveraging a taxonomy of product categories, with the highest level of the taxonomy being the monthly "all items" CPI that is commonly used when discussing the overall level of inflation, typically COICOIP.
 
-The recent adoption of alternative data sources[^1] in the calculation of CPIs has further increased the complexity of these systems, and has increased the importance of skills in newly emerging disciplines such as [Data Science](https://en.wikipedia.org/wiki/Data_science), [Data Engineering](https://en.wikipedia.org/wiki/Data_engineering), and [Analytics Engineering](https://www.getdbt.com/what-is-analytics-engineering).
+The recent adoption of alternative data sources[^intro-2] in the calculation of CPIs has further increased the complexity of these systems, and has increased the importance of skills in newly emerging disciplines such as [Data Science](https://en.wikipedia.org/wiki/Data_science), [Data Engineering](https://en.wikipedia.org/wiki/Data_engineering), and [Analytics Engineering](https://www.getdbt.com/what-is-analytics-engineering).
 
-[^1]: In the context of CPI Production Systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.
-
+[^intro-2]: In the context of CPI Production Systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.
 
 ## Related Work
 
 We borrow and adapt several ideas presented in @skelton2019team such as the concepts of [Stream-aligned teams and the Flow of change](https://teamtopologies.com/key-concepts) in our survey. These concepts (discussed in greater detail in the following sections) can be applied to understand how teams are organized around the various steps in a complex data processing workflow.
 
-We also borrow a number of ideas from @forsgren2018accelerate. Particularly, multiple of the DevOps Research and Assessment (DORA) metrics they present are highly relevant in measuring the business outcomes of teams that maintain CPI systems.[^2]
+We also borrow a number of ideas from @forsgren2018accelerate. Particularly, multiple of the DevOps Research and Assessment (DORA) metrics they present are highly relevant in measuring the business outcomes of teams that maintain CPI systems.[^intro-3]
 
-[^2]: We use slightly different terminology to refer to some of these concepts throughout the survey in order to use language that our target audience is most likely familiar with.
+[^intro-3]: We use slightly different terminology to refer to some of these concepts throughout the survey in order to use language that our target audience is most likely familiar with.
 
 We believe that multiple ideas presented in @dehghani2022data are highly applicable to the CPI Systems under study. Specifically, we believe that the concept of [Data-as-a-Product](https://www.thoughtworks.com/en-ca/insights/articles/leveraging-data-as-a-product-a-strategic-imperative-for-business-leaders) (and teams organized around these Data Products) provides a useful framework for thinking about how these systems and teams interact with one another. We also contrast domain-oriented decentralized teams with centralized teams.
 
@@ -77,23 +75,23 @@ Throughout this write up, we distinguish between software systems and IT profess
 
 This report is presented in the order that the survey was conducted, with findings presented along the way.
 
-- @sec-concepts covers the key conceptual models and terminology used to articulate concepts about system and team organization.
+-   @sec-concepts covers the key conceptual models and terminology used to articulate concepts about system and team organization.
 
-- @sec-sys-teams analyzes our findings with respect to system and team organization.
+-   @sec-sys-teams analyzes our findings with respect to system and team organization.
 
-- @sec-tools-tech covers some high-level questions on the use of tools and technologies required to develop and maintain CPI Production Systems.
+-   @sec-tools-tech covers some high-level questions on the use of tools and technologies required to develop and maintain CPI Production Systems.
 
-- @sec-age covers questions about the age and update frequency of systems.
+-   @sec-age covers questions about the age and update frequency of systems.
 
-- @sec-num-ppl covers questions about the number of individuals required to participate in system changes.
+-   @sec-num-ppl covers questions about the number of individuals required to participate in system changes.
 
-- @sec-lead-time covers questions about a concept called [lead time](https://en.wikipedia.org/wiki/Lead_time), which measures the end-to-end time required to implement a change to a software component.
+-   @sec-lead-time covers questions about a concept called [lead time](https://en.wikipedia.org/wiki/Lead_time), which measures the end-to-end time required to implement a change to a software component.
 
-- @sec-alt-data covers questions about the usage of alternative data in CPI Production Systems.
+-   @sec-alt-data covers questions about the usage of alternative data in CPI Production Systems.
 
-- @sec-challenges covers the challenges CPI Production System teams face with respect to maintaining their systems.
+-   @sec-challenges covers the challenges CPI Production System teams face with respect to maintaining their systems.
 
-- @sec-findings concludes with a summary of the most notable findings from the survey, some practical insights to address some common areas of struggle, and some areas of future work.
+-   @sec-findings concludes with a summary of the most notable findings from the survey, some practical insights to address some common areas of struggle, and some areas of future work.
 
 ## Note on Confidentiality and Privacy
 
