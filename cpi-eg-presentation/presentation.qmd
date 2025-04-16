@@ -207,8 +207,13 @@ for (mat in crossings_Q1$steps) {
 | Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
 | ----- | ----- | ---- | ----- | ----- | ---- |
 | ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | `r proc_elem_crossings` |
+| ❌ | ❌ | ✅ | ✅ | ❌ | `r elem_agg_crossings` |
+| ❌ | ❌ | ❌ | ✅ | ✅ | `r agg_fin_crossings` |
 | ✅ | ✅ | ✅ | ❌ | ❌ | `r ing_proc_elem_x` |
 | ❌ | ✅ | ✅ | ✅ | ❌ | `r proc_elem_agg_x` |
+| ❌ | ❌ | ✅ | ✅ | ✅ | `r elem_agg_fin_x` |
+| ❌ | ✅ | ✅ | ✅ | ✅ | `r last_4_x` |
 | ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
 
 ## Results - Which Team Combinations are Common Within the Flow of Change?
@@ -273,11 +278,14 @@ for (mat in crossings_Q2$steps) {
 
 ```
 
-| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
-| ----- | ----- | ---- | ----- | ----- | ---- | ---- |
-| ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analysts | `r d_analyst_only` |
-| ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts & Domain IT | `r stream_aligned` |
-| ✅ | ❌ | ✅ | ❌ | ❌ | Corp. IT & Domain Analysts | `r cit_d_analyst` |
+| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Frequency |
+| ----- | ----- | ---- | ----- | ----- | ---- |
+| ❌ | ❌ | ✅ | ❌ | ❌ | `r d_analyst_only` |
+| ❌ | ✅ | ✅ | ❌ | ❌ | `r stream_aligned` |
+| ✅ | ❌ | ❌ | ❌ | ❌ | `r cit_only` |
+| ❌ | ✅ | ❌ | ❌ | ❌ | `r dit_only` |
+| ✅ | ✅ | ❌ | ❌ | ❌ | `r it_only` |
+| ✅ | ❌ | ✅ | ❌ | ❌ | `r cit_d_analyst` |
 
 ## Results - Version Control System (VCS) Use
 
