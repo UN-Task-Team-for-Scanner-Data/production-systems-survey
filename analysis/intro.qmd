@@ -63,7 +63,7 @@ The recent adoption of alternative data sources[^1] in the calculation of CPIs h
 
 We borrow and adapt several ideas presented in @skelton2019team such as the concepts of [Stream-aligned teams and the Flow of change](https://teamtopologies.com/key-concepts) in our survey. These concepts (discussed in greater detail in the following sections) can be applied to understand how teams are organized around the various steps in a complex data processing workflow.
 
-We also borrow a number of ideas from @forsgren2018accelerate. Particularly, multiple of the DevOps Research and Assessment (DORA) metrics they present are highly relevant in measuring the business outcomes of teams that maintain CPI systems.[^2]
+We also borrow a number of ideas from @forsgren2018accelerate. Particularly, multiple of the DevOps Research and Assessment (DORA) metrics they present are highly relevant in measuring the business outcomes of teams that maintain CPI systems[^2].
 
 [^2]: We use slightly different terminology to refer to some of these concepts throughout the survey in order to use language that our target audience is most likely familiar with.
 
