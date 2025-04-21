@@ -436,6 +436,40 @@ Steve Martin
 </div>
 </div>
 </section>
+<section id="survey-concepts---flow-of-change" class="slide level2">
+<h2>Survey Concepts - Flow of Change</h2>
+<p>From left to right, we go from raw data to the production of the CPI.</p>
+<div id="fig-flow-of-work" class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./diagrams/gsbpm-systems-2.drawio.svg" style="width:90.0%"></p>
+<figcaption>Figure&nbsp;1: Flow of Change</figcaption>
+</figure>
+</div>
+<p>Flow of change based loosely on the General Statistical Business Process Model (GSBPM).</p>
+</section>
+<section id="survey-concepts---monolithic-vs.-modular-architectures" class="slide level2">
+<h2>Survey Concepts - Monolithic vs.&nbsp;Modular Architectures</h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-monolith" class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./diagrams/gsbpm-monolith.drawio.svg"></p>
+<figcaption>Figure&nbsp;2: Perfect Monolith Example</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-modular" class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./diagrams/gsbpm-modular.drawio.svg"></p>
+<figcaption>Figure&nbsp;3: Perfect Modular Example</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="survey-concepts---teams" class="slide level2">
 <h2>Survey Concepts - Teams</h2>
 <p>A <strong>team</strong> is defined as a <strong>group of individuals</strong> who <strong>maintain</strong> one or more <strong>systems</strong>.</p>
@@ -473,40 +507,6 @@ Steve Martin
 </tr>
 </tbody>
 </table>
-</section>
-<section id="survey-concepts---flow-of-change" class="slide level2">
-<h2>Survey Concepts - Flow of Change</h2>
-<p>From left to right, we go from raw data to the production of the CPI.</p>
-<div id="fig-flow-of-work" class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="./diagrams/gsbpm-systems-2.drawio.svg" style="width:90.0%"></p>
-<figcaption>Figure&nbsp;1: Flow of Change</figcaption>
-</figure>
-</div>
-<p>Flow of change based loosely on the General Statistical Business Process Model (GSBPM).</p>
-</section>
-<section id="survey-concepts---monolithic-vs.-modular-architectures" class="slide level2">
-<h2>Survey Concepts - Monolithic vs.&nbsp;Modular Architectures</h2>
-<div class="quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-monolith" class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="./diagrams/gsbpm-monolith.drawio.svg"></p>
-<figcaption>Figure&nbsp;2: Perfect Monolith Example</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-modular" class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="./diagrams/gsbpm-modular.drawio.svg"></p>
-<figcaption>Figure&nbsp;3: Perfect Modular Example</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
 </section>
 <section id="survey-concepts---4-team-types" class="slide level2">
 <h2>Survey Concepts - 4 Team Types</h2>
@@ -583,6 +583,30 @@ Steve Martin
 <td>21</td>
 </tr>
 <tr class="even">
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>6</td>
+</tr>
+<tr class="odd">
 <td>✅</td>
 <td>✅</td>
 <td>✅</td>
@@ -590,7 +614,7 @@ Steve Martin
 <td>❌</td>
 <td>12</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>❌</td>
 <td>✅</td>
 <td>✅</td>
@@ -598,7 +622,23 @@ Steve Martin
 <td>❌</td>
 <td>8</td>
 </tr>
+<tr class="odd">
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>11</td>
+</tr>
 <tr class="even">
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>4</td>
+</tr>
+<tr class="odd">
 <td>✅</td>
 <td>✅</td>
 <td>✅</td>
@@ -613,13 +653,12 @@ Steve Martin
 <h2>Results - Which Team Combinations are Common Within the Flow of Change?</h2>
 <table>
 <colgroup>
-<col style="width: 15%">
-<col style="width: 15%">
-<col style="width: 12%">
-<col style="width: 15%">
-<col style="width: 15%">
-<col style="width: 12%">
-<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 14%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 14%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -628,7 +667,6 @@ Steve Martin
 <th>Domain Analysts</th>
 <th>Other Analysts</th>
 <th>Consultants</th>
-<th>Team Type</th>
 <th>Frequency</th>
 </tr>
 </thead>
@@ -639,7 +677,6 @@ Steve Martin
 <td>✅</td>
 <td>❌</td>
 <td>❌</td>
-<td>Domain Analysts</td>
 <td>120</td>
 </tr>
 <tr class="even">
@@ -648,16 +685,38 @@ Steve Martin
 <td>✅</td>
 <td>❌</td>
 <td>❌</td>
-<td>Domain Analysts &amp; Domain IT</td>
 <td>25</td>
 </tr>
 <tr class="odd">
 <td>✅</td>
 <td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>33</td>
+</tr>
+<tr class="even">
+<td>❌</td>
 <td>✅</td>
 <td>❌</td>
 <td>❌</td>
-<td>Corp.&nbsp;IT &amp; Domain Analysts</td>
+<td>❌</td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
 <td>45</td>
 </tr>
 </tbody>
@@ -1009,7 +1068,7 @@ Steve Martin
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-1.png"></p>
-<figcaption>Lead Time for Small Changes (Stream-Aligned)</figcaption>
+<figcaption>Lead Time for Large Changes (Stream-Aligned)</figcaption>
 </figure>
 </div>
 </div>
@@ -1017,7 +1076,7 @@ Steve Martin
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-2.png"></p>
-<figcaption>Lead Time for Small Changes (IT-Only)</figcaption>
+<figcaption>Lead Time for Large Changes (IT-Only)</figcaption>
 </figure>
 </div>
 </div>
@@ -1027,7 +1086,7 @@ Steve Martin
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-3.png"></p>
-<figcaption>Lead Time for Small Changes (Analyst-Only)</figcaption>
+<figcaption>Lead Time for Large Changes (Analyst-Only)</figcaption>
 </figure>
 </div>
 </div>
@@ -1035,7 +1094,7 @@ Steve Martin
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-4.png"></p>
-<figcaption>Lead Time for Small Changes (Other Mix)</figcaption>
+<figcaption>Lead Time for Large Changes (Other Mix)</figcaption>
 </figure>
 </div>
 </div>
@@ -1139,8 +1198,9 @@ Steve Martin
 <ul>
 <li><p>Think explicitly about <strong>system boundaries</strong>.</p></li>
 <li><p>Think explicitly about <strong>data interchange between systems</strong> (e.g., <a href="https://datacontract.com/">Data Contracts</a>).</p></li>
-<li><p>Embed technical expertise <strong>within business domain teams</strong>.</p></li>
+<li><p>Embed software engineering technical expertise <strong>within business domain teams</strong>.</p></li>
 <li><p>Version control all the things!</p></li>
+<li><p>Aim for <a href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)">high cohesion</a> and <a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)">low coupling</a> in system development.</p></li>
 </ul>
 </div><div class="column" style="width:50%;">
 <ul>
