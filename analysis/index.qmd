@@ -1,6 +1,12 @@
 # Preface {.unnumbered}
 
-We would like to acknowledge the helpful feedback and numerous contributions from our colleagues in the Workstream on CPI Systems Architecture in the [Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) under the [UN Committee of Experts on Big Data and Data Science for Official Statistics](https://unstats.un.org/bigdata/).
+This work showcases the findings and takeaways from surveying National Statistical Organizations (NSOs) around the world during the winter of 2025 on how each structures their Consumer Price Index (CPI) production systems and teams, as well as how each approaches technical topics.
+
+This is work done by the Workstream 4, CPI Systems and Architecture, part of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml), hence we would like to acknowledge all the members of the team who played an integral part of in the drafting of the survey questions, providing insights, and in supporting this empirical assessment.
+
+We would also like to thank and acknowledge the support of the Steering Group of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml), as well as the [UN Committee of Experts on Big Data and Data Science for Official Statistics (UN-CEBD)](https://unstats.un.org/bigdata/) team in making this work possible. Without the support of both, it would not have been possible to survey National Statistical Organizations (NSOs) around the world and evaluate the systems and architectures used.
+
+![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
 
 # Survey Methodology Notes
 
