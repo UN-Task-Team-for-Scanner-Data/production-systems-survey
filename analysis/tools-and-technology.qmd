@@ -6,10 +6,9 @@ In this section, we look at various tools and technologies in use by NSOs.
 
 Complex Analytical Systems, such as the systems used in monthly CPI Production, often need to synchronize and integrate multiple versions of related code, data, and documentation. This is especially important for creating reproducible analytical pipelines (@RAPsite), or enabling multiple individuals to work concurrently on the same project.
 
-Version Control Systems (VCS) are tools that systematically manage changes in a codebase over time. At the time of writing, [Git](https://git-scm.com/) is by far the most popular software for this purpose, and platforms such as [Github](https://github.com/) and [GitLab](https://about.gitlab.com/) have built extensive functionality around projects managed with Git[^1].
+Version Control Systems (VCS) are tools that systematically manage changes in a codebase over time. At the time of writing, [Git](https://git-scm.com/) is by far the most popular software for this purpose, and platforms such as [Github](https://github.com/) and [GitLab](https://about.gitlab.com/) have built extensive functionality around projects managed with Git[^tools-and-technology-1].
 
-[^1]: It is worth mentioning that git-adjacent software such as [Data Version Control](https://dvc.org/) and [Git Large File Storage](https://git-lfs.com/) exists to extend the versioning capabilities of Git to files you wouldn't typically commit to a Git repository. However, this is a more advanced topic that we did not investigate in this survey.
-
+[^tools-and-technology-1]: It is worth mentioning that git-adjacent software such as [Data Version Control](https://dvc.org/) and [Git Large File Storage](https://git-lfs.com/) exists to extend the versioning capabilities of Git to files you wouldn't typically commit to a Git repository. However, this is a more advanced topic that we did not investigate in this survey.
 
 ```{r message = FALSE}
 #| echo: false
@@ -397,21 +396,21 @@ GIT_OR_GITHUB = sum(df$vc_git == "Yes" | df$vc_github == "Yes")
 
 @fig-vcs shows the VCS used by respondent NSOs.
 
-Surprisingly, the most common response by far was that the respondent did not use version control software at all for their CPI Production Systems. In fact, almost two thirds of the sample claims to use no VCS whatsoever or file-naming conventions[^2].
+Surprisingly, the most common response by far was that the respondent did not use version control software at all for their CPI Production Systems. In fact, almost two thirds of the sample claims to use no VCS whatsoever or file-naming conventions[^tools-and-technology-2].
+
+[^tools-and-technology-2]: What we mean by file naming conventions is encoding the author, version, and date information into the names of multiple files as the primary system of revision control. E.g., `analysis_collin_v1.py`, `analysis_steve_v2.py`, `analysis_collin_v2_final_2025_03.py`, `analysis_steve_v2_final_FINAL_2025_04.py`, and so on.
 
 Our hypothesis here is that (1) some commonly used file formats (e.g., Excel Workbooks) don't lend themselves easily to well-established version control tools like Git and (2) a lack of familiarity with VCS tools in general.
 
-Another interesting observation is that slightly less than one third of the sample uses Git and/or GitHub/GitLab[^3].
+Another interesting observation is that slightly less than one third of the sample uses Git and/or GitHub/GitLab[^tools-and-technology-3].
+
+[^tools-and-technology-3]: We were surprised to find a small number of respondents indicated that they use Git but not a developer platform built around Git such as GitHub, GitLab, or BitBucket. We suspect that these individuals may work in an air-gapped network or similar situation without internet access and use Git locally without also using a tool like GitLab/GitHub.
 
 A very small fraction of the sample indicated using other version control software such as Mercurial, Subversion, or built-in versioning capabilities of another tool/platform.
 
-Having both worked on non-trivial Complex Analytical Systems ourselves, we suspect that adopting industry standard VCS toolingap may greatly reduce the cognitive load for teams who are not currently using any VCS or are only using file-naming conventions to manage source code and documentation for Complex Analytical Systems[^4].
+We echo the recommendations of [RAP](https://nhsdigital.github.io/rap-community-of-practice/introduction_to_RAP/what_is_RAP/#version-control) and [the Turing way](https://book.the-turing-way.org/reproducible-research/vcs/vcs-workflow) to strongly recommend adopting industry standard VCS. It may greatly reduce the cognitive load for teams who are not currently using any VCS or are only using file-naming conventions to manage source code and documentation for Complex Analytical Systems[^tools-and-technology-4].
 
-[^2]: What we mean by file naming conventions is encoding the author, version, and date information into the names of multiple files as the primary system of revision control. E.g., `analysis_collin_v1.py`, `analysis_steve_v2.py`, `analysis_collin_v2_final_2025_03.py`, `analysis_steve_v2_final_FINAL_2025_04.py`, and so on.
-
-[^3]: We were surprised to find a small number of respondents indicated that they use Git but not a developer platform built around Git such as GitHub, GitLab, or BitBucket. We suspect that these individuals may work in an air-gapped network or similar situation without internet access and use Git locally without also using a tool like GitLab/GitHub.
-
-[^4]: We believe that most people working on CPI Production Systems have the aptitude to learn Git. However, we acknowledge that the learning curve for Git is non-trivial. Our recommendation to readers who are interested is to [learn the basics](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository) and immediately put this knowledge into practice in your day-to-day activities. Over time, versioning files with Git will become second nature.
+[^tools-and-technology-4]: We believe that most people working on CPI Production Systems have the aptitude to learn Git. However, we acknowledge that the learning curve for Git is non-trivial. Our recommendation to readers who are interested is to [learn the basics](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository) and immediately put this knowledge into practice in your day-to-day activities. Over time, versioning files with Git will become second nature.
 
 ## Commercial Software
 
@@ -419,8 +418,8 @@ The next question we asked was which commercial software (if any) is used in eac
 
 ```{r}
 #| echo: false
-#| label: fig-vcs
-#| fig-cap: VCS used by survey respondents
+#| label: fig-commercial-software
+#| fig-cap: Commercial software used by survey respondents
 
 
 # Version control
@@ -428,7 +427,7 @@ dat <- data.frame(
   Frequency = c(df$cs_warehouse, df$cs_sas, df$cs_excel, df$cs_pbi, df$cs_access, df$cs_none),
   Software = c(
     rep("Data Warehouse", each=nrow(df)),
-    rep("SPSS", each=nrow(df)),
+    rep("SAS", each=nrow(df)),
     rep("Excel", each=nrow(df)),
     rep("Power BI", each=nrow(df)),
     rep("MS Access", each=nrow(df)),
@@ -440,21 +439,22 @@ dat <- data.frame(
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#1d6f42") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Commercial Software Used")
 ```
-We were not overly surprised to learn that over two thirds of the respondents listed that Microsoft Excel was used in their CPI Production Systems.
 
-Microsoft Excel satisfies a number of use cases for beginner-friendly tabular data analysis, however, it is not an ideal tool for expressing business logic in Complex Analytical Systems[^5]. Some of the key reasons for this include:
+Over two thirds of the respondents listed that Microsoft Excel was used in their CPI Production Systems.
 
-- Excel Workbooks are stored in a binary format rather than a plain text format, which doesn't integrate well with Version Control Systems.
+Microsoft Excel satisfies a number of use cases for beginner-friendly tabular data analysis, however, it is not an ideal tool for expressing business logic in Complex Analytical Systems[^tools-and-technology-5]. Some of the key reasons for this include:
 
-- There isn't a well-defined entrypoint to an Excel Workbook (i.e., you can't "run" an Excel workbook the same way you can "run" `python main.py`).
+[^tools-and-technology-5]: Our criticism here applies to **all spreadsheet software**, not just Microsoft Excel. Our point is that spreadsheet workbooks are not an ideal unit of software for expressing business logic in Complex Analytical Systems.
 
-- The business logic encoded into an Excel Workbook is often difficult to read and interpret for any non-trivial Workbook, making Excel Workbooks difficult to maintain as a unit of software.
+-   Excel Workbooks are stored in a binary format rather than a plain text format, which doesn't integrate well with Version Control Systems.
 
-- Excel Workbooks encourage a high degree of coupling between business logic and data[^6].
+-   There isn't a well-defined entrypoint to an Excel Workbook (i.e., you can't "run" an Excel workbook the same way you can "run" `python main.py`).
 
-[^5]: Our criticism here applies to **all spreadsheet software**, not just Microsoft Excel. Our point is that spreadsheet workbooks are not an ideal unit of software for expressing business logic in Complex Analytical Systems.
+-   The business logic encoded into an Excel Workbook is often difficult to read and interpret for any non-trivial Workbook, making Excel Workbooks difficult to maintain as a unit of software.
 
-[^6]: In other words, you can't easily "reuse" a piece of business logic from someone else's Excel Workbook in the way that you can reuse a piece of source code.
+-   Excel Workbooks encourage a high degree of coupling between business logic and data[^tools-and-technology-6].
+
+[^tools-and-technology-6]: In other words, you can't easily "reuse" a piece of business logic from someone else's Excel Workbook in the way that you can reuse a piece of source code.
 
 In a distant second to Microsoft Excel, we find SAS is the next most commonly used commercial product in CPI Production Systems.
 
@@ -464,9 +464,9 @@ We asked respondents which project management software they use to manage work d
 
 The exact set of features provided by project management software differ depending on the specific software used, but in general, this kind of software is used to plan and coordinate tasks, manage timelines, and track progress on work items.
 
-We believe that using some purpose-built project management software for any non-trivial project is generally a good idea because it encourages a structure to the way projects are managed and it offers a way to reduce cognitive burden for project team members[^7].
+We believe that using some purpose-built project management software for any non-trivial project is generally a good idea because it encourages a structure to the way projects are managed and it offers a way to reduce cognitive burden for project team members[^tools-and-technology-7].
 
-[^7]: Note that we are not advocating for any specific project management software product. Rather, we are encouraging the use of any purpose-built project management software to facilitate managing non-trivial projects.
+[^tools-and-technology-7]: Note that we are not advocating for any specific project management software product. Rather, we are encouraging the use of any purpose-built project management software to facilitate managing non-trivial projects.
 
 ```{r}
 #| echo: false
@@ -501,11 +501,11 @@ Shared Excel Workbooks may be sufficient for keeping track of small tasks, but f
 
 The second most cited answer was not using any project management software whatsoever, with almost one third of respondents indicating this answer.
 
-Given the complexity of CPI Production Systems, we were surprised to see so many individuals not using any project management software. For all but the simplest of initiatives, we believe there is significant value in adopting at least the basic features of some purpose-built project management software[^8].
+Given the complexity of CPI Production Systems, we were surprised to see so many individuals not using any project management software. For all but the simplest of initiatives, we believe there is significant value in adopting at least the basic features of some purpose-built project management software[^tools-and-technology-8].
+
+[^tools-and-technology-8]: By "basic features", we're referring to capabilities such as task tracking, milestone tracking, and the ability to see which tasks each colleague is working on at any given time.
 
 Finally, just over twenty percent of the sample reported using either GitHub Projects, GitLab Milestones, or Jira as their primary software for project management.
-
-[^8]: By "basic features", we're referring to capabilities such as task tracking, milestone tracking, and the ability to see which tasks each colleague is working on at any given time.
 
 ## Programming Languages
 
@@ -620,10 +620,11 @@ NONE_LANGUAGE = sum(df$none == "Yes")
 
 First, just under half of the respondents indicated that they use SQL in the development of their CPI Production Systems.
 
-We suspect this answer reflects the fact that SQL still remains a very popular choice of language for expressing tabular data manipulations, as well as the fact that many organizations reported using some kind of database management system (DBMS) in their CPI Production Systems. Our suspicion is that SQL is most commonly used in the ingestion and processing steps in the flow of change[^9].
+We suspect this answer reflects the fact that SQL still remains a very popular choice of language for expressing tabular data manipulations, as well as the fact that many organizations reported using some kind of database management system (DBMS) in their CPI Production Systems. Our suspicion is that SQL is most commonly used in the ingestion and processing steps in the flow of change[^tools-and-technology-9].
+
+[^tools-and-technology-9]: To minimize response burden, we did not ask respondents to enumerate programming languages used by GSBPM step, so we cannot say for sure in which step(s) SQL is used.
 
 Second, we notice than more than ninety percent of the sample reported using **at least one of** Python, R, and SAS in their CPI Production Systems. Interestingly, less than one quarter of these users reported using Python and/or R but not SAS. In other words, it is quite common for SAS to be used **in conjunction with** Python and/or R rather than being used **instead of** Python and/or R.
-
 
 ```{r}
 #| echo: false
@@ -635,14 +636,11 @@ MONOLITH_R_SAS = sum(monolith_df$r == "Yes" | monolith_df$sas == "Yes")
 MODULAR_R_SAS = sum(modular_df$r == "Yes" | modular_df$sas == "Yes")
 ```
 
-
 Third, there are some differences in programming languages used between NSOs with monolithic representative systems and NSOs with modular representative systems.
 
 The most noteworthy observation is that Java, C#, C/C++, Visual Basic, and Visual Basic Applications (VBA) are somewhat commonly used by NSOs with monolithic representative systems (almost two thirds) and almost never used by NSOs with modular representative systems (less than one quarter).
 
 Additionally, we notice that slightly over one third of NSOs with monolithic representative systems report using R or SAS, while almost two thirds of NSOs with modular representative systems report using R or SAS.
-
-[^9]: To minimize response burden, we did not ask respondents to enumerate programming languages used by GSBPM step, so we cannot say for sure in which step(s) SQL is used.
 
 ```{r}
 #| echo: false
@@ -707,7 +705,6 @@ ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE
 ## Data Storage Tools
 
 We conclude the Tools and Technology portion of the survey by asking which data storage tools are in use by respondents in their CPI Production Systems.
-
 
 ```{r message = FALSE}
 #| echo: false
@@ -830,12 +827,13 @@ dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
 ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Modular] Storage Systems Used")
 
 ```
+
 We were surprised by the following findings.
 
-1. A very small percentage of the respondents reported using analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/) in their CPI Production Systems. There is a small learning curve associated with using these file formats, but they offer many benefits such as columnar storage on disk, data types supported natively by the file format, and a significantly smaller storage footprint due to columnar data compression strategies[^10].
+1.  A very small percentage of the respondents reported using analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/) in their CPI Production Systems. There is a small learning curve associated with using these file formats, but they offer many benefits such as columnar storage on disk, data types supported natively by the file format, and a significantly smaller storage footprint due to columnar data compression strategies[^tools-and-technology-10].
 
-2. There is an approximately equal split between the usage of Database Management Systems (DBMS) and file system storage, which is true across both NSOs with modular representative systems and NSOs with monolithic representative systems.
+2.  There is an approximately equal split between the usage of Database Management Systems (DBMS) and file system storage, which is true across both NSOs with modular representative systems and NSOs with monolithic representative systems.
 
-3. The small number of respondents who reported using something in addition to DBMS or filesystem storage all belonged to NSOs with modular or hybrid representative systems.
+3.  The small number of respondents who reported using something in addition to DBMS or filesystem storage all belonged to NSOs with modular or hybrid representative systems.
 
-[^10]: While there is a learning curve for some of the concepts involved, reading and writing to analytics-optimized file formats like Parquet is very easy due to the existence of many well-documented third party packages. For example, Python's Pandas can [read parquet files directly](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html) as long as an engine like `pyarrow` or `fastparquet` is also installed.
+[^tools-and-technology-10]: While there is a learning curve for some of the concepts involved, reading and writing to analytics-optimized file formats like Parquet is very easy due to the existence of many well-documented third party packages. For example, Python's Pandas can [read parquet files directly](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html) as long as an engine like `pyarrow` or `fastparquet` is also installed.
