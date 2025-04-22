@@ -188,7 +188,7 @@ for (mat in crossings_Q2$steps) {
 
 ```
 
-| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
+| Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
 |-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analyst Only | `r d_analyst_only` |
 | ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts and Domain IT | `r stream_aligned` |
