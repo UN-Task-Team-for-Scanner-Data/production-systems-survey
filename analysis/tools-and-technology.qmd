@@ -462,7 +462,7 @@ In a distant second to Microsoft Excel, we find SAS is the next most commonly us
 
 We asked respondents which project management software they use to manage work done on their CPI Production Systems.
 
-The exact set of features provided by project management software differ depending on the specific software used, but in general, this kind of software is used to plan and coordinate tasks, manage timelines, and track progress on work items.
+The exact set of features provided by project management software differ depending on the specific software used, but in general, this kind of software is used to plan and coordinate tasks, manage timelines, and track progress on work items. Given the complexity of the CPI and many factors that need to be coordinated and tracked for each change, project management software has a major productivity impact on users.
 
 We believe that using some purpose-built project management software for any non-trivial project is generally a good idea because it encourages a structure to the way projects are managed and it offers a way to reduce cognitive burden for project team members[^tools-and-technology-7].
 
@@ -624,7 +624,9 @@ We suspect this answer reflects the fact that SQL still remains a very popular c
 
 [^tools-and-technology-9]: To minimize response burden, we did not ask respondents to enumerate programming languages used by GSBPM step, so we cannot say for sure in which step(s) SQL is used.
 
-Second, we notice than more than ninety percent of the sample reported using **at least one of** Python, R, and SAS in their CPI Production Systems. Interestingly, less than one quarter of these users reported using Python and/or R but not SAS. In other words, it is quite common for SAS to be used **in conjunction with** Python and/or R rather than being used **instead of** Python and/or R.
+Second, we notice than more than ninety percent of the sample reported using **at least one of** Python, R, and SAS in their CPI Production Systems. Interestingly, less than one quarter of these users reported using Python and/or R but not SAS. In other words, it is quite common for SAS to be used **in conjunction with** Python and/or R rather than being used **instead of** Python and/or R. This is likely the case currently as some NSOs are working on converting their older SAS code to open source languages like R, hence may still operate SAS in alignment with newer open source scripts.[^tools-and-technology-10]
+
+[^tools-and-technology-10]: Due to the complexity of the task, many NSOs are looking at LLMs to support the conversion of SAS code. For example see the use case of CSO Ireland (see [section 3.2 Large Language Models for Official Statistics: HLG-MOS 2023 White paper](https://unece.org/sites/default/files/2023-12/HLGMOS%20LLM%20Paper_Preprint_1.pdf)) or [INSEE (France)](https://my.visme.co/view/z4nodvzv-gpt-for-sas-to-r-slides-for-geneva#s1).
 
 ```{r}
 #| echo: false
@@ -828,12 +830,12 @@ ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF99
 
 ```
 
-We were surprised by the following findings.
+We found that:
 
-1.  A very small percentage of the respondents reported using analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/) in their CPI Production Systems. There is a small learning curve associated with using these file formats, but they offer many benefits such as columnar storage on disk, data types supported natively by the file format, and a significantly smaller storage footprint due to columnar data compression strategies[^tools-and-technology-10].
+1.  A very small percentage of the respondents reported using analytics optimized file formats such as [Apache Parquet](https://parquet.apache.org/) in their CPI Production Systems. There is a small learning curve associated with using these file formats, but they offer many benefits such as columnar storage on disk, data types supported natively by the file format, and a significantly smaller storage footprint due to columnar data compression strategies[^tools-and-technology-11].
 
 2.  There is an approximately equal split between the usage of Database Management Systems (DBMS) and file system storage, which is true across both NSOs with modular representative systems and NSOs with monolithic representative systems.
 
 3.  The small number of respondents who reported using something in addition to DBMS or filesystem storage all belonged to NSOs with modular or hybrid representative systems.
 
-[^tools-and-technology-10]: While there is a learning curve for some of the concepts involved, reading and writing to analytics-optimized file formats like Parquet is very easy due to the existence of many well-documented third party packages. For example, Python's Pandas can [read parquet files directly](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html) as long as an engine like `pyarrow` or `fastparquet` is also installed.
+[^tools-and-technology-11]: While there is a learning curve for some of the concepts involved, reading and writing to analytics-optimized file formats like Parquet is very easy due to the existence of many well-documented third party packages. For example, Python's Pandas can [read parquet files directly](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html) as long as an engine like `pyarrow` or `fastparquet` is also installed.
