@@ -4,11 +4,11 @@ Our first objective in this analysis is to describe the kinds of system and team
 
 ## Steps Where Systems are Coupled
 
-One important piece of system architecture information we were interested in is cases where systems span more than one GSBPM step along the flow of change. Using our definition of "system" from @sec-concepts, a system that spans two or more GSBPM steps implies that it would not be straightforward to modify just one GSBPM step in the system without affecting the others[^12]. This relates to the concept of [coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming)) in software engineering, which measures the extent to which distinct software modules depend on each other.
+One important piece of system architecture information we were interested in is cases where systems span more than one GSBPM step along the flow of change. Using our definition of "system" from @sec-concepts, a system that spans two or more GSBPM steps implies that it would not be straightforward to modify just one GSBPM step in the system without affecting the others[^systems-teams-analysis-1]. This relates to the concept of [coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming)) in software engineering, which measures the extent to which distinct software modules depend on each other.
 
-[^12]: For example, a single Python script that processes data using [Pandas](https://pandas.pydata.org/) and immediately performs a price index calculation on the processed data frame while it's still in memory is a system that spans the (1) Processing and the (2) Elementary Indexes GSBPM steps. Such a system has coupled the Processing logic and the Elementary Indexes logic because it is not straightforward to change just the Processing component without also needing to consider how the Elementary Indexes component is affected.
+[^systems-teams-analysis-1]: For example, a single Python script that processes data using [Pandas](https://pandas.pydata.org/) and immediately performs a price index calculation on the processed data frame while it's still in memory is a system that spans the (1) Processing and the (2) Elementary Indexes GSBPM steps. Such a system has coupled the Processing logic and the Elementary Indexes logic because it is not straightforward to change just the Processing component without also needing to consider how the Elementary Indexes component is affected.
 
-![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png)
+![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling\_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png)
 
 We asked the following question to get a coarse-grained understanding of systems that spanned more than one GSBPM step.
 
@@ -97,7 +97,7 @@ for (mat in crossings_Q1$steps) {
 We note how frequently systems cross certain GSBPM steps in @tbl-span-steps.
 
 | Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
-| ----- | ----- | ---- | ----- | ----- | ---- |
+|------------|------------|------------|------------|------------|------------|
 | ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
 | ❌ | ✅ | ✅ | ❌ | ❌ | `r proc_elem_crossings` |
 | ❌ | ❌ | ✅ | ✅ | ❌ | `r elem_agg_crossings` |
@@ -116,11 +116,9 @@ The second most common pattern we observed was the "Monolith" pattern, where we 
 
 Monolithic systems are not inherently bad. If they are carefully designed for maximum [cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science)) and minimal coupling, they can be maintainable. However, if monoliths **emerge accidentally**, they often involve many tightly coupled components and become very difficult to maintain in the long run.
 
-The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** (`r ing_proc_elem_x` occurrences) and **elementary indexes-aggregation-finalization** (`r elem_agg_fin_x` occurrences). The latter makes some sense to us as these three concerns can be quite bespoke and tailored to the price statistics business domain. The former, however, surprised us as ingestion and processing are fairly generic data preparation activities, while elementary index calculation is a highly specific price statistics activity.
+The next two most frequent coupling patterns are **ingestion-processing-elementary indexes** (`r ing_proc_elem_x` occurrences) and **elementary indexes-aggregation-finalization** (`r elem_agg_fin_x` occurrences). The former make sense if an NSO creates data and method specific 'mini-monoliths' that do everything necessary to ingest, process, and aggregate it to create elementary aggregates. Technically, as data preparation activities are fairly general, while elementary aggregation is highly specific, this may also create unnecessary coupling as changes to the data preparation activities may unduly impact elementary aggregation.[^systems-teams-analysis-2] The latter makes sense if the NSOs primarily leverages field collection and traditional methods, however such coupling may become quite challenging once new data sources and complex methods that aggregate new data sources are increasingly used. Suprisingly, there were zero occurrences of a system spanning **elementary indexes-aggregation**, meaning that the finalization step of storage and analytical activities for dissemination was a natural capability to couple to the previous steps.
 
-We were also surprised to learn that there are zero occurrences of a system spanning **elementary indexes-aggregation**. In the price statistics business domain, these concepts are often closely related, so we thought there would be more cases where a single system handled both steps[^13].
-
-[^13]: An example of a system that performs both elementary index calculation and aggregation would be if the same script calculated component price changes in apples, bananas, and oranges, then the same script also calculated the overall price change in fruit from these component price changes.
+[^systems-teams-analysis-2]: See [Goussev (2023)](https://unece.org/sites/default/files/2023-05/7.2%20Canada.pdf) for an overview of the shift from data and method specific monoliths to a more standardized and flexible approach.
 
 ## Team Types at Each Step
 
@@ -191,7 +189,7 @@ for (mat in crossings_Q2$steps) {
 ```
 
 | Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Team Type | Frequency |
-| ----- | ----- | ---- | ----- | ----- | ---- | ---- |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | ❌ | ❌ | ✅ | ❌ | ❌ | Domain Analyst Only | `r d_analyst_only` |
 | ❌ | ✅ | ✅ | ❌ | ❌ | Domain Analysts and Domain IT | `r stream_aligned` |
 | ✅ | ❌ | ❌ | ❌ | ❌ | Corporate IT-Only | `r cit_only` |
@@ -566,13 +564,13 @@ clusters <- crossings_Q3 |>
 sys_cluster_split <- split(crossings_Q3$steps, clusters$cluster)
 ```
 
-We perform k-means clustering with a cluster size of 3 on each respondent's answer the "system topology" part of the Representative System Group question[^8].
+We perform k-means clustering with a cluster size of 3 on each respondent's answer the "system topology" part of the Representative System Group question[^systems-teams-analysis-3].
+
+[^systems-teams-analysis-3]: Due to the small sample size, we were hesitant to try and split the sample into more than 3 groups. While there are almost certainly more than 3 meaningful system topologies that describe CPI Production Systems, our concern was that using more than 3 clusters would lead to us picking up idiosyncrasies in this specific sample rather than more general patterns that are likely true in a more general setting.
 
 We were not able to find any rule or explanation that perfectly split respondents into some number of clusters for this question.
 
 However, we were able to identify some high-level patterns that were consistent across the 3 groups. We use these patterns to characterize 3 archetypes that are explained below along with some illustrative examples from each cluster.
-
-[^8]: Due to the small sample size, we were hesitant to try and split the sample into more than 3 groups. While there are almost certainly more than 3 meaningful system topologies that describe CPI Production Systems, our concern was that using more than 3 clusters would lead to us picking up idiosyncrasies in this specific sample rather than more general patterns that are likely true in a more general setting.
 
 ### One or more System Groups Span the Entire Flow of Change
 
@@ -583,7 +581,6 @@ However, we were able to identify some high-level patterns that were consistent 
 knitr::kable(sys_cluster_split[[3]][[24]])
 ```
 
-
 ### There is exactly one "split point" between System Groups
 
 ```{r}
@@ -592,9 +589,7 @@ knitr::kable(sys_cluster_split[[3]][[24]])
 knitr::kable(sys_cluster_split[[1]][[10]])
 ```
 
-
 ### There are two or more split points between system groups
-
 
 ```{r}
 #| echo: false
@@ -602,26 +597,27 @@ knitr::kable(sys_cluster_split[[1]][[10]])
 knitr::kable(sys_cluster_split[[2]][[14]])
 ```
 
-
 ## Assigning Architectures to Organizations
 
 We use responses to the Representative System Group question to assign NSOs to one of the three architecture types defined below.
 
 ### Monolithic Architecture
 
-We assume that an NSO has a monolithic architecture if any of their system groups span all 5 GSBPM steps[^1],[^4].
+We assume that an NSO has a monolithic architecture if any of their system groups span all 5 GSBPM steps[^systems-teams-analysis-4],[^systems-teams-analysis-5].
 
-[^1]: There were also two NSOs who explicitly stated that the same system does not handle more than one step for making their CPI across all systems. We assign these two records to the "modular" architecture category regardless of their answer to the Representative System Group question.
+[^systems-teams-analysis-4]: There were also two NSOs who explicitly stated that the same system does not handle more than one step for making their CPI across all systems. We assign these two records to the "modular" architecture category regardless of their answer to the Representative System Group question.
 
-[^4]: We classify organizations where **any** system group spans all 5 GSBPM steps as monolithic because we are concerned with the precense of a system group that is plausibly monolithic, we do not have a large enough sample to distinguish between cases where there is a monolithic system group **and** another system group.
+[^systems-teams-analysis-5]: We classify organizations where **any** system group spans all 5 GSBPM steps as monolithic because we are concerned with the precense of a system group that is plausibly monolithic, we do not have a large enough sample to distinguish between cases where there is a monolithic system group **and** another system group.
 
 Our reasoning for this assumption is that if the respondent thought a system group spanning all 5 GSBPM steps was similar enough that there was no need to split any subset of it into a second system group, it is probably due to coupling between one or more systems in the system group.
 
-It is important to note that since we do not ask questions about the quantity or span of systems, we cannot know for certain whether or not a system group spanning all 5 GSBPM steps is truly monolithic[^2].
+It is important to note that since we do not ask questions about the quantity or span of systems, we cannot know for certain whether or not a system group spanning all 5 GSBPM steps is truly monolithic[^systems-teams-analysis-6].
 
-For example, a system group that spans all 5 GSBPM steps could be comprised of one system that truly is monolithic with respect to the 5 GSBPM steps, or it could be comprised of 5 or more distinct systems that the respondent felt were sufficiently representative of their typical workflow[^3].
+[^systems-teams-analysis-6]: It is probably more realistic to think about the monolithic category as "more likely to have significant coupling between systems compared to organizations categorized as modular" rather than a true monolith in the strict sense of the term.
 
-[^2]: It is probably more realistic to think about the monolithic category as "more likely to have significant coupling between systems compared to organizations categorized as modular" rather than a true monolith in the strict sense of the term.
+For example, a system group that spans all 5 GSBPM steps could be comprised of one system that truly is monolithic with respect to the 5 GSBPM steps, or it could be comprised of 5 or more distinct systems that the respondent felt were sufficiently representative of their typical workflow[^systems-teams-analysis-7].
+
+[^systems-teams-analysis-7]: The number of respondents classified as monoliths who stated that the same system handles more than one step for making their CPI across **all systems** is 21/29 (8/29 skipped this question). This evidence alone is not sufficient to know one way or the other if these cases are truly monolithic, but we take it as evidence that the majority of assignments to "monolith" explicitly indicated that **at least some systems** cut across GSBPM boundaries.
 
 Nevertheless, we needed to make some simplifying assumptions to make the response burden of this survey realistic, and we do not believe this assumption is too far fetched.
 
@@ -633,8 +629,6 @@ Nevertheless, we needed to make some simplifying assumptions to make the respons
 # Number of respondents classified as monoliths who answered "Yes" to the "is it the case that the same system handles more than one step for making your CPI?" question
 num_monolith_x_systems = sum(monolith_df[, 15] == "Yes")
 ```
-
-[^3]: The number of respondents classified as monoliths who stated that the same system handles more than one step for making their CPI across **all systems** is 21/29 (8/29 skipped this question). This evidence alone is not sufficient to know one way or the other if these cases are truly monolithic, but we take it as evidence that the majority of assignments to "monolith" explicitly indicated that **at least some systems** cut across GSBPM boundaries.
 
 ### Hybrid Architectures
 
@@ -650,11 +644,11 @@ While this kind of architecture is not necessarily perfectly modular, there are 
 
 There are a couple of important points to note about Hybrid and Modular architectures as defined above.
 
-1. Unlike Monolithic architectures where we have to make an assumption about the internal structure of a system group, here we know for certain that there are explicit "boundary points" between two system groups that the respondent deemed sufficiently different to not be grouped together.
+1.  Unlike Monolithic architectures where we have to make an assumption about the internal structure of a system group, here we know for certain that there are explicit "boundary points" between two system groups that the respondent deemed sufficiently different to not be grouped together.
 
-2. Using our definition of Systems given in @sec-concepts, Hybrid and Modular architectures are guaranteed to pass output data from one system as input data to another system at least once[^5].
+2.  Using our definition of Systems given in @sec-concepts, Hybrid and Modular architectures are guaranteed to pass output data from one system as input data to another system at least once[^systems-teams-analysis-8].
 
-[^5]: This is in contrast to managing data entirely **within a single system**, which **may** be happening in the monolithic architectures.
+[^systems-teams-analysis-8]: This is in contrast to managing data entirely **within a single system**, which **may** be happening in the monolithic architectures.
 
 ## Assigning Team Types to Organizations
 
@@ -691,22 +685,21 @@ clusters <- crossings_Q3 |>
 team_cluster_split <- split(crossings_Q3$steps, clusters$cluster)
 ```
 
-
-
 We assign each organization one or more of the following team types using the following definitions.
 
-- **Stream Aligned team**: A system group is maintained by domain-analysts, domain-IT, or both.
+-   **Stream Aligned team**: A system group is maintained by domain-analysts, domain-IT, or both.
 
-- **IT-Only team**: A system group is maintained by corporate-IT, domain-IT, or both.
+-   **IT-Only team**: A system group is maintained by corporate-IT, domain-IT, or both.
 
-- **Analyst-Only team**: A system group is maintained by domain-analysts, elsewhere-analysts, or both.
+-   **Analyst-Only team**: A system group is maintained by domain-analysts, elsewhere-analysts, or both.
 
-- **Other Mix team**: Assigned to organizations that have not been assigned to any of the above three team types.
+-   **Other Mix team**: Assigned to organizations that have not been assigned to any of the above three team types.
 
 **Note**: Unlike the architecture definitions earlier in this section, these team types are **not mutually exclusive** in the way we define them.
 
-For example, an organization could have one system group maintained by a Stream Aligned team, and a second system group maintained by an IT-Only team[^7].
+For example, an organization could have one system group maintained by a Stream Aligned team, and a second system group maintained by an IT-Only team[^systems-teams-analysis-9].
 
+[^systems-teams-analysis-9]: The rationale for this decision is that we could not think of a sensible way to break ties. For example, if one system group is maintained by a Stream Aligned team and another is maintained by an IT-Only team, is the NSO more appropriately labelled as a Stream Aligned team or as an IT-Only team? We take care while presenting results to make clear that some NSOs may be classified in more than one category if more than one team type is present in their representative system description.
 
 ```{r}
 #| echo: false
@@ -715,8 +708,6 @@ For example, an organization could have one system group maintained by a Stream 
 num_nsos = nrow(df)
 num_teams = sum(df$has_stream_aligned_team) + sum(df$has_it_only_team) + sum(df$has_analyst_only_team)
 ```
-
-[^7]: The rationale for this decision is that we could not think of a sensible way to break ties. For example, if one system group is maintained by a Stream Aligned team and another is maintained by an IT-Only team, is the NSO more appropriately labelled as a Stream Aligned team or as an IT-Only team? We take care while presenting results to make clear that some NSOs may be classified in more than one category if more than one team type is present in their representative system description.
 
 ## Are Certain Team Types Correlated with Certain Architectures?
 
@@ -739,16 +730,16 @@ team_arch_mat[4,3] = "< 0.25"
 knitr::kable(team_arch_mat)
 ```
 
-There are a few notable observations to point out in the above distribution[^10].
+There are a few notable observations to point out in the above distribution[^systems-teams-analysis-10].
 
-1. IT-Only teams are more likely than average to be present in NSOs with Modular representative systems.
+[^systems-teams-analysis-10]: Here and throughout this report, we do not make any claims about the statistical significance of our results as we could not think of any straightforward or meaningful way to compute confidence intervals over the small sample of data we collected. Moreover, our goal with this report is **more descriptive than prescriptive**. We are aiming to describe the current state of CPI Production Systems and present notable differences that are worth investigating further, rather than claiming what **should** be done using the results of this survey alone.
 
-2. Stream-Aligned teams are more likely to be present in NSOs with Monolithic representative systems compared to IT-Only teams.
+1.  IT-Only teams are more likely than average to be present in NSOs with Modular representative systems.
 
-3. Other Mix teams were **much** more likely to be present in NSOs with Monolithic representative systems compared to all other team types[^11].
+2.  Stream-Aligned teams are more likely to be present in NSOs with Monolithic representative systems compared to IT-Only teams.
+
+3.  Other Mix teams were **much** more likely to be present in NSOs with Monolithic representative systems compared to all other team types[^systems-teams-analysis-11].
+
+[^systems-teams-analysis-11]: It is important to note that a relatively small fraction of the sample contained Other Mix teams, so this result could be partly or entirely explained by a small number of outliers.
 
 Throughout the remainder of this report, we look at how various practices and outcomes are associated with the presence of each architecture type and team type.
-
-[^10]: Here and throughout this report, we do not make any claims about the statistical significance of our results as we could not think of any straightforward or meaningful way to compute confidence intervals over the small sample of data we collected. Moreover, our goal with this report is **more descriptive than prescriptive**. We are aiming to describe the current state of CPI Production Systems and present notable differences that are worth investigating further, rather than claiming what **should** be done using the results of this survey alone.
-
-[^11]: It is important to note that a relatively small fraction of the sample contained Other Mix teams, so this result could be partly or entirely explained by a small number of outliers.
