@@ -127,7 +127,7 @@ We are **not** claiming any strict cause-and-effect relationships from this surv
 
 : Practical Takeaways from Survey {tbl-colwidths="[35,65]"}
 
-[^5]: In general, the Consumer Price Index is a non-revisable product, meaning that it is not straightforward to "roll back" a change in the same way that would be possible in other settings. Because of this, there is a certain level of due-diligence required for large system changes, meaning there are some limits on how frequently CPI Production Systems can be updated.
+[^5]: In general, the Consumer Price Index is a non-revisable product, meaning that it is not straightforward to "roll back" a change in the same way that would be possible in other non-critical operations or for statistical products that have a revision policy. Because of this, there is a certain level of due-diligence required for large system changes, meaning there are some limits on how frequently CPI Production Systems can be updated.
 
 [^6]: Note that this can be as simple as having a `production` folder and a `development` folder on a network file system and scoping activities to the appropriate folder. More complex separations of development, testing, and production environments are possible, but we encourage readers to start simple if this is a new concept.
 
