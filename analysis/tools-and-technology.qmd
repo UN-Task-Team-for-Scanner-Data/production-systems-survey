@@ -442,7 +442,7 @@ ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#1d6
 
 Over two thirds of the respondents listed that Microsoft Excel was used in their CPI Production Systems.
 
-Microsoft Excel satisfies a number of use cases for beginner-friendly tabular data analysis, however, it is not an ideal tool for expressing business logic in Complex Analytical Systems[^tools-and-technology-5]. Some of the key reasons for this include:
+Microsoft Excel satisfies a number of use cases for basic tabular data analysis, however, it is not an ideal tool for expressing business logic in Complex Analytical Systems[^tools-and-technology-5]. Some of the key reasons for this include:
 
 [^tools-and-technology-5]: Our criticism here applies to **all spreadsheet software**, not just Microsoft Excel. Our point is that spreadsheet workbooks are not an ideal unit of software for expressing business logic in Complex Analytical Systems.
 

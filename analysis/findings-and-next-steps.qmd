@@ -34,7 +34,7 @@ This section highlights some of the noteworthy results we found in our survey on
 
 -   The most common tool used for project management was a shared Microsoft Excel workbook, while the second most common response was to not use any software for project management.
 
--   The most common programming language used across all systems is SQL, while the second most frequently used language is tied between Python, R, and SAS.
+-   The most common programming language used across all systems is SQL, while the second most frequently used language R, with Python and SAS close behind.
 
 -   Among organizations with Monolithic representative systems, SQL is still the most commonly used language, with many other languages being reported. For example, Java, Python, Visual Basic Applications, R, Visual Basic, SAS, C#, and C++ are all being used by multiple organizations.
 
@@ -116,7 +116,7 @@ We are **not** claiming any strict cause-and-effect relationships from this surv
 
 | Suggestion | Explanation |
 |----------------------------------|--------------------------------------|
-| Think explicitly about system boundaries. | There is some evidence in our survey that monolithic architectures are associated with certain outcomes such as (1) longer lead times for large changes and (2) never updating systems. <br/> <br/> Are two unrelated concerns implemented in the same system? Would it be easier to maintain your codebase if these concerns were split into two independent components? |
+| Think explicitly about system boundaries. | There is some evidence in our survey that monolithic architectures are associated with certain outcomes such as (1) longer lead times for large changes and (2) never updating systems. <br/> <br/> Are two unrelated technical capabilities implemented in the same system? Would it be easier to maintain your codebase if these technical capabilities were split into two independent components? |
 | Think explicitly about data interchange **between** systems. | If an important piece of data is exchanged between two or more systems, take the time to properly document important properties of the data such as the columns available, the data types, and the semantics of the data. This will make it easier for data consumers to use this data. <br/> <br/> One way to formalize this data exchange is through a standard format such as [Data Contract Specification](https://datacontract.com/). |
 | Embed technical expertise in business domain teams. | There is some evidence in our survey that "Other Mix" teams underperformed the other team mixes on several outcomes. <br/> <br/> Effectively developing and maintaining CPI Production Systems requires a team of individuals with **both** strong domain knowledge and strong technical skills. <br/> <br/> Whether technical expertise is embedded by directly employing IT professionals **within** the business domain team, or by upskilling domain-embedded analysts to improve their technical skills, our belief is that improving the technical capacity of business domain teams who own CPI Production Systems will lead to a number of improved business outcomes. |
 | Adopt Git and GitLab or GitHub as a Version Control System for code, configuration, and documentation. | The cognitive load of understanding CPI Production Systems is already high enough without manually keeping track of version control and code integration from multiple collaborators. Allow a purpose-built tool handle the burden of revision control. |
