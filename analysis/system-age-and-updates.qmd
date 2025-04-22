@@ -416,7 +416,7 @@ We suspect this is once again related to the fact that monolithic systems tend t
 
 Modular systems, in contrast, tend to be easier to reason about, and involve a lower degree of coupling between system components that are unrelated. Hence, making a change to a system component is less likely to lead to an unintended consequence elsewhere in the system.
 
-Across all respondents, almost one fifth of respondents indicated that the majority of their systems are **never updated**. We are very surprised by this finding.
+Across all respondents, almost one fifth of respondents indicated that the majority of their systems are **never updated**. This may be because that the data and methods used does not change since these systems were introduced. 
 
 More generally, the distribution of update frequencies seems to be left skewed, with a majority of NSOs having the majority of systems updated once per year or less, or not updated at all.
 
