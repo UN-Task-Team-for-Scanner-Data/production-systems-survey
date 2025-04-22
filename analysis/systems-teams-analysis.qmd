@@ -685,13 +685,13 @@ clusters <- crossings_Q3 |>
 team_cluster_split <- split(crossings_Q3$steps, clusters$cluster)
 ```
 
-We assign each organization one or more of the following team types using the following definitions.
+As architectures or technical practices may be adopted differently by teams depending on their role, or their technical skillset, we categorize the initial organizations we described in the survey into new teams. Specifically:
 
--   **Stream Aligned team**: A system group is maintained by domain-analysts, domain-IT, or both.
+-   **Stream Aligned team**: A system group is maintained by domain-analysts, domain-IT, or both. The idea is that domain-specific teams would have a better understanding of the prices domain and thus may choose different architectures.
 
--   **IT-Only team**: A system group is maintained by corporate-IT, domain-IT, or both.
+-   **IT-Only team**: A system group is maintained by corporate-IT, domain-IT, or both. The idea is to differentiate technical skillsets of this team compared to analyst-only teams.
 
--   **Analyst-Only team**: A system group is maintained by domain-analysts, elsewhere-analysts, or both.
+-   **Analyst-Only team**: A system group is maintained by domain-analysts, elsewhere-analysts, or both. The idea is to differentiate these to IT-Only teams.
 
 -   **Other Mix team**: Assigned to organizations that have not been assigned to any of the above three team types.
 
