@@ -1,6 +1,6 @@
 # Alternative Data {#sec-alt-data}
 
-In the world of official statistics, the term **alternative data** is used to describe sources of data other than traditional field-collected data that is increasingly being used by many NSOs as a different source of the CPI and other price statistics.[^alternative-data-1] These data sources often require more complicated tooling and methodology to work with, but offer certain benefits over field-collected data such as collection cost and comprehensiveness[^alternative-data-2].
+In the world of official statistics, the term **alternative data** is used to describe sources of data other than traditional field-collected data that is increasingly being used by many NSOs as a different source of the CPI and other price statistics.[^alternative-data-1] These data sources often require more complicated tooling and methodology to work with, but offer certain benefits over field-collected data such as collection cost and comprehensiveness.[^alternative-data-2]
 
 [^alternative-data-1]: See the [UN e-handbook](https://unstats.un.org/wiki/spaces/GWGSD/pages/240910447/Handbook+on+utilising+new+data+sources+in+the+production+of+consumer+price+statistics) for an overview of how alternative data sources (also referred to as new data sources) are used.
 
@@ -10,7 +10,7 @@ In this section, we ask respondents about the extent to which they currently lev
 
 ## Alternative Data Usage
 
-Just under two thirds of respondents report not using alternative data sources at all. Of those that use alternative data sources, the majority of respondents report that "Less than 10%" or "Between 10% and 30%" of their CPI is derived from alternative data sources[^alternative-data-3].
+Just under two thirds of respondents report not using alternative data sources at all. Of those that use alternative data sources, the majority of respondents report that "Less than 10%" or "Between 10% and 30%" of their CPI is derived from alternative data sources.[^alternative-data-3]
 
 [^alternative-data-3]: These percentages refer to the share of the CPI by expenditure weight. For example, if an NSO uses alternative data sources to calculate the CPI for product categories that make up 10% of total household expenditures, then we would say that 10% of the CPI comes from alternative data sources.
 
@@ -73,7 +73,7 @@ It appears that most NSOs want between 10% and 50% of their CPI to be comprised 
 
 ## Which Price Index Methods are Used on Alternative Data Sources
 
-Of those respondents reporting that they currently use alternative data sources, we asked which price index methods are most commonly used[^alternative-data-4]. The table below summarizes the number of respondents who are using each method[^alternative-data-5].
+Of those respondents reporting that they currently use alternative data sources, we asked which price index methods are most commonly used.[^alternative-data-4] The table below summarizes the number of respondents who are using each method.[^alternative-data-5]
 
 [^alternative-data-4]: For readers who are unfamiliar with the Consumer Prices business domain, these are techniques that are used to calculate period-over-period price changes from a given data source.
 
