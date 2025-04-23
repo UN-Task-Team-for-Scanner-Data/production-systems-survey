@@ -1,14 +1,18 @@
 # Introduction {#sec-intro}
 
-Considerable guidance is available to NSOs on methodological or practical considerations related to the Consumer Price Index (CPI)[^intro-1], however there is little guidance on how to approach technical topics related to designing systems and technical architectures to most efficiently process data. Furthemore, many NSOs are starting to modernize their programs by shifting towards new data sources, which is similarly well supported with methodological and practical guidance[^intro-2], however little technical guidance exists on technical topics related to this transition. There are off course approaches that are discussed and several open source packages are available for price statistics[^intro-3] specifically, however as of early 2025, there is no comprehensive overview of how NSOs could approach technical aspects, as well as how they should modernize.
+Extensive methodological and practical guidance is available to National Statistical Organizations (NSOs) related to the creation of the Consumer Price Index (CPI).[^intro-1] However, there is not much material on how to create maintainable software systems to carry out this methodological and practical guidance.
+
+Furthemore, many NSOs are starting to modernize their programs by shifting towards new data sources, which is similarly well supported with methodological and practical guidance.[^intro-2] Again, while some resources exist,[^intro-3] there is not much direction on how to deal with the complexity introduced by developing and maintaining the systems that operate on these new data sources. 
 
 [^intro-1]: Most notable is the [2020 CPI Manual](https://www.imf.org/en/Data/Statistics/cpi-manual).
 
 [^intro-2]: See the [e-handbook](https://unstats.un.org/wiki/spaces/GWGSD/pages/240910447/Handbook+on+utilising+new+data+sources+in+the+production+of+consumer+price+statistics), developed and maintained by the UN Task Team on Scanner data, for guidance on various aspects of leveraging new data sources.
 
-[^intro-3]: Most notable approach being recommended is Reproducible Analytical Pipelines (or RAPs). See the [NHS RAP Communitiy of Practice](https://nhsdigital.github.io/rap-community-of-practice/) and the [RAP companion](https://ukgovdatascience.github.io/rap_companion/) for more information on the paradigm, and [Price-Marques (2023)](https://unece.org/sites/default/files/2023-05/7.4%20UK_un_systems_railfares_paper.pdf) for an example on the application to consumer price indices. The [IT system requirements section in the e-handbook](https://unstats.un.org/wiki/spaces/GWGSD/pages/240910453/IT+system+requirements) also summarizes several interim considerations and approaches.
+[^intro-3]: The most notable approach being recommended is Reproducible Analytical Pipelines (or RAPs), which are discussed in @sec-related-work. The [IT system requirements section in the e-handbook](https://unstats.un.org/wiki/spaces/GWGSD/pages/240910453/IT+system+requirements) also summarizes several considerations and approaches for systems development.
 
-To help mitigate this, [Workstream 4 of the UN Task Team on Scanner data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) conducted a detailed survey during the winter of 2025 to (1) provide a detailed summary of the approaches used by NSOs currently and (2) to provide guidance in the form of this report on how NSOs could approach technical topics to better process data for their CPIs. While this report is specific to the state of CPI Production Systems at NSOs around the world in early 2025, our hope is that some of the content in this report is also useful for a wider audience maintaining similar kinds of systems. As such, we attempt to explain our results in a general way and highlight opportunities where our survey approach and findings could be applied in related settings.
+To help mitigate this, Workstream 4 of the [UN Task Team on Scanner data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) conducted a detailed survey during the winter of 2025 to (1) provide a detailed summary of the CPI production systems currently used by NSOs and (2) provide guidance in the form of this report on how NSOs can better manage the complexities of system development and maintenance.
+
+While this report is specific to the state of CPI Production Systems at NSOs around the world, our hope is that some of the content in this report is also useful for a wider audience maintaining similar kinds of systems. As such, we attempt to explain our results in a general way and highlight opportunities where our survey approach and findings could be applied in related settings.
 
 ## Motivation {#sec-motivation}
 
@@ -33,7 +37,7 @@ Due to differences like those mentioned above, there is not a perfect mapping be
 
 To this end, we hope our survey can help bridge the gap between well-understood industry best practices from the world of software engineering, and those aspects of Complex Analytical Systems that could benefit from these best practices. Our hope is that the insights gained and the survey methodology deployed may be valuable for other Complex Analytical Systems facing similar challenges.
 
-## Why was this survey the most applicable approach? {#sec-why-run-this-survey}
+## What Was the Purpose of This Survey? {#sec-why-run-this-survey}
 
 In our experience, we've noticed that many teams who are responsible for Complex Analytical Systems struggle with managing many aspects of system complexity.
 
@@ -53,13 +57,13 @@ While this report is tailored towards a Consumer Prices domain audience, we welc
 
 ## Overview of CPI Production Systems
 
-With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in @sec-motivation. More precisely, these systems take data on the price of consumer goods purchased throughout an economy and calculate period-over-period price changes of these goods and services. These price changes are ultimately mapped to a taxonomy of product categories, with the highest level of the taxonomy being the monthly "all items" CPI that is commonly used when discussing the overall level of inflation.
+With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in @sec-motivation. More precisely, these systems take data on the price of consumer goods and services purchased throughout an economy and calculate period-over-period price changes of these goods and services. These price changes are ultimately mapped to a taxonomy of product categories, with the highest level of the taxonomy being the monthly "all items" CPI that is commonly used when discussing the overall level of inflation.
 
-The recent adoption of alternative data sources[^intro-5] in the calculation of CPIs has further increased the complexity of these systems, and has increased the importance of skills in newly emerging disciplines such as [Data Science](https://en.wikipedia.org/wiki/Data_science), [Data Engineering](https://en.wikipedia.org/wiki/Data_engineering), and [Analytics Engineering](https://www.getdbt.com/what-is-analytics-engineering).
+The recent adoption of alternative data sources in the calculation of CPIs has further increased the complexity of these systems,[^intro-5] and has increased the importance of skills in newly emerging disciplines such as [Data Science](https://en.wikipedia.org/wiki/Data_science), [Data Engineering](https://en.wikipedia.org/wiki/Data_engineering), and [Analytics Engineering](https://www.getdbt.com/what-is-analytics-engineering).
 
 [^intro-5]: In the context of CPI Production Systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.
 
-## Related Work
+## Related Work {#sec-related-work}
 
 We borrow and adapt several ideas presented in @skelton2019team such as the concepts of [Stream-aligned teams and the Flow of change](https://teamtopologies.com/key-concepts) in our survey. These concepts (discussed in greater detail in the following sections) can be applied to understand how teams are organized around the various steps in a complex data processing workflow.
 
@@ -69,17 +73,30 @@ We also borrow a number of ideas from @forsgren2018accelerate. Particularly, mul
 
 We believe that multiple ideas presented in @dehghani2022data are highly applicable to the CPI Systems under study. Specifically, we believe that the concept of [Data-as-a-Product](https://www.thoughtworks.com/en-ca/insights/articles/leveraging-data-as-a-product-a-strategic-imperative-for-business-leaders) (and teams organized around these Data Products) provides a useful framework for thinking about how these systems and teams interact with one another. We also contrast domain-oriented decentralized teams with centralized teams.
 
-Although we do not make specific references to it in our survey, we believe the Reproducible Analytical Pipeline (RAP) work by @RAPsite does a good job at explaining how teams can introduce relevant tools and practices to workloads oriented around data processing.[^intro-7]
+Although we do not make specific references to it in our survey, we believe the Reproducible Analytical Pipeline (RAP) work by @RAPsite does a good job at explaining how teams can introduce relevant tools and practices to workloads oriented around data processing. More information about RAP can be found on the [NHS RAP Communitiy of Practice](https://nhsdigital.github.io/rap-community-of-practice/) and the [RAP companion website](https://ukgovdatascience.github.io/rap_companion/).[^intro-7] @RAPTransformation provides a good case study on the application of RAP to production price statistics.
 
-[^intro-7]: See [Price-Marques (2023)](https://unece.org/sites/default/files/2023-05/7.4%20UK_un_systems_railfares_paper.pdf) for a good case study on the application of RAP to production price statistics, and a [training session on RAP for price statistics by ESCAP](https://escap-sd.github.io/ESCAP_RAP_class/docs/) in 2024, specifically applied to web scraping.
+
+[^intro-7]: For readers who want to learn more about RAP, see this [training session on RAP for price statistics by ESCAP](https://escap-sd.github.io/ESCAP_RAP_class/docs/) which covers an application involving web scraping.
 
 Throughout this write up, we distinguish between software systems and IT professionals being **embedded in domain teams** versus being centralized **outside of domain teams**. Organizing software system architecture around business domains is not a new idea in software engineering (see Domain Driven Design by @evans2004domain, and more recently Software Architecture: The Hard Parts by @ford2021software and Fundamentals of Software Architecture by @richards2020fundamentals, for example). However, we believe this distinction may not be well understood or formalized in the context of the teams who maintain the kinds of Complex Analytical Systems described in @sec-why-run-this-survey, so we pay special attention to this distinction throughout this write up.
 
-## The survey process and aspects of the collected data
+## Survey Design and Data Collection
 
-We developed the survey towards the end of 2024 and ran it between January and February 2024. With support from the UN-CEBD and UNECE, we compiled and reached out to NSOs around the world. We prioritized reaching out directly to individuals in Price Statistics divisions at each NSOs, or where no contact was known, we inquired with the overall organization and requested that the survey link be forwarded to the Price Statistics team of that organization. Individuals were asked to submit one response from the organization, and where applicable, data editing was done to ensure a robust dataset was finalized.
+We developed this survey during the fall of 2024 and administered it through the winter of 2025.
 
-Around 70 NSOs responded to the survey. Every major geographic region of the world is represented in the survey. NSOs that answered included those advanced in their modernization and the use of new data sources and those that focused on traditional methods. Self-selection bias is possible (this could also be due to factors such as the time commitment necessary and the complexity of the survey). It is also possible that misinterpretation could have affected some responder answers, which we note when discussing specific topics. In summary though, despite the likelihood for self-selection bias and some misinterpretation of the questions asked, we believe the coverage is good.
+With support from the UN-CEBD and UNECE, we contacted NSOs around the world. We prioritized reaching out directly to individuals in the Price Statistics divisions at each NSO. Where no contact was known, we requested that the survey link be forwarded to the Price Statistics team of that organization. Each Price Statistics team submitted one response on behalf of their NSO. At the time of writing this interim report, 70 NSOs responded to our survey.
+
+Every major geographic region of the world is represented in the responses. NSOs that answered ranged from those advanced in their modernization efforts to those that are still focused on traditional methods.
+
+We do not make any claims about the statistical significance of results throughout this survey. Rather, the goal of this survey is to provide descriptive findings about system and team organization, and to relate these findings to prior knowledge in other disciplines such as Software Engineering.
+
+To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.
+
+Some amount of selection bias is possible, which could be due in part to factors such as the time commitment and the complexity of the survey. It is also possible that misinterpretation could have affected some responses.
+
+However, despite these possible shortcomings, we believe the data collected is still relevant. We also believe the findings in this survey have high external validity with respect to other Complex Analytical System use cases beyond CPI production systems.
+
+For readers who are interested, this survey was administered using [LimeSurvey](https://www.limesurvey.org/), and the questionnaire used can be found in the [Github repository for this survey](https://github.com/UN-Task-Team-for-Scanner-Data/production-systems-survey).
 
 ## How This Report Is Organized
 

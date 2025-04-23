@@ -1,14 +1,15 @@
 ## Preface {.unnumbered}
 
-::: {layout-ncol=2}
 
 This work showcases the findings and takeaways from surveying National Statistical Organizations (NSOs) around the world during the winter of 2025. The survey primarily focused on how each NSO structures, develops, and maintains their Consumer Price Index (CPI) production systems and organizes the teams that are responsible for these systems.
+
+::: {layout-ncol=2}
+
+This work was done by Workstream 4 (CPI Systems and Architecture), which is part of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml). Hence, we would like to acknowledge the team members of Workstream 4 who provided insights, helped draft survey questions, and supported this empirical assessment.
 
 ![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
 
 :::
-
-This work was done by Workstream 4 (CPI Systems and Architecture), which is part of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml). Hence, we would like to acknowledge the team members of Workstream 4 who provided insights, helped draft survey questions, and supported this empirical assessment.
 
 We would also like to thank and acknowledge the support of the Steering Group of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml), as well as the [UN Committee of Experts on Big Data and Data Science for Official Statistics (UN-CEBD)](https://unstats.un.org/bigdata/) team in making this work possible. Without the support of both, it would not have been possible to survey NSOs around the world and evaluate their CPI production system architectures and team organizations.
 
