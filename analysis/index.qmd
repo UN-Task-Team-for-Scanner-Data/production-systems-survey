@@ -1,6 +1,6 @@
 # Introduction
 
-## Preface {.unnumbered}
+## Preface {#sec-preface}
 
 This work showcases the findings and takeaways from surveying National Statistical Organizations (NSOs) around the world during the winter of 2025. The survey primarily focused on how each NSO structures, develops, and maintains their Consumer Price Index (CPI) production systems and organizes the teams that are responsible for these systems.
 
