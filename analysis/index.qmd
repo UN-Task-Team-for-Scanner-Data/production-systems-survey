@@ -109,9 +109,9 @@ We do not make any claims about the statistical significance of results througho
 
 To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.
 
-Some amount of selection bias is possible, which could be due in part to factors such as the time commitment and the complexity of the survey. It is also possible that misinterpretation could have affected some responses.
+Some amount of selection bias is possible, which could be in part due to factors such as the time commitment and the complexity of the survey. It is also possible that misinterpretation could have affected some responses.
 
-However, despite these possible shortcomings, we believe the data collected is still relevant. We also believe the findings in this survey have high external validity with respect to other Complex Analytical System use cases beyond CPI production systems.
+However, despite these possible shortcomings, we believe the data collected are still relevant. We also believe that the findings in this survey have high external validity with respect to other Complex Analytical Systems beyond CPI production systems.
 
 For readers who are interested, this survey was administered using [LimeSurvey](https://www.limesurvey.org/), and the questionnaire used can be found in the [Github repository for this survey](https://github.com/UN-Task-Team-for-Scanner-Data/production-systems-survey).
 
