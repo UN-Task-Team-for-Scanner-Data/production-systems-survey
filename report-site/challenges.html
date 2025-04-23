@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Survey of CPI Production Systems - 9&nbsp; Challenges</title>
+<title>Interim Report: Survey of CPI Production Systems - 9&nbsp; Challenges</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -89,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Survey of CPI Production Systems</a> 
+      <a href="./">Interim Report: Survey of CPI Production Systems</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -102,12 +102,6 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Preface</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
@@ -220,7 +214,7 @@ ul.task-list li input[type="checkbox"] {
 <p>In our experience, these kinds of system integration issues are usually small enough that they are resolved in an ad hoc manner. However, the accumulation of many ad hoc solutions over time can create significant <a href="https://en.wikipedia.org/wiki/Technical_debt">technical debt</a> and lead to significant system interaction challenges.</p>
 <p>Tied for fourth place are (1) complexity within a system (e.g., managing large quantities of code) and (2) verifying that a system behaves correctly.</p>
 <p>Maintaining large and complex code bases over time is an inherently challenging problem that requires years of practice. Our suspicion is that applying a relatively small number of relevant ideas from software engineering can lead to a significant reduction in the complexity of CPI Production Systems<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. However, we emphasize that mastering these concepts takes significant practice, even if the concepts are fairly straightforward at face value.</p>
-<p>We were not surprised to learn that verifying system correctness registered as one of the top challenges due to the complexity of CPI Production Systems. While there are a large number of tools and techniques that can greatly facilitate the testing of software, being able to take advantage of these tools and techniques requires a minimum level of knowledge. Every major programming language comes with at least one comprehensive framework for automated testing. However, taking advantage of these frameworks require adopting certain idioms in order to integrate the testing framework into the code under test[^3]. In brief, very good solutions to this challenge exist, but they require a baseline level of programming skills to adopt in the first place.</p>
+<p>We were not surprised to learn that verifying system correctness registered as one of the top challenges due to the complexity of CPI Production Systems. While there are a large number of tools and techniques that can greatly facilitate the testing of software, being able to take advantage of these tools and techniques requires a minimum level of knowledge. Every major programming language comes with at least one comprehensive framework for automated testing. However, taking advantage of these frameworks require adopting certain idioms in order to integrate the testing framework into the code under test.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> In brief, very good solutions to this challenge exist, but they require a baseline level of programming skills to adopt in the first place.</p>
 <p>As a final note, we were very surprised to see so few respondents identifying Version Control as a challenge. In <a href="tools-and-technology.html"><span>Chapter&nbsp;4</span></a>, the majority of respondents indicated that they either don’t use a version control system at all, or they use file-naming conventions to version files. We are skeptical that these two facts are true at the same time.</p>
 <p>Our suspicion is that the concept of learning how to use a tool like <a href="https://git-scm.com/">Git</a> that exists specifically for the purpose of revision control is not something that many survey respondents considered until encountering it in the survey. We therefore suspect that respondents may have lumped revision control challenges with another type of challenge such as “Manual Tasks” or “System Complexity”.</p>
 
@@ -228,8 +222,9 @@ ul.task-list li input[type="checkbox"] {
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>The problem of passing data inputs from one system to another system has been around since the dawn of computing. However, the somewhat new concept of Data Contracts (see <a href="https://datacontract.com/">Data Contract Specification</a> for example) try to address this problem in the context of passing complex structured data between data producers and data consumers.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>The problem of passing data inputs from one system to another system has been around since the dawn of computing. However, the somewhat new concept of Data Contracts (see <a href="https://datacontract.com/">Data Contract Specification</a>, for example) tries to address this problem in the context of passing complex structured data between data producers and data consumers.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>For example, adopting a few simple ideas such as grouping related functions into the same module or separating configuration information source code can lead to significant simplifications to code bases that don’t currently leverage these ideas.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For example, a 1,000 line Python script that performs multiple operations on a <a href="https://pandas.pydata.org/">Pandas</a> data frame entirely in the global scope will not integrate nicely with a testing framework like <a href="https://docs.pytest.org/en/stable/">PyTest</a>. This is because there is no straightforward way to identify and group a section of the code to be run in a test.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

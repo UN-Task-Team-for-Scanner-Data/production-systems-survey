@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Survey of CPI Production Systems - 1&nbsp; Introduction</title>
+<title>Interim Report: Survey of CPI Production Systems - 1&nbsp; Introduction</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -108,7 +108,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Survey of CPI Production Systems</a> 
+      <a href="./">Interim Report: Survey of CPI Production Systems</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -201,11 +201,12 @@ div.csl-indent {
    
   <ul>
   <li><a href="#sec-motivation" id="toc-sec-motivation" class="nav-link active" data-scroll-target="#sec-motivation"><span class="header-section-number">1.1</span> Motivation</a></li>
-  <li><a href="#sec-why-run-this-survey" id="toc-sec-why-run-this-survey" class="nav-link" data-scroll-target="#sec-why-run-this-survey"><span class="header-section-number">1.2</span> Why Did We Run This Survey?</a></li>
+  <li><a href="#sec-why-run-this-survey" id="toc-sec-why-run-this-survey" class="nav-link" data-scroll-target="#sec-why-run-this-survey"><span class="header-section-number">1.2</span> What Was the Purpose of This Survey?</a></li>
   <li><a href="#overview-of-cpi-production-systems" id="toc-overview-of-cpi-production-systems" class="nav-link" data-scroll-target="#overview-of-cpi-production-systems"><span class="header-section-number">1.3</span> Overview of CPI Production Systems</a></li>
-  <li><a href="#related-work" id="toc-related-work" class="nav-link" data-scroll-target="#related-work"><span class="header-section-number">1.4</span> Related Work</a></li>
-  <li><a href="#how-this-report-is-organized" id="toc-how-this-report-is-organized" class="nav-link" data-scroll-target="#how-this-report-is-organized"><span class="header-section-number">1.5</span> How This Report Is Organized</a></li>
-  <li><a href="#note-on-confidentiality-and-privacy" id="toc-note-on-confidentiality-and-privacy" class="nav-link" data-scroll-target="#note-on-confidentiality-and-privacy"><span class="header-section-number">1.6</span> Note on Confidentiality and Privacy</a></li>
+  <li><a href="#sec-related-work" id="toc-sec-related-work" class="nav-link" data-scroll-target="#sec-related-work"><span class="header-section-number">1.4</span> Related Work</a></li>
+  <li><a href="#survey-design-and-data-collection" id="toc-survey-design-and-data-collection" class="nav-link" data-scroll-target="#survey-design-and-data-collection"><span class="header-section-number">1.5</span> Survey Design and Data Collection</a></li>
+  <li><a href="#how-this-report-is-organized" id="toc-how-this-report-is-organized" class="nav-link" data-scroll-target="#how-this-report-is-organized"><span class="header-section-number">1.6</span> How This Report Is Organized</a></li>
+  <li><a href="#note-on-confidentiality-and-privacy" id="toc-note-on-confidentiality-and-privacy" class="nav-link" data-scroll-target="#note-on-confidentiality-and-privacy"><span class="header-section-number">1.7</span> Note on Confidentiality and Privacy</a></li>
   </ul>
 </nav>
     </div>
@@ -229,26 +230,19 @@ div.csl-indent {
 
 </header>
 
-<div class="quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p>We created this survey about the state of Consumer Price Index (CPI) Production Systems on behalf of the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">Task Team on Scanner Data</a> under the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics</a>.</p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png" class="img-fluid"></p>
-</div>
-</div>
-</div>
-<p>While this report is specific to the state of CPI Production Systems at National Statistics Organizations (NSOs) around the world, our hope is that some of the content in this report is also useful for a wider audience maintaining similar kinds of systems. As such, we attempt to explain our results in a general way and highlight opportunities where our survey approach and findings could be applied in related settings.</p>
+<p>Extensive methodological and practical guidance is available to National Statistical Organizations (NSOs) related to the creation of the Consumer Price Index (CPI).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> However, there is not much material on how to create maintainable software systems to carry out this methodological and practical guidance.</p>
+<p>Furthemore, many NSOs are starting to modernize their programs by shifting towards new data sources, which is similarly well supported with methodological and practical guidance.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Again, while some resources exist,<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> there is not much direction on how to deal with the complexity introduced by developing and maintaining the systems that operate on these new data sources.</p>
+<p>To help mitigate this, Workstream 4 of the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">UN Task Team on Scanner data</a> conducted a detailed survey during the winter of 2025 to (1) provide a detailed summary of the CPI production systems currently used by NSOs and (2) provide guidance in the form of this report on how NSOs can better manage the complexities of system development and maintenance.</p>
+<p>While this report is specific to the state of CPI Production Systems at NSOs around the world, our hope is that some of the content in this report is also useful for a wider audience maintaining similar kinds of systems. As such, we attempt to explain our results in a general way and highlight opportunities where our survey approach and findings could be applied in related settings.</p>
 <section id="sec-motivation" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sec-motivation"><span class="header-section-number">1.1</span> Motivation</h2>
-<p>In our time working at National Statistics Organizations (NSOs), we have encountered some extremely complicated systems that exist in order to produce various analytical and data products such as consumer price indexes, national accounts figures, or labour force statistics. These complicated systems and the teams who maintain them are the subjects of this survey and write up. To reduce ambiguity, we refer to these systems as <strong>Complex Analytical Systems</strong> throughout this report.</p>
+<p>In our time working at NSOs, we have encountered some extremely complicated systems that exist in order to produce various analytical and data products such as consumer price indexes, national accounts figures, or labour force statistics. These complicated systems and the teams who maintain them are the subjects of this survey and write up. To reduce ambiguity, we refer to these systems as <strong>Complex Analytical Systems</strong> throughout this report.</p>
 <p>Complex Analytical Systems involve significant amounts of code, documentation, and other non-code artifacts such as Excel Workbooks that carry out complex business logic in order to transform input data into output data. Additionally, they are often developed entirely or in large part by people with backgrounds in Economics, Statistics, Mathematics, or another area related to the domain of Official Statistics.</p>
-<p>These Complex Analytical Systems differ from traditional software systems in a number of important aspects<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<p>These Complex Analytical Systems differ from traditional software systems in a number of important aspects<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
 <table class="table">
 <colgroup>
-<col style="width: 53%">
-<col style="width: 46%">
+<col style="width: 52%">
+<col style="width: 47%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -287,7 +281,7 @@ div.csl-indent {
 <p>To this end, we hope our survey can help bridge the gap between well-understood industry best practices from the world of software engineering, and those aspects of Complex Analytical Systems that could benefit from these best practices. Our hope is that the insights gained and the survey methodology deployed may be valuable for other Complex Analytical Systems facing similar challenges.</p>
 </section>
 <section id="sec-why-run-this-survey" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="sec-why-run-this-survey"><span class="header-section-number">1.2</span> Why Did We Run This Survey?</h2>
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-why-run-this-survey"><span class="header-section-number">1.2</span> What Was the Purpose of This Survey?</h2>
 <p>In our experience, we’ve noticed that many teams who are responsible for Complex Analytical Systems struggle with managing many aspects of system complexity.</p>
 <p>Complex Analytical System business domain teams are typically comprised of individuals with strong analytical skills and significant domain knowledge, however, they often do not have specific training in software engineering concepts. Therefore, they are often not exposed to the significant body of knowledge that has been developed over decades to deal with the kinds of system complexity problems that software developers are routinely exposed to.</p>
 <p>We have also found that individuals in these business domains are often missing the vocabulary and concepts to articulate the state of their Complex Analytical Systems. As a result, when these individuals try to explain where they are struggling to a more IT-oriented audience, miscommunication often results, and it becomes difficult to arrive at reasonable solutions.</p>
@@ -301,19 +295,30 @@ div.csl-indent {
 </section>
 <section id="overview-of-cpi-production-systems" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="overview-of-cpi-production-systems"><span class="header-section-number">1.3</span> Overview of CPI Production Systems</h2>
-<p>With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in <a href="#sec-motivation"><span>Section&nbsp;1.1</span></a>. More precisely, these systems take data on the price of consumer goods purchased throughout an economy and calculate period-over-period price changes of these goods. These price changes are ultimately mapped to a taxonomy of product categories, with the highest level of the taxonomy being the monthly “all items” CPI that is commonly used when discussing the overall level of inflation.</p>
-<p>The recent adoption of alternative data sources<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> in the calculation of CPIs has further increased the complexity of these systems, and has increased the importance of skills in newly emerging disciplines such as <a href="https://en.wikipedia.org/wiki/Data_science">Data Science</a>, <a href="https://en.wikipedia.org/wiki/Data_engineering">Data Engineering</a>, and <a href="https://www.getdbt.com/what-is-analytics-engineering">Analytics Engineering</a>.</p>
+<p>With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in <a href="#sec-motivation"><span>Section&nbsp;1.1</span></a>. More precisely, these systems take data on the price of consumer goods and services purchased throughout an economy and calculate period-over-period price changes of these goods and services. These price changes are ultimately mapped to a taxonomy of product categories, with the highest level of the taxonomy being the monthly “all items” CPI that is commonly used when discussing the overall level of inflation.</p>
+<p>The recent adoption of alternative data sources in the calculation of CPIs has further increased the complexity of these systems,<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and has increased the importance of skills in newly emerging disciplines such as <a href="https://en.wikipedia.org/wiki/Data_science">Data Science</a>, <a href="https://en.wikipedia.org/wiki/Data_engineering">Data Engineering</a>, and <a href="https://www.getdbt.com/what-is-analytics-engineering">Analytics Engineering</a>.</p>
 </section>
-<section id="related-work" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="related-work"><span class="header-section-number">1.4</span> Related Work</h2>
+<section id="sec-related-work" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-related-work"><span class="header-section-number">1.4</span> Related Work</h2>
 <p>We borrow and adapt several ideas presented in <span class="citation" data-cites="skelton2019team">Skelton, Pais, and Malan (<a href="references.html#ref-skelton2019team" role="doc-biblioref">2019</a>)</span> such as the concepts of <a href="https://teamtopologies.com/key-concepts">Stream-aligned teams and the Flow of change</a> in our survey. These concepts (discussed in greater detail in the following sections) can be applied to understand how teams are organized around the various steps in a complex data processing workflow.</p>
-<p>We also borrow a number of ideas from <span class="citation" data-cites="forsgren2018accelerate">Forsgren, Humble, and Kim (<a href="references.html#ref-forsgren2018accelerate" role="doc-biblioref">2018</a>)</span>. Particularly, multiple of the DevOps Research and Assessment (DORA) metrics they present are highly relevant in measuring the business outcomes of teams that maintain CPI systems.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>We also borrow a number of ideas from <span class="citation" data-cites="forsgren2018accelerate">Forsgren, Humble, and Kim (<a href="references.html#ref-forsgren2018accelerate" role="doc-biblioref">2018</a>)</span>. Particularly, multiple of the DevOps Research and Assessment (DORA) metrics they present are highly relevant in measuring the business outcomes of teams that maintain CPI systems<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
 <p>We believe that multiple ideas presented in <span class="citation" data-cites="dehghani2022data">Dehghani (<a href="references.html#ref-dehghani2022data" role="doc-biblioref">2022</a>)</span> are highly applicable to the CPI Systems under study. Specifically, we believe that the concept of <a href="https://www.thoughtworks.com/en-ca/insights/articles/leveraging-data-as-a-product-a-strategic-imperative-for-business-leaders">Data-as-a-Product</a> (and teams organized around these Data Products) provides a useful framework for thinking about how these systems and teams interact with one another. We also contrast domain-oriented decentralized teams with centralized teams.</p>
-<p>Although we do not make specific references to it in our survey, we believe the Reproducible Analytical Pipeline (RAP) work by <span class="citation" data-cites="RAPsite">NHS (<a href="references.html#ref-RAPsite" role="doc-biblioref">2017</a>)</span> does a good job at explaining how teams can introduce relevant tools and practices to workloads oriented around data processing.</p>
+<p>Although we do not make specific references to it in our survey, we believe the Reproducible Analytical Pipeline (RAP) work by <span class="citation" data-cites="RAPsite">NHS (<a href="references.html#ref-RAPsite" role="doc-biblioref">2017</a>)</span> does a good job at explaining how teams can introduce relevant tools and practices to workloads oriented around data processing. More information about RAP can be found on the <a href="https://nhsdigital.github.io/rap-community-of-practice/">NHS RAP Communitiy of Practice</a> and the <a href="https://ukgovdatascience.github.io/rap_companion/">RAP companion website</a>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> <span class="citation" data-cites="RAPTransformation">Price and Marques (<a href="references.html#ref-RAPTransformation" role="doc-biblioref">2023</a>)</span> provides a good case study on the application of RAP to production price statistics.</p>
 <p>Throughout this write up, we distinguish between software systems and IT professionals being <strong>embedded in domain teams</strong> versus being centralized <strong>outside of domain teams</strong>. Organizing software system architecture around business domains is not a new idea in software engineering (see Domain Driven Design by <span class="citation" data-cites="evans2004domain">Evans (<a href="references.html#ref-evans2004domain" role="doc-biblioref">2004</a>)</span>, and more recently Software Architecture: The Hard Parts by <span class="citation" data-cites="ford2021software">Ford et al. (<a href="references.html#ref-ford2021software" role="doc-biblioref">2021</a>)</span> and Fundamentals of Software Architecture by <span class="citation" data-cites="richards2020fundamentals">Richards and Ford (<a href="references.html#ref-richards2020fundamentals" role="doc-biblioref">2020</a>)</span>, for example). However, we believe this distinction may not be well understood or formalized in the context of the teams who maintain the kinds of Complex Analytical Systems described in <a href="#sec-why-run-this-survey"><span>Section&nbsp;1.2</span></a>, so we pay special attention to this distinction throughout this write up.</p>
 </section>
-<section id="how-this-report-is-organized" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="how-this-report-is-organized"><span class="header-section-number">1.5</span> How This Report Is Organized</h2>
+<section id="survey-design-and-data-collection" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="survey-design-and-data-collection"><span class="header-section-number">1.5</span> Survey Design and Data Collection</h2>
+<p>We developed this survey during the fall of 2024 and administered it through the winter of 2025.</p>
+<p>With support from the UN-CEBD and UNECE, we contacted NSOs around the world. We prioritized reaching out directly to individuals in the Price Statistics divisions at each NSO. Where no contact was known, we requested that the survey link be forwarded to the Price Statistics team of that organization. Each Price Statistics team submitted one response on behalf of their NSO. At the time of writing this interim report, 70 NSOs responded to our survey.</p>
+<p>Every major geographic region of the world is represented in the responses. NSOs that answered ranged from those advanced in their modernization efforts to those that are still focused on traditional methods.</p>
+<p>We do not make any claims about the statistical significance of results throughout this survey. Rather, the goal of this survey is to provide descriptive findings about system and team organization, and to relate these findings to prior knowledge in other disciplines such as Software Engineering.</p>
+<p>To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.</p>
+<p>Some amount of selection bias is possible, which could be due in part to factors such as the time commitment and the complexity of the survey. It is also possible that misinterpretation could have affected some responses.</p>
+<p>However, despite these possible shortcomings, we believe the data collected is still relevant. We also believe the findings in this survey have high external validity with respect to other Complex Analytical System use cases beyond CPI production systems.</p>
+<p>For readers who are interested, this survey was administered using <a href="https://www.limesurvey.org/">LimeSurvey</a>, and the questionnaire used can be found in the <a href="https://github.com/UN-Task-Team-for-Scanner-Data/production-systems-survey">Github repository for this survey</a>.</p>
+</section>
+<section id="how-this-report-is-organized" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="how-this-report-is-organized"><span class="header-section-number">1.6</span> How This Report Is Organized</h2>
 <p>This report is presented in the order that the survey was conducted, with findings presented along the way.</p>
 <ul>
 <li><p><a href="concepts.html"><span>Chapter&nbsp;2</span></a> covers the key conceptual models and terminology used to articulate concepts about system and team organization.</p></li>
@@ -327,8 +332,8 @@ div.csl-indent {
 <li><p><a href="findings-and-next-steps.html"><span>Chapter&nbsp;10</span></a> concludes with a summary of the most notable findings from the survey, some practical insights to address some common areas of struggle, and some areas of future work.</p></li>
 </ul>
 </section>
-<section id="note-on-confidentiality-and-privacy" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="note-on-confidentiality-and-privacy"><span class="header-section-number">1.6</span> Note on Confidentiality and Privacy</h2>
+<section id="note-on-confidentiality-and-privacy" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="note-on-confidentiality-and-privacy"><span class="header-section-number">1.7</span> Note on Confidentiality and Privacy</h2>
 <p>As part of the administration of this survey, we ensured respondents that their data will be treated confidentiality. Therefore, no individual response data are made available in this report; all results presented are aggregated over all respondents.</p>
 
 
@@ -348,6 +353,9 @@ Forsgren, N., J. Humble, and G. Kim. 2018. <em>Accelerate: The Science Behind De
 <div id="ref-RAPsite" class="csl-entry" role="listitem">
 NHS. 2017. <span>“Reproducible Analytical Pipelines (RAP).”</span> <a href="https://nhsdigital.github.io/rap-community-of-practice/" class="uri">https://nhsdigital.github.io/rap-community-of-practice/</a>.
 </div>
+<div id="ref-RAPTransformation" class="csl-entry" role="listitem">
+Price, M., and D. Marques. 2023. <span>“Developing Reproducible Analytical Pipelines for the Transformation of Consumer Price Statistics: Rail Fares.”</span> Office of National Statistics; "<a href="https://unece.org/sites/default/files/2023-05/7.4%20UK_un_systems_railfares_paper.pdf" class="uri">https://unece.org/sites/default/files/2023-05/7.4%20UK_un_systems_railfares_paper.pdf</a>".
+</div>
 <div id="ref-richards2020fundamentals" class="csl-entry" role="listitem">
 Richards, M., and N. Ford. 2020. <em>Fundamentals of Software Architecture: An Engineering Approach</em>. O’Reilly Media, Incorporated. <a href="https://books.google.ca/books?id=_pNdwgEACAAJ">https://books.google.ca/books?id=_pNdwgEACAAJ</a>.
 </div>
@@ -359,9 +367,13 @@ Skelton, M., M. Pais, and R. Malan. 2019. <em>Team Topologies: Organizing Busine
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>We are not implying that all “traditional” software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would often develop and maintain.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>In the context of CPI Production Systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>We use slightly different terminology to refer to some of these concepts throughout the survey in order to use language that our target audience is most likely familiar with.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Most notable is the <a href="https://www.imf.org/en/Data/Statistics/cpi-manual">2020 CPI Manual</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See the <a href="https://unstats.un.org/wiki/spaces/GWGSD/pages/240910447/Handbook+on+utilising+new+data+sources+in+the+production+of+consumer+price+statistics">e-handbook</a>, developed and maintained by the UN Task Team on Scanner data, for guidance on various aspects of leveraging new data sources.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The most notable approach being recommended is Reproducible Analytical Pipelines (or RAPs), which are discussed in <a href="#sec-related-work"><span>Section&nbsp;1.4</span></a>. The <a href="https://unstats.un.org/wiki/spaces/GWGSD/pages/240910453/IT+system+requirements">IT system requirements section in the e-handbook</a> also summarizes several considerations and approaches for systems development.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>We are not implying that all “traditional” software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would often develop and maintain.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>In the context of CPI Production Systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>We use slightly different terminology to refer to some of these concepts throughout the survey in order to use language that our target audience is most likely familiar with.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>For readers who want to learn more about RAP, see this <a href="https://escap-sd.github.io/ESCAP_RAP_class/docs/">training session on RAP for price statistics by ESCAP</a> which covers an application involving web scraping.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

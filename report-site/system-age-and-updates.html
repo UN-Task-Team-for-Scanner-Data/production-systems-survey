@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Survey of CPI Production Systems - 5&nbsp; System Age and Updates</title>
+<title>Interim Report: Survey of CPI Production Systems - 5&nbsp; System Age and Updates</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -108,7 +108,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Survey of CPI Production Systems</a> 
+      <a href="./">Interim Report: Survey of CPI Production Systems</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -121,12 +121,6 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Preface</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
@@ -270,7 +264,7 @@ div.csl-indent {
 </div>
 </div>
 <p>The system age distribution for NSOs with modular representative systems is approximately uniform, while NSOs with monolithic representative systems are more likely to report that the majority of their systems are between 6-20 years old, and less likely to report that the majority of their systems are more than 20 years old.</p>
-<p>One possible explanation for this observation is that monolithic systems are more likely to reach a level of complexity where it becomes too difficult to reliably make changes to the system due to a high degree of coupling (inter-dependency) between components<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. If this is true, it could be the case that relatively few monolithic systems reach an age greater than 20 years before a complete system rewrite is necessary.</p>
+<p>One possible explanation for this observation is that monolithic systems are more likely to reach a level of complexity where it becomes too difficult to reliably make changes to the system due to a high degree of coupling (inter-dependency) between components.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> If this is true, it could be the case that relatively few monolithic systems reach an age greater than 20 years before a complete system rewrite is necessary.</p>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
@@ -311,7 +305,7 @@ div.csl-indent {
 </div>
 <p>NSOs with IT-Only teams appear relatively less likely to have the majority of systems be less than 20 years old, compared to their Analyst-Only and Stream-Aligned counterparts. One possible explanation is that IT-Only teams are more likely to have the technical skills to perform a full system rewrite when it becomes necessary, although we don’t have sufficient data to say for sure.</p>
 <p>Another noteworthy observation is that NSOs with Other Mix teams (see <a href="systems-teams-analysis.html"><span>Chapter&nbsp;3</span></a>) are most likely to have the majority of systems be between 6-10 years old. It is noteworthy that most of the NSOs with Other Mix teams also have Monolithic representative systems, so there is a high degree of overlap between Other Mix teams and Monolithic representative systems.</p>
-<p>Our hypothesis for this observation is that teams comprised of individuals with little shared domain context (e.g., a team with individuals from Corporate IT as well as Domain Analysts) are more likely to produce overly complicated and tightly inter-connected systems that are difficult to change<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. After 6-10 years, these systems become so difficult to maintain that it becomes necessary to undergo a full system rewrite<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>Our hypothesis for this observation is that teams comprised of individuals with little shared domain context (e.g., a team with individuals from Corporate IT as well as Domain Analysts) are more likely to produce overly complicated and tightly inter-connected systems that are difficult to change.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> After 6-10 years, these systems become so difficult to maintain that it becomes necessary to undergo a full system rewrite.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 </section>
 <section id="system-update-frequency" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="system-update-frequency"><span class="header-section-number">5.2</span> System Update Frequency</h2>
@@ -324,7 +318,7 @@ div.csl-indent {
 </div>
 <p>In this section, we ask respondents how often the majority of CPI Production Systems are usually updated.</p>
 <p>Unless software is being written in a domain where (1) the problem is “solved” (i.e., requirements never change) and/or (2) the software’s correctness can be proved mathematically, routinely updating systems (e.g., fixing errors in source code or enhancing the system with new features) is a practical reality of software development.</p>
-<p>Given this practical reality, updating systems at a somewhat high frequency is generally considered to be good practice <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>Given this practical reality, updating systems at a somewhat high frequency is generally considered to be good practice.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>We share below some observations on how frequently respondents update their systems.</p>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -359,7 +353,7 @@ div.csl-indent {
 <p>NSOs with monolithic representative systems are much more likely to <strong>never update systems</strong> compared to NSOs with Modular representative systems.</p>
 <p>We suspect this is once again related to the fact that monolithic systems tend to be complex and involve many inter-connected components. In the most extreme case, it can be too risky to update these systems due to the possibility of a change in one part of a system causing unintended consequences in another (seemingly unrelated) part of the system.</p>
 <p>Modular systems, in contrast, tend to be easier to reason about, and involve a lower degree of coupling between system components that are unrelated. Hence, making a change to a system component is less likely to lead to an unintended consequence elsewhere in the system.</p>
-<p>Across all respondents, almost one fifth of respondents indicated that the majority of their systems are <strong>never updated</strong>. We are very surprised by this finding.</p>
+<p>Across all respondents, almost one fifth of respondents indicated that the majority of their systems are <strong>never updated</strong>. This may be partially due to the fact that some data and methods used with traditional field collection approaches change very rarely. Moreover, these approaches can be very simple to implement in certain cases, which could mean no bugs were ever introduced to the implementation. In such cases, it’s conceivable that non-trivial updates are never performed.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 <p>More generally, the distribution of update frequencies seems to be left skewed, with a majority of NSOs having the majority of systems updated once per year or less, or not updated at all.</p>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -399,7 +393,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<p>When looking at the system age distributions broken down by team type, we do not see much difference from the overall trend. One noteworthy exception to this is the Other Mix team category, which seems to have a relatively high proportion of cases updated less than once per year or not at all<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
+<p>When looking at the system age distributions broken down by team type, we do not see much difference from the overall trend. One noteworthy exception to this is the Other Mix team category, which seems to have a relatively high proportion of cases updated less than once per year or not at all.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -421,7 +415,8 @@ Richards, M., and N. Ford. 2020. <em>Fundamentals of Software Architecture: An E
 <li id="fn2"><p>In our experience, these systems become overly complicated because of the need to introduce new abstractions to bridge the lack of shared domain context. These abstractions aren’t necessary when all parties involved have a common understanding of the domain problem.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>This hypothesis is consistent with our professional experience and prior knowledge in software architecture (e.g., <span class="citation" data-cites="evans2004domain">Evans (<a href="references.html#ref-evans2004domain" role="doc-biblioref">2004</a>)</span>, <span class="citation" data-cites="ford2021software">Ford et al. (<a href="references.html#ref-ford2021software" role="doc-biblioref">2021</a>)</span>, <span class="citation" data-cites="richards2020fundamentals">Richards and Ford (<a href="references.html#ref-richards2020fundamentals" role="doc-biblioref">2020</a>)</span>). However, it is important to note that this particular observation is made on a relatively small subset of our survey data, so it could be an anomaly.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>N.B., having the <strong>ability</strong> to update systems at a high frequency is <strong>unambiguously</strong> good practice.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Once again, we note the small sample size caveat of NSOs containing Other Mix teams.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Another possibility is that some systems are never updated because there was only one individual who knew how the system worked, and that individual has since left the organization, so the system can no longer be updated. We did not collect sufficient data to diagnose why this one fifth of NSOs never update their systems, so we cannot say for sure what the explanation is one way or the other.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Once again, we note the small sample size caveat of NSOs containing Other Mix teams.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Survey of CPI Production Systems - 2&nbsp; Concepts</title>
+<title>Interim Report: Survey of CPI Production Systems - 2&nbsp; Concepts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./systems-teams-analysis.html" rel="next">
-<link href="./intro.html" rel="prev">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -89,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Survey of CPI Production Systems</a> 
+      <a href="./">Interim Report: Survey of CPI Production Systems</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -102,12 +102,6 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Preface</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
@@ -231,13 +225,13 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p>When we refer to an indivisible software component, we mean that the component runs “entirely or not at all” with respect to the transformation of inputs into outputs. For example, if there is one Python script that reads a file and writes an intermediate file, and a second R script that reads the intermediate file and produces another output file, we would consider this to be two separate systems.</p>
 <p>The types of systems developed and maintained by the teams being surveyed can vary wildly. Therefore, we intentionally keep the definition of system vague so that it captures the key activity of transforming data without imposing any assumptions about how data are transformed.</p>
-<p>A <strong>team</strong> is defined as a group of individuals who maintain one or more systems. Teams can be composed of many different types of professionals, but for the purpose of this survey we distinguish between those who are Information Technology (IT) professionals (e.g., software developers) and those who are non-IT analysts (e.g., economists, statisticians)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>A <strong>team</strong> is defined as a group of individuals who maintain one or more systems. Teams can be composed of many different types of professionals, but for the purpose of this survey we distinguish between those who are Information Technology (IT) professionals (e.g., software developers) and those who are non-IT analysts (e.g., economists, statisticians).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Importantly, we also distinguish whether these teams are embedded in the price-statistics domain of the organization or work elsewhere in the organization. The detail we care about here is whether the team developing and maintaining one or more systems shares business context and domain knowledge with the team making use of these systems, or whether they do not share this business context and domain knowledge.</p>
 <p>In total, we define the following 5 team types for the purposes of this survey.</p>
 <table class="table">
 <colgroup>
 <col style="width: 45%">
-<col style="width: 55%">
+<col style="width: 54%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -279,10 +273,6 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <table class="table">
-<colgroup>
-<col style="width: 42%">
-<col style="width: 57%">
-</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Process</strong></th>
@@ -300,11 +290,11 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td><strong>Elementary Indexes</strong></td>
-<td>Calculate price indexes from the processed data for a given geography and product category (i.e., elementary aggregate) at a point in time<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</td>
+<td>Calculate price indexes from the processed data for a given geography and product category (i.e., elementary aggregate) at a point in time.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></td>
 </tr>
 <tr class="even">
 <td><strong>Aggregation</strong></td>
-<td>Aggregate the elementary price indexes into higher-level indexes (e.g., “All Items” CPI)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</td>
+<td>Aggregate the elementary price indexes into higher-level indexes (e.g., “All Items” CPI).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></td>
 </tr>
 <tr class="odd">
 <td><strong>Finalization</strong></td>
@@ -326,8 +316,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p><a href="#fig-putting-it-all-together">Figure&nbsp;<span>2.2</span></a> shows an example of what one of these diagrams could look like for a real NSO. A description of team/system organization that could correspond to this example is described below.</p>
 <ul>
-<li><p>A <strong>corporate IT</strong> team maintains a large Java application with an application-specific database that handles ingestion of most data sources<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p></li>
-<li><p>A team of <strong>domain-embedded analysts</strong> (e.g., economists and statisticians) maintain a system written in Python, using <a href="https://pandas.pydata.org/">pandas</a> to ingest data from one source that does not integrate with the corporate system<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p></li>
+<li><p>A <strong>corporate IT</strong> team maintains a large Java application with an application-specific database that handles ingestion of most data sources.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p></li>
+<li><p>A team of <strong>domain-embedded analysts</strong> (e.g., economists and statisticians) maintain a system written in Python, using <a href="https://pandas.pydata.org/">pandas</a> to ingest data from one source that does not integrate with the corporate system.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p></li>
 <li><p>A team of domain-embedded analysts maintain a series of systems, using some combination of R and Python, that perform data processing and computation of elementary indexes.</p>
 <ul>
 <li><p>The top system handles both the data processing step <strong>and</strong> the elementary index calculation step, implying it would not be straightforward to decouple these two concerns.</p></li>
@@ -383,8 +373,8 @@ ul.task-list li input[type="checkbox"] {
 <hr>
 <ol>
 <li id="fn1"><p>We recognize there is some grey area as to whether or not certain occupations are considered to be IT, and that two organizations may classify the same positions differently.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>For readers unfamiliar with the CPI domain, this step refers to calculating period-over-period price changes for a particular product category at the lowest level of aggregation (e.g., “Canned salmon”).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>For readers unfamiliar with the CPI domain, this step refers to the process of combining elementary indexes into higher level indexes. For example, “Canned Salmon” and “Canned tuna” belong to a higher level category such as “Canned and other preserved fish”, which in turn belongs to a higher level category like “Fish, seafood and other marine products”, and so on until you reach the “All Items” CPI.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>For readers unfamiliar with the CPI domain, Elementary Aggregates (or EAs) are the most granular groups of goods and services for which expenditure shares are available. These EAs are the building blocks of the CPI. Calculated EAs are aggregated into higher-level indexes (weighted by expenditure shares), eventually rolling up to the “all items” CPI. For more detailed information, see <a href="https://www.imf.org/-/media/Files/Data/CPI/cpi-manual-concepts-and-methods.ashx">sections 8.7 - 8.90 in Chapter 8 of the CPI Manual</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>This step refers to the process of aggregating Elementary Aggregates to obtain higher-level price indexes, all the way to the “all items” CPI. Aggregation typically uses the CIOCOP classification structure. More information can be found in <a href="https://www.imf.org/-/media/Files/Data/CPI/cpi-manual-concepts-and-methods.ashx">sections 8.91 - 8.96 in Chapter 8, in the CPI Manual</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The corporate IT team boxes are drawn in blue, indicating that they are a central-organization team that does not necessarily have detailed domain knowledge. In the absence of domain knowledge, this team would need to engage in a requirements gathering process with the domain team in order to build a system that performs the required capabilities.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>The domain-embedded analyst boxes are drawn in yellow, indicating that they are a domain-aligned team.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
@@ -626,7 +616,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
-      <a href="./intro.html" class="pagination-link">
+      <a href="./index.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
       </a>          
   </div>
