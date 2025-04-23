@@ -719,7 +719,7 @@ ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#1d6
 ::: {.column width="50%"}
 - Over 2/3 of the respondents listed that Microsoft Excel was used in their CPI Production Systems.
 
-- Excel is useful for beginner-friendly tabular data analysis, however, not an ideal tool for expressing complex business logic.
+- Spreadsheets are useful for tabular data analysis, however, they are not ideal tool for expressing complex business logic.
 
 - Excel Workbooks encourage a high degree of coupling between business logic and data.
 :::

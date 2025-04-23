@@ -154,3 +154,21 @@ Our survey provides some evidence that certain findings from the world of softwa
 To this end, we believe there is significant business value to be gained by further investigating these topics in the context of other business domains maintaining Complex Analytical Systems[^findings-and-next-steps-8].
 
 [^findings-and-next-steps-8]: For example, if there is evidence that certain team structures, team interaction modes, and system architectures are more effective than others, then organizations that adopt the improved team topologies and system architectures may see reduced maintenance costs and faster delivery times, among other benefits.
+
+## Data Availability
+
+As of this interim report, the data used are not publicly available. If a sufficient number of respondents provide consent to share their anonymized responses, we will release an anonymized version of the survey dataset into the public domain.
+
+## Code Availability
+
+This report was created using [Quarto](https://quarto.org/). All figures and tables used throughout the report are rendered in-place when the report is created. All of the source content for this report is available in our [GitHub repository](https://github.com/UN-Task-Team-for-Scanner-Data/production-systems-survey).
+
+## Acknowledgements
+
+We reiterate our appreciation and acknoledgements mentioned in @sec-preface to the various UN groups who supported this work. Without their support and guidance, administering this survey would not have been possible. 
+
+## Author Information
+
+- Collin Brown, Statistics Canada
+
+- Steve Martin, Statistics Canada
