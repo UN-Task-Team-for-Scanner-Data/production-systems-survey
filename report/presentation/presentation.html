@@ -348,7 +348,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">CPI Production Systems</h1>
-  <p class="subtitle">Survey Analysis</p>
+  <p class="subtitle">Interim Report with Survey Analysis</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -375,15 +375,15 @@ Steve Martin
 <div class="quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p>Survey created on behalf of the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">Task Team on Scanner Data</a> under the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics</a>.</p>
+<p>Work was done by Workstream 4 (CPI Systems and Architecture), which is part of the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">UN Task Team on Scanner Data</a> under the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics</a>.</p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p>Thank you for the helpful feedback and numerous contributions from our colleagues in the <strong>Workstream on CPI Systems Architecture</strong></p>
+<p>We would like to acknowledge the team members of Workstream 4 who provided insights, helped draft survey questions, and supported this empirical assessment.</p>
 </div>
 </div>
 </div>
 <p><img data-src="https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png"></p>
-<p><strong>Note</strong>: Please consider reading the <a href="https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html">full report</a> that accompanies this presentation.</p>
+<p><strong>Note</strong>: Please consider reading the <a href="https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html">full interim report</a> that accompanies this presentation.</p>
 </section>
 <section id="cpi-production-systems-background" class="slide level2">
 <h2>CPI Production Systems Background</h2>
@@ -544,16 +544,13 @@ Steve Martin
 </section>
 <section id="results---which-steps-are-systems-coupled-across" class="slide level2">
 <h2>Results - Which Steps are Systems Coupled Across?</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png" style="width:40.0%"></p>
-<figcaption>Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)</figcaption>
-</figure>
-</div>
-<p><strong>Question</strong>: To what extent do distinct software modules depend on each other?</p>
-</section>
-<section id="results---which-steps-are-systems-coupled-across-1" class="slide level2">
-<h2>Results - Which Steps are Systems Coupled Across?</h2>
+<div class="columns">
+<div class="column" style="width:25%;">
+<ul>
+<li><p><strong>Hypothesis</strong>: Monolithic architectures don’t scale with the complexity introduced by ADS.</p></li>
+<li><p><strong>ingestion-processing-elementary indexes</strong> might be associated with a piece of a monolithic system “breaking off”.</p></li>
+</ul>
+</div><div class="column" style="width:75%;">
 <table>
 <colgroup>
 <col style="width: 17%">
@@ -570,7 +567,7 @@ Steve Martin
 <th>Elementary indexes</th>
 <th>Aggregation</th>
 <th>Finalization</th>
-<th>Frequency</th>
+<th>#</th>
 </tr>
 </thead>
 <tbody>
@@ -648,6 +645,8 @@ Steve Martin
 </tr>
 </tbody>
 </table>
+</div>
+</div>
 </section>
 <section id="results---which-team-combinations-are-common-within-the-flow-of-change" class="slide level2">
 <h2>Results - Which Team Combinations are Common Within the Flow of Change?</h2>
@@ -667,7 +666,7 @@ Steve Martin
 <th>Domain Analysts</th>
 <th>Other Analysts</th>
 <th>Consultants</th>
-<th>Frequency</th>
+<th>#</th>
 </tr>
 </thead>
 <tbody>
@@ -731,7 +730,7 @@ Steve Martin
 <div id="fig-comm-software" class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="presentation_files/figure-revealjs/fig-comm-software-1.png" width="960"></p>
-<figcaption>Figure&nbsp;4: VCS used by survey respondents</figcaption>
+<figcaption>Figure&nbsp;4: Version Control Software Use</figcaption>
 </figure>
 </div>
 </div>
@@ -744,6 +743,7 @@ Steve Martin
 <li><p><code>analysis_v6_FINAL_2025_03_edits.py</code></p></li>
 </ul></li>
 <li><p>21 respondents reported using some combination of GitHub/GitLab, or just using Git locally.</p></li>
+<li><p><strong>Recommendation</strong>: Use Git to version code, documentation, and configuration (but <strong>not</strong> with Excel Workbooks)!</p></li>
 </ul>
 </div>
 </div>
@@ -757,7 +757,7 @@ Steve Martin
 <div id="fig-vcs" class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="presentation_files/figure-revealjs/fig-vcs-1.png" width="960"></p>
-<figcaption>Figure&nbsp;5: VCS used by survey respondents</figcaption>
+<figcaption>Figure&nbsp;5: Commercial Software Use</figcaption>
 </figure>
 </div>
 </div>
@@ -765,7 +765,7 @@ Steve Martin
 </div><div class="column" style="width:50%;">
 <ul>
 <li><p>Over 2/3 of the respondents listed that Microsoft Excel was used in their CPI Production Systems.</p></li>
-<li><p>Excel is useful for beginner-friendly tabular data analysis, however, not an ideal tool for expressing complex business logic.</p></li>
+<li><p>Spreadsheets are useful for tabular data analysis, however, they are not ideal tool for expressing complex business logic.</p></li>
 <li><p>Excel Workbooks encourage a high degree of coupling between business logic and data.</p></li>
 </ul>
 </div>
@@ -808,24 +808,6 @@ Steve Martin
 </div>
 </div>
 </section>
-<section id="results---programming-language-use-monolith-vs.-modular" class="slide level2">
-<h2>Results - Programming Language Use (Monolith vs.&nbsp;Modular)</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-8-1.png" width="960"></p>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-9-1.png" width="960"></p>
-</div>
-</div>
-</div>
-</div>
-</section>
 <section id="results---storage-use" class="slide level2">
 <h2>Results - Storage Use</h2>
 <div class="columns">
@@ -834,7 +816,7 @@ Steve Martin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-10-1.png" style="width:100.0%"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-8-1.png" style="width:100.0%"></p>
 <figcaption>Choice of Storage (Overall)</figcaption>
 </figure>
 </div>
@@ -857,7 +839,7 @@ Steve Martin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-12-1.png" style="width:100.0%"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-10-1.png" style="width:100.0%"></p>
 <figcaption>System Age Distribution (Entire Sample)</figcaption>
 </figure>
 </div>
@@ -872,29 +854,6 @@ Steve Martin
 </div>
 </div>
 </section>
-<section id="results---system-age-monolith-vs.-modular" class="slide level2">
-<h2>Results - System Age (Monolith vs.&nbsp;Modular)</h2>
-<div class="cell quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-13-1.png"></p>
-<figcaption>System Age Distribution (Monolith)</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-13-2.png"></p>
-<figcaption>System Age Distribution (Modular)</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</section>
 <section id="results---update-frequency" class="slide level2">
 <h2>Results - Update Frequency</h2>
 <div class="columns">
@@ -903,7 +862,7 @@ Steve Martin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:100.0%"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-11-1.png" style="width:100.0%"></p>
 <figcaption>Update Frequency Distribution (Overall)</figcaption>
 </figure>
 </div>
@@ -916,85 +875,22 @@ Steve Martin
 <li><p>IT-Only teams more likely to <strong>update systems frequently</strong> than other team types.</p></li>
 <li><p>Other Mix teams most likely to <strong>never update or update very infrequently</strong>.</p></li>
 <li><p><strong>All team types</strong> reported multiple <code>Never updated</code> answers.</p></li>
+<li><p>NSOs that use ADS have 7 respondents who update at least every six months and 16 respondents who update once per year or less.</p></li>
 </ul>
-</div>
-</div>
-</section>
-<section id="results---update-frequency-monolith-vs.-modular" class="slide level2">
-<h2>Results - Update Frequency (Monolith vs.&nbsp;Modular)</h2>
-<div class="cell quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-15-1.png"></p>
-<figcaption>Update Frequency Distribution (Monolith)</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-15-2.png"></p>
-<figcaption>Update Frequency Distribution (Modular)</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="results---update-frequency-4-team-types" class="slide level2">
-<h2>Results - Update Frequency (4 Team Types)</h2>
-<div class="cell quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-1.png"></p>
-<figcaption>Update Frequency Distribution (Stream-Aligned)</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-2.png"></p>
-<figcaption>Update Frequency Distribution (IT-Only)</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-3.png"></p>
-<figcaption>Update Frequency Distribution (Analyst-Only)</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-4.png"></p>
-<figcaption>Update Frequency Distribution (Other Mix)</figcaption>
-</figure>
-</div>
-</div>
 </div>
 </div>
 </section>
 <section id="results---number-of-individuals" class="slide level2">
 <h2>Results - Number of Individuals</h2>
 <ul>
-<li>Most NSOs require 2-3 individuals to complete <strong>small changes</strong> to systems, and between 2-6 individuals to complete <strong>large changes</strong> to systems.</li>
+<li>Large changes required more people.</li>
 </ul>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-17-1.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-12-1.png"></p>
 <figcaption>Number of Individuals for Small Changes (Overall)</figcaption>
 </figure>
 </div>
@@ -1002,7 +898,7 @@ Steve Martin
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-17-2.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-12-2.png"></p>
 <figcaption>Number of Individuals for Large Changes (Overall)</figcaption>
 </figure>
 </div>
@@ -1017,12 +913,12 @@ Steve Martin
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-19-1.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-14-1.png"></p>
 </div>
 </div>
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-19-2.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-14-2.png"></p>
 </div>
 </div>
 </div>
@@ -1032,7 +928,212 @@ Steve Martin
 <li><p>38 respondents reported lead times of <code>Within 1 day</code> or <code>Within 1 week</code> for <strong>small changes</strong>.</p></li>
 <li><p>11 reported lead times of <code>Within 1 month</code> for <strong>small changes</strong>.</p></li>
 <li><p>Lead time responses for <strong>large changes</strong> range anywhere from <code>Within 1 week</code> to <code>Can't be modified</code>.</p></li>
+<li><p><strong>Takeaway</strong>: Modest changes with short lead times are less risky than substantial changes with long lead times.</p></li>
 </ul>
+</div>
+</div>
+</section>
+<section id="results---alternative-data-source-ads-usage" class="slide level2">
+<h2>Results - Alternative Data Source (ADS) Usage</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/ads-usage-1.png"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img data-src="presentation_files/figure-revealjs/ads-usage-2.png"></p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Just under two thirds of respondents don’t use Alternative Data Sources (ADS) at all.</p></li>
+<li><p>Of those respondents who <strong>do not use ADS</strong>, most of them would like <code>Between 10% and 30%</code> or <code>Between 30% and 70%</code> of their CPIs to be comprised of ADS by expenditure weight.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="results---system-development-challenges-in-general" class="slide level2">
+<h2>Results - System Development Challenges (In General)</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:100.0%"></p>
+</div>
+</div>
+</section>
+<section id="practical-suggestions" class="slide level2">
+<h2>Practical Suggestions</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>Think explicitly about <strong>system boundaries</strong>.</p></li>
+<li><p>Think explicitly about <strong>data interchange between systems</strong> (e.g., <a href="https://datacontract.com/">Data Contracts</a>).</p></li>
+<li><p>Embed software engineering technical expertise <strong>within business domain teams</strong>.</p></li>
+<li><p>Version control all the things!</p></li>
+<li><p>Aim for <a href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)">high cohesion</a> and <a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)">low coupling</a> in system development.</p></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Use <strong>analytics-optimized</strong> file formats like <a href="https://parquet.apache.org/">Apache Parquet</a>.</p></li>
+<li><p>Organize systems around <strong>one-way</strong> data flows and <strong>idempotent</strong> operations.</p></li>
+<li><p>Update systems <strong>frequently</strong>.</p></li>
+<li><p>Have a <strong>separate development environment</strong> for <strong>rapid iteration</strong>.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="future-work" class="slide level2">
+<h2>Future Work</h2>
+<p>Three main follow-questions from our survey.</p>
+<ol type="1">
+<li><p>Which system structures and team organizations enable the best business outcomes? We have some hypotheses based on prior knowledge and the data in this survey, but more research is needed.</p></li>
+<li><p>How to efficiently communicate software engineering knowledge to a business domain audience, and business domain knowledge to a software engineering audience? Effective system delivery requires imparting the relevant knowledge to both audiences.</p></li>
+<li><p>Do our conclusions about CPI production systems have external validity? We have some evidence that they do, but more research is needed.</p></li>
+</ol>
+</section>
+<section id="thanks-for-listening" class="slide level2">
+<h2>Thanks for Listening!</h2>
+<p><br><br><br></p>
+<p>Please consider reading the <a href="https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html">full interim report</a> that accompanies this presentation.</p>
+</section>
+<section id="references" class="slide level2 unnumbered smaller scrollable">
+<h2>References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-dehghani2022data" class="csl-entry" role="listitem">
+Dehghani, Z. 2022. <em>Data Mesh: Delivering Data-Driven Value at Scale</em>. O’Reilly. <a href="https://books.google.ca/books?id=M5J5zgEACAAJ">https://books.google.ca/books?id=M5J5zgEACAAJ</a>.
+</div>
+<div id="ref-forsgren2018accelerate" class="csl-entry" role="listitem">
+Forsgren, N., J. Humble, and G. Kim. 2018. <em>Accelerate: The Science Behind DevOps : Building and Scaling High Performing Technology Organizations</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=85XHAQAACAAJ">https://books.google.ca/books?id=85XHAQAACAAJ</a>.
+</div>
+<div id="ref-RAPsite" class="csl-entry" role="listitem">
+NHS. 2017. <span>“Reproducible Analytical Pipelines (RAP).”</span> <a href="https://nhsdigital.github.io/rap-community-of-practice/" class="uri">https://nhsdigital.github.io/rap-community-of-practice/</a>.
+</div>
+<div id="ref-skelton2019team" class="csl-entry" role="listitem">
+Skelton, M., M. Pais, and R. Malan. 2019. <em>Team Topologies: Organizing Business and Technology Teams for Fast Flow</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=oFdRuAEACAAJ">https://books.google.ca/books?id=oFdRuAEACAAJ</a>.
+</div>
+</div>
+</section>
+<section>
+<section id="appendix" class="title-slide slide level1 center">
+<h1>Appendix</h1>
+
+</section>
+<section id="results---which-steps-are-systems-coupled-across-1" class="slide level2">
+<h2>Results - Which Steps are Systems Coupled Across?</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png" style="width:40.0%"></p>
+<figcaption>Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)</figcaption>
+</figure>
+</div>
+<p><strong>Question</strong>: To what extent do distinct software modules depend on each other?</p>
+</section>
+<section id="results---programming-language-use-monolith-vs.-modular" class="slide level2">
+<h2>Results - Programming Language Use (Monolith vs.&nbsp;Modular)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-18-1.png" width="960"></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="results---system-age-monolith-vs.-modular" class="slide level2">
+<h2>Results - System Age (Monolith vs.&nbsp;Modular)</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-19-1.png"></p>
+<figcaption>System Age Distribution (Monolith)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-19-2.png"></p>
+<figcaption>System Age Distribution (Modular)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="results---update-frequency-monolith-vs.-modular" class="slide level2">
+<h2>Results - Update Frequency (Monolith vs.&nbsp;Modular)</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-20-1.png"></p>
+<figcaption>Update Frequency Distribution (Monolith)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-20-2.png"></p>
+<figcaption>Update Frequency Distribution (Modular)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="results---update-frequency-4-team-types" class="slide level2">
+<h2>Results - Update Frequency (4 Team Types)</h2>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-1.png"></p>
+<figcaption>Update Frequency Distribution (Stream-Aligned)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-2.png"></p>
+<figcaption>Update Frequency Distribution (IT-Only)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-3.png"></p>
+<figcaption>Update Frequency Distribution (Analyst-Only)</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-4.png"></p>
+<figcaption>Update Frequency Distribution (Other Mix)</figcaption>
+</figure>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1043,12 +1144,12 @@ Steve Martin
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-20-1.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-22-1.png"></p>
 </div>
 </div>
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-20-2.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-22-2.png"></p>
 </div>
 </div>
 </div>
@@ -1067,7 +1168,7 @@ Steve Martin
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-1.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-23-1.png"></p>
 <figcaption>Lead Time for Large Changes (Stream-Aligned)</figcaption>
 </figure>
 </div>
@@ -1075,7 +1176,7 @@ Steve Martin
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-2.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-23-2.png"></p>
 <figcaption>Lead Time for Large Changes (IT-Only)</figcaption>
 </figure>
 </div>
@@ -1085,7 +1186,7 @@ Steve Martin
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-3.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-23-3.png"></p>
 <figcaption>Lead Time for Large Changes (Analyst-Only)</figcaption>
 </figure>
 </div>
@@ -1093,35 +1194,11 @@ Steve Martin
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-21-4.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-23-4.png"></p>
 <figcaption>Lead Time for Large Changes (Other Mix)</figcaption>
 </figure>
 </div>
 </div>
-</div>
-</div>
-</section>
-<section id="results---alternative-data-source-ads-usage" class="slide level2">
-<h2>Results - Alternative Data Source (ADS) Usage</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-22-1.png"></p>
-</div>
-</div>
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-22-2.png"></p>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<ul>
-<li><p>43 respondents don’t use Alternative Data Sources (ADS) at all.</p></li>
-<li><p>Of those respondents who <strong>do not use ADS</strong>, most of them would like <code>Between 10% and 30%</code> or <code>Between 30% and 70%</code> of their CPIs to be comprised of ADS by expenditure weight.</p></li>
-</ul>
 </div>
 </div>
 </section>
@@ -1178,73 +1255,14 @@ Steve Martin
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-24-1.png"></p>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-25-1.png"></p>
 </div>
-</div>
-</div>
-</section>
-<section id="results---system-development-challenges-in-general" class="slide level2">
-<h2>Results - System Development Challenges (In General)</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-25-1.png" style="width:100.0%"></p>
-</div>
-</div>
-</section>
-<section id="practical-suggestions" class="slide level2">
-<h2>Practical Suggestions</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li><p>Think explicitly about <strong>system boundaries</strong>.</p></li>
-<li><p>Think explicitly about <strong>data interchange between systems</strong> (e.g., <a href="https://datacontract.com/">Data Contracts</a>).</p></li>
-<li><p>Embed software engineering technical expertise <strong>within business domain teams</strong>.</p></li>
-<li><p>Version control all the things!</p></li>
-<li><p>Aim for <a href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)">high cohesion</a> and <a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)">low coupling</a> in system development.</p></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li><p>Use <strong>analytics-optimized</strong> file formats like <a href="https://parquet.apache.org/">Apache Parquet</a>.</p></li>
-<li><p>Organize systems around <strong>one-way</strong> data flows and <strong>idempotent</strong> operations.</p></li>
-<li><p>Update systems <strong>frequently</strong>.</p></li>
-<li><p>Have a <strong>separate development environment</strong> for <strong>rapid iteration</strong>.</p></li>
-</ul>
-</div>
-</div>
-</section>
-<section id="future-work" class="slide level2">
-<h2>Future Work</h2>
-<p>Two main follow-questions from our survey.</p>
-<ol type="1">
-<li><p>Effectively managing the complexity of CPI Production Systems <strong>in practice</strong> is <strong>far from a solved problem</strong>, despite viable solutions existing for all of the component problems. <strong>How can this gap be bridged</strong>?</p></li>
-<li><p>Are lessons about <strong>system architecture and team organization</strong> from software engineering applicable to complex analytical systems like the CPI Production Systems studied in this survey?</p></li>
-</ol>
-</section>
-<section id="thanks-for-listening" class="slide level2">
-<h2>Thanks for Listening!</h2>
-<p><br><br><br></p>
-<p>Please consider reading the <a href="https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html">full report</a> that accompanies this presentation.</p>
-</section>
-<section id="references" class="slide level2 unnumbered smaller scrollable">
-<h2>References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-dehghani2022data" class="csl-entry" role="listitem">
-Dehghani, Z. 2022. <em>Data Mesh: Delivering Data-Driven Value at Scale</em>. O’Reilly. <a href="https://books.google.ca/books?id=M5J5zgEACAAJ">https://books.google.ca/books?id=M5J5zgEACAAJ</a>.
-</div>
-<div id="ref-forsgren2018accelerate" class="csl-entry" role="listitem">
-Forsgren, N., J. Humble, and G. Kim. 2018. <em>Accelerate: The Science Behind DevOps : Building and Scaling High Performing Technology Organizations</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=85XHAQAACAAJ">https://books.google.ca/books?id=85XHAQAACAAJ</a>.
-</div>
-<div id="ref-RAPsite" class="csl-entry" role="listitem">
-NHS. 2017. <span>“Reproducible Analytical Pipelines (RAP).”</span> <a href="https://nhsdigital.github.io/rap-community-of-practice/" class="uri">https://nhsdigital.github.io/rap-community-of-practice/</a>.
-</div>
-<div id="ref-skelton2019team" class="csl-entry" role="listitem">
-Skelton, M., M. Pais, and R. Malan. 2019. <em>Team Topologies: Organizing Business and Technology Teams for Fast Flow</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=oFdRuAEACAAJ">https://books.google.ca/books?id=oFdRuAEACAAJ</a>.
 </div>
 </div>
 <div class="footer footer-default">
 
 </div>
-</section>
+</section></section>
     </div>
   </div>
 
