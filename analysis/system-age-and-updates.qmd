@@ -308,9 +308,9 @@ ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") 
 
 The system age distribution for NSOs with modular representative systems is approximately uniform, while NSOs with monolithic representative systems are more likely to report that the majority of their systems are between 6-20 years old, and less likely to report that the majority of their systems are more than 20 years old.
 
-One possible explanation for this observation is that monolithic systems are more likely to reach a level of complexity where it becomes too difficult to reliably make changes to the system due to a high degree of coupling (inter-dependency) between components[^1]. If this is true, it could be the case that relatively few monolithic systems reach an age greater than 20 years before a complete system rewrite is necessary.
+One possible explanation for this observation is that monolithic systems are more likely to reach a level of complexity where it becomes too difficult to reliably make changes to the system due to a high degree of coupling (inter-dependency) between components.[^sys-age-1] If this is true, it could be the case that relatively few monolithic systems reach an age greater than 20 years before a complete system rewrite is necessary.
 
-[^1]: Monolithic architectures are not guaranteed to result in highly coupled systems. However, it requires considerable effort, skill, and knowledge of software architecture patterns to ensure monolithic architectures remain loosely coupled over a long period of time (@ford2021software).
+[^sys-age-1]: Monolithic architectures are not guaranteed to result in highly coupled systems. However, it requires considerable effort, skill, and knowledge of software architecture patterns to ensure monolithic architectures remain loosely coupled over a long period of time (@ford2021software).
 
 ```{r}
 #| echo: false
@@ -352,11 +352,11 @@ NSOs with IT-Only teams appear relatively less likely to have the majority of sy
 
 Another noteworthy observation is that NSOs with Other Mix teams (see @sec-sys-teams) are most likely to have the majority of systems be between 6-10 years old. It is noteworthy that most of the NSOs with Other Mix teams also have Monolithic representative systems, so there is a high degree of overlap between Other Mix teams and Monolithic representative systems.
 
-Our hypothesis for this observation is that teams comprised of individuals with little shared domain context (e.g., a team with individuals from Corporate IT as well as Domain Analysts) are more likely to produce overly complicated and tightly inter-connected systems that are difficult to change[^2]. After 6-10 years, these systems become so difficult to maintain that it becomes necessary to undergo a full system rewrite[^3].
+Our hypothesis for this observation is that teams comprised of individuals with little shared domain context (e.g., a team with individuals from Corporate IT as well as Domain Analysts) are more likely to produce overly complicated and tightly inter-connected systems that are difficult to change.[^sys-age-2] After 6-10 years, these systems become so difficult to maintain that it becomes necessary to undergo a full system rewrite.[^sys-age-3]
 
-[^3]: This hypothesis is consistent with our professional experience and prior knowledge in software architecture (e.g., @evans2004domain, @ford2021software, @richards2020fundamentals). However, it is important to note that this particular observation is made on a relatively small subset of our survey data, so it could be an anomaly.
+[^sys-age-3]: This hypothesis is consistent with our professional experience and prior knowledge in software architecture (e.g., @evans2004domain, @ford2021software, @richards2020fundamentals). However, it is important to note that this particular observation is made on a relatively small subset of our survey data, so it could be an anomaly.
 
-[^2]: In our experience, these systems become overly complicated because of the need to introduce new abstractions to bridge the lack of shared domain context. These abstractions aren't necessary when all parties involved have a common understanding of the domain problem.
+[^sys-age-2]: In our experience, these systems become overly complicated because of the need to introduce new abstractions to bridge the lack of shared domain context. These abstractions aren't necessary when all parties involved have a common understanding of the domain problem.
 
 ## System Update Frequency
 
@@ -368,11 +368,11 @@ In this section, we ask respondents how often the majority of CPI Production Sys
 
 Unless software is being written in a domain where (1) the problem is "solved" (i.e., requirements never change) and/or (2) the software's correctness can be proved mathematically, routinely updating systems (e.g., fixing errors in source code or enhancing the system with new features) is a practical reality of software development.
 
-Given this practical reality, updating systems at a somewhat high frequency is generally considered to be good practice [^4].
+Given this practical reality, updating systems at a somewhat high frequency is generally considered to be good practice.[^sys-age-4]
 
 We share below some observations on how frequently respondents update their systems.
 
-[^4]: N.B., having the **ability** to update systems at a high frequency is **unambiguously** good practice.
+[^sys-age-4]: N.B., having the **ability** to update systems at a high frequency is **unambiguously** good practice.
 
 
 ```{r}
@@ -416,7 +416,9 @@ We suspect this is once again related to the fact that monolithic systems tend t
 
 Modular systems, in contrast, tend to be easier to reason about, and involve a lower degree of coupling between system components that are unrelated. Hence, making a change to a system component is less likely to lead to an unintended consequence elsewhere in the system.
 
-Across all respondents, almost one fifth of respondents indicated that the majority of their systems are **never updated**. This may be because that the data and methods used does not change since these systems were introduced. 
+Across all respondents, almost one fifth of respondents indicated that the majority of their systems are **never updated**. This may be partially due to the fact that some data and methods used with traditional field collection approaches change very rarely. Moreover, these approaches can be very simple to implement in certain cases, which could mean no bugs were ever introduced to the implementation. In such cases, it's conceivable that non-trivial updates are never performed.[^sys-age-6]
+
+[^sys-age-6]: Another possibility is that some systems are never updated because there was only one individual who knew how the system worked, and that individual has since left the organization, so the system can no longer be updated. We did not collect sufficient data to diagnose why this one fifth of NSOs never update their systems, so we cannot say for sure what the explanation is one way or the other.
 
 More generally, the distribution of update frequencies seems to be left skewed, with a majority of NSOs having the majority of systems updated once per year or less, or not updated at all.
 
@@ -458,6 +460,6 @@ other_mix_dat <- other_mix_dat[other_mix_dat != "Every six months" & other_mix_d
 ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Other Mix)")
 ```
 
-When looking at the system age distributions broken down by team type, we do not see much difference from the overall trend. One noteworthy exception to this is the Other Mix team category, which seems to have a relatively high proportion of cases updated less than once per year or not at all[^5].
+When looking at the system age distributions broken down by team type, we do not see much difference from the overall trend. One noteworthy exception to this is the Other Mix team category, which seems to have a relatively high proportion of cases updated less than once per year or not at all.[^sys-age-5]
 
-[^5]: Once again, we note the small sample size caveat of NSOs containing Other Mix teams.
+[^sys-age-5]: Once again, we note the small sample size caveat of NSOs containing Other Mix teams.
