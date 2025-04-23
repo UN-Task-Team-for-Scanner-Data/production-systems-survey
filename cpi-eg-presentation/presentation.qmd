@@ -2025,7 +2025,7 @@ pct_dat <- factor(df[df$pct_ads != "", 'pct_ads'], levels=c('Less than 10%.', 'B
 # Suppress low counts
 pct_dat <- pct_dat[pct_dat != "Between 50% and 70%." & pct_dat != "Between 70% and 90%."]
 
-ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Actual)")
+ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Actual)")
 
 NUM_USE_ADS = sum(df$use_ads == "Yes")
 NUM_NOT_USE_ADS = sum(nrow(df) - NUM_USE_ADS)
