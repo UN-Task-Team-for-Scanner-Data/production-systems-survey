@@ -292,7 +292,7 @@ for (mat in crossings_Q2$steps) {
 
 ```
 
-| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Frequency |
+| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | # |
 | ----- | ----- | ---- | ----- | ----- | ---- |
 | ❌ | ❌ | ✅ | ❌ | ❌ | `r d_analyst_only` |
 | ❌ | ✅ | ✅ | ❌ | ❌ | `r stream_aligned` |
@@ -309,7 +309,6 @@ for (mat in crossings_Q2$steps) {
 ```{r, fig.width=10,fig.height=10}
 #| echo: false
 #| label: fig-comm-software
-#| fig-cap: VCS used by survey respondents
 
 library(dplyr)
 library(ggplot2)
@@ -711,7 +710,6 @@ GIT_OR_GITHUB = sum(df$vc_git == "Yes" | df$vc_github == "Yes")
 ```{r, fig.width=10,fig.height=10}
 #| echo: false
 #| label: fig-vcs
-#| fig-cap: VCS used by survey respondents
 
 
 # Version control
@@ -1300,7 +1298,7 @@ dat_use_ads = make_update_freq_table(df_use_ads)
 
 - **All team types** reported multiple `Never updated` answers.
 
-- NSOs that use ADS have 7 respondents who update every six months or more and 16 respondents who update once per year or less.
+- NSOs that use ADS have 7 respondents who update at least every six months and 16 respondents who update once per year or less.
 :::
 
 ::::
