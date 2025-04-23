@@ -6,10 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Collin Brown and Steve Martin">
-<meta name="dcterms.date" content="2025-02-03">
+<meta name="author" content="Collin Brown">
+<meta name="author" content="Steve Martin">
+<meta name="dcterms.date" content="2025-04-28">
 
-<title>Survey of CPI Production Systems</title>
+<title>Interim Report: Survey of CPI Production Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +23,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -32,7 +52,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./concepts.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -75,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -90,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Survey of CPI Production Systems</a> 
+      <a href="./">Interim Report: Survey of CPI Production Systems</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -103,12 +123,6 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Preface</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
@@ -182,10 +196,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
-  <li><a href="#survey-methodology-notes" id="toc-survey-methodology-notes" class="nav-link" data-scroll-target="#survey-methodology-notes">Survey Methodology Notes</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
-  <li><a href="#value-suppression" id="toc-value-suppression" class="nav-link" data-scroll-target="#value-suppression">Value Suppression</a></li>
+  <li><a href="#sec-preface" id="toc-sec-preface" class="nav-link" data-scroll-target="#sec-preface"><span class="header-section-number">1.1</span> Preface</a></li>
+  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link" data-scroll-target="#sec-intro"><span class="header-section-number">1.2</span> Overview</a></li>
+  <li><a href="#sec-motivation" id="toc-sec-motivation" class="nav-link" data-scroll-target="#sec-motivation"><span class="header-section-number">1.3</span> Motivation</a></li>
+  <li><a href="#sec-why-run-this-survey" id="toc-sec-why-run-this-survey" class="nav-link" data-scroll-target="#sec-why-run-this-survey"><span class="header-section-number">1.4</span> What Was the Purpose of This Survey?</a></li>
+  <li><a href="#overview-of-cpi-production-systems" id="toc-overview-of-cpi-production-systems" class="nav-link" data-scroll-target="#overview-of-cpi-production-systems"><span class="header-section-number">1.5</span> Overview of CPI Production Systems</a></li>
+  <li><a href="#sec-related-work" id="toc-sec-related-work" class="nav-link" data-scroll-target="#sec-related-work"><span class="header-section-number">1.6</span> Related Work</a></li>
+  <li><a href="#survey-design-and-data-collection" id="toc-survey-design-and-data-collection" class="nav-link" data-scroll-target="#survey-design-and-data-collection"><span class="header-section-number">1.7</span> Survey Design and Data Collection</a></li>
+  <li><a href="#how-this-report-is-organized" id="toc-how-this-report-is-organized" class="nav-link" data-scroll-target="#how-this-report-is-organized"><span class="header-section-number">1.8</span> How This Report Is Organized</a></li>
+  <li><a href="#note-on-confidentiality-and-privacy" id="toc-note-on-confidentiality-and-privacy" class="nav-link" data-scroll-target="#note-on-confidentiality-and-privacy"><span class="header-section-number">1.9</span> Note on Confidentiality and Privacy</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -195,24 +216,39 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Survey of CPI Production Systems</h1>
+<h1 class="title">Interim Report: Survey of CPI Production Systems</h1>
 </div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Collin Brown <a href="https://orcid.org/0009-0000-7535-6771" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Statistics Canada
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Steve Martin <a href="https://orcid.org/0000-0003-2544-9480" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Statistics Canada
+          </p>
+      </div>
+    </div>
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Collin Brown and Steve Martin </p>
-          </div>
-  </div>
-    
+      
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 3, 2025</p>
+      <p class="date">April 28, 2025</p>
     </div>
   </div>
   
@@ -222,19 +258,172 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>We would like to acknowledge the helpful feedback and numerous contributions from our colleagues in the Workstream on CPI Systems Architecture in the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">Task Team on Scanner Data</a> under the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics</a>.</p>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<section id="sec-preface" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-preface"><span class="header-section-number">1.1</span> Preface</h2>
+<p>This work showcases the findings and takeaways from surveying National Statistical Organizations (NSOs) around the world during the winter of 2025. The survey primarily focused on how each NSO structures, develops, and maintains their Consumer Price Index (CPI) production systems and organizes the teams that are responsible for these systems.</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p>This work was done by Workstream 4 (CPI Systems and Architecture), which is part of the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">UN Task Team on Scanner Data</a>. Hence, we would like to acknowledge the team members of Workstream 4 who provided insights, helped draft survey questions, and supported this empirical assessment.</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>We would also like to thank and acknowledge the support of the Steering Group of the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">UN Task Team on Scanner Data</a>, as well as the <a href="https://unstats.un.org/bigdata/">UN Committee of Experts on Big Data and Data Science for Official Statistics (UN-CEBD)</a> team in making this work possible. Without the support of both, it would not have been possible to survey NSOs around the world and evaluate their CPI production system architectures and team organizations.</p>
 </section>
-<section id="survey-methodology-notes" class="level1">
-<h1>Survey Methodology Notes</h1>
-<p>We follow a few standard practices for reporting on survey data.</p>
-<section id="value-suppression" class="level2">
-<h2 class="anchored" data-anchor-id="value-suppression">Value Suppression</h2>
+<section id="sec-intro" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-intro"><span class="header-section-number">1.2</span> Overview</h2>
+<p>Extensive methodological and practical guidance is available to National Statistical Organizations (NSOs) related to the creation of the Consumer Price Index (CPI).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> However, there is not much material on how to create maintainable software systems to carry out this methodological and practical guidance.</p>
+<p>Furthemore, many NSOs are starting to modernize their programs by shifting towards new data sources, which is similarly well supported with methodological and practical guidance.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Again, while some resources exist,<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> there is not much direction on how to deal with the complexity introduced by developing and maintaining the systems that operate on these new data sources.</p>
+<p>To help mitigate this, Workstream 4 of the <a href="https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml">UN Task Team on Scanner data</a> conducted a detailed survey during the winter of 2025 to (1) provide a detailed summary of the CPI production systems currently used by NSOs and (2) provide guidance in the form of this report on how NSOs can better manage the complexities of system development and maintenance.</p>
+<p>While this report is specific to the state of CPI Production Systems at NSOs around the world, our hope is that some of the content in this report is also useful for a wider audience maintaining similar kinds of systems. As such, we attempt to explain our results in a general way and highlight opportunities where our survey approach and findings could be applied in related settings.</p>
+</section>
+<section id="sec-motivation" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-motivation"><span class="header-section-number">1.3</span> Motivation</h2>
+<p>In our time working at NSOs, we have encountered some extremely complicated systems that exist in order to produce various analytical and data products such as consumer price indexes, national accounts figures, or labour force statistics. These complicated systems and the teams who maintain them are the subjects of this survey and write up. To reduce ambiguity, we refer to these systems as <strong>Complex Analytical Systems</strong> throughout this report.</p>
+<p>Complex Analytical Systems involve significant amounts of code, documentation, and other non-code artifacts such as Excel Workbooks that carry out complex business logic in order to transform input data into output data. Additionally, they are often developed entirely or in large part by people with backgrounds in Economics, Statistics, Mathematics, or another area related to the domain of Official Statistics.</p>
+<p>These Complex Analytical Systems differ from traditional software systems in a number of important aspects<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
+<table class="table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Complex Analytical Systems</th>
+<th>Typical Software System</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Multiple distinct scripts that are run sequentially and perform complex data manipulations.</td>
+<td>One code base representing an entire application.</td>
+</tr>
+<tr class="even">
+<td>Running time measured in minutes/hours</td>
+<td>Running time measured in milliseconds.</td>
+</tr>
+<tr class="odd">
+<td>Human in the loop activities to interpret results.</td>
+<td>Completely autonomous system.</td>
+</tr>
+<tr class="even">
+<td>Ad-hoc (messy) data gathered from whatever data sources are available.</td>
+<td>Highly structured data whose schema is designed in lock step with the rest of the system.</td>
+</tr>
+<tr class="odd">
+<td>Batch workloads that are run manually (or semi-manually).</td>
+<td>System running continuously in an event loop waiting for user input.</td>
+</tr>
+<tr class="even">
+<td>Operate on a large fraction of an entire table quickly.</td>
+<td>Search for one specific record in a large table quickly.</td>
+</tr>
+</tbody>
+</table>
+<p>Due to differences like those mentioned above, there is not a perfect mapping between best practices from the software engineering world and pain points currently experienced by teams maintaining Complex Analytical Systems. However, there are certainly some best practices from software engineering that are highly appropriate to solve some of the problems faced in the development and maintenance of Complex Analytical Systems.</p>
+<p>To this end, we hope our survey can help bridge the gap between well-understood industry best practices from the world of software engineering, and those aspects of Complex Analytical Systems that could benefit from these best practices. Our hope is that the insights gained and the survey methodology deployed may be valuable for other Complex Analytical Systems facing similar challenges.</p>
+</section>
+<section id="sec-why-run-this-survey" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-why-run-this-survey"><span class="header-section-number">1.4</span> What Was the Purpose of This Survey?</h2>
+<p>In our experience, we’ve noticed that many teams who are responsible for Complex Analytical Systems struggle with managing many aspects of system complexity.</p>
+<p>Complex Analytical System business domain teams are typically comprised of individuals with strong analytical skills and significant domain knowledge, however, they often do not have specific training in software engineering concepts. Therefore, they are often not exposed to the significant body of knowledge that has been developed over decades to deal with the kinds of system complexity problems that software developers are routinely exposed to.</p>
+<p>We have also found that individuals in these business domains are often missing the vocabulary and concepts to articulate the state of their Complex Analytical Systems. As a result, when these individuals try to explain where they are struggling to a more IT-oriented audience, miscommunication often results, and it becomes difficult to arrive at reasonable solutions.</p>
+<p>In this survey, we ask questions that capture several germane aspects of system organization, team organization, technology choices, and business outcomes using language, terms, and conceptual models that are more familiar to individuals on these business domain teams. Our rationale for doing this is threefold.</p>
+<ol type="1">
+<li><p>Measure and describe the state of many Complex Analytical Systems around the world within a specific business domain (CPI Production Systems).</p></li>
+<li><p>Provide some concrete and practical suggestions to address common areas of struggle within this domain across many NSOs.</p></li>
+<li><p>Expose people from these business domain teams to software engineering concepts that are relevant in the development and maintenance of Complex Analytical Systems.</p></li>
+</ol>
+<p>While this report is tailored towards a Consumer Prices domain audience, we welcome and encourage readers from different domains to read through this report. We make significant efforts to avoid using too much domain-specific jargon, and present findings in a way that should comprehensible to a more general audience. In <a href="findings-and-next-steps.html"><span>Chapter&nbsp;10</span></a>, we elaborate on aspects of our survey we believe to have high external validity, provide some practical suggestions that are applicable to Complex Analytical Systems in general, and describe some productive areas of future exploration that are not limited to the Consumer Prices business domain.</p>
+</section>
+<section id="overview-of-cpi-production-systems" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="overview-of-cpi-production-systems"><span class="header-section-number">1.5</span> Overview of CPI Production Systems</h2>
+<p>With the above motivation in mind, we conduct this survey for CPI Production Systems specifically, which are a kind of Complex Analytical System described in <a href="#sec-motivation"><span>Section&nbsp;1.3</span></a>. More precisely, these systems take data on the price of consumer goods and services purchased throughout an economy and calculate period-over-period price changes of these goods and services. These price changes are ultimately mapped to a taxonomy of product categories, with the highest level of the taxonomy being the monthly “all items” CPI that is commonly used when discussing the overall level of inflation.</p>
+<p>The recent adoption of alternative data sources in the calculation of CPIs has further increased the complexity of these systems,<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and has increased the importance of skills in newly emerging disciplines such as <a href="https://en.wikipedia.org/wiki/Data_science">Data Science</a>, <a href="https://en.wikipedia.org/wiki/Data_engineering">Data Engineering</a>, and <a href="https://www.getdbt.com/what-is-analytics-engineering">Analytics Engineering</a>.</p>
+</section>
+<section id="sec-related-work" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-related-work"><span class="header-section-number">1.6</span> Related Work</h2>
+<p>We borrow and adapt several ideas presented in <span class="citation" data-cites="skelton2019team">Skelton, Pais, and Malan (<a href="references.html#ref-skelton2019team" role="doc-biblioref">2019</a>)</span> such as the concepts of <a href="https://teamtopologies.com/key-concepts">Stream-aligned teams and the Flow of change</a> in our survey. These concepts (discussed in greater detail in the following sections) can be applied to understand how teams are organized around the various steps in a complex data processing workflow.</p>
+<p>We also borrow a number of ideas from <span class="citation" data-cites="forsgren2018accelerate">Forsgren, Humble, and Kim (<a href="references.html#ref-forsgren2018accelerate" role="doc-biblioref">2018</a>)</span>. Particularly, multiple of the DevOps Research and Assessment (DORA) metrics they present are highly relevant in measuring the business outcomes of teams that maintain CPI systems<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>We believe that multiple ideas presented in <span class="citation" data-cites="dehghani2022data">Dehghani (<a href="references.html#ref-dehghani2022data" role="doc-biblioref">2022</a>)</span> are highly applicable to the CPI Systems under study. Specifically, we believe that the concept of <a href="https://www.thoughtworks.com/en-ca/insights/articles/leveraging-data-as-a-product-a-strategic-imperative-for-business-leaders">Data-as-a-Product</a> (and teams organized around these Data Products) provides a useful framework for thinking about how these systems and teams interact with one another. We also contrast domain-oriented decentralized teams with centralized teams.</p>
+<p>Although we do not make specific references to it in our survey, we believe the Reproducible Analytical Pipeline (RAP) work by <span class="citation" data-cites="RAPsite">NHS (<a href="references.html#ref-RAPsite" role="doc-biblioref">2017</a>)</span> does a good job at explaining how teams can introduce relevant tools and practices to workloads oriented around data processing. More information about RAP can be found on the <a href="https://nhsdigital.github.io/rap-community-of-practice/">NHS RAP Communitiy of Practice</a> and the <a href="https://ukgovdatascience.github.io/rap_companion/">RAP companion website</a>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> <span class="citation" data-cites="RAPTransformation">Price and Marques (<a href="references.html#ref-RAPTransformation" role="doc-biblioref">2023</a>)</span> provides a good case study on the application of RAP to production price statistics.</p>
+<p>Throughout this write up, we distinguish between software systems and IT professionals being <strong>embedded in domain teams</strong> versus being centralized <strong>outside of domain teams</strong>. Organizing software system architecture around business domains is not a new idea in software engineering (see Domain Driven Design by <span class="citation" data-cites="evans2004domain">Evans (<a href="references.html#ref-evans2004domain" role="doc-biblioref">2004</a>)</span>, and more recently Software Architecture: The Hard Parts by <span class="citation" data-cites="ford2021software">Ford et al. (<a href="references.html#ref-ford2021software" role="doc-biblioref">2021</a>)</span> and Fundamentals of Software Architecture by <span class="citation" data-cites="richards2020fundamentals">Richards and Ford (<a href="references.html#ref-richards2020fundamentals" role="doc-biblioref">2020</a>)</span>, for example). However, we believe this distinction may not be well understood or formalized in the context of the teams who maintain the kinds of Complex Analytical Systems described in <a href="#sec-why-run-this-survey"><span>Section&nbsp;1.4</span></a>, so we pay special attention to this distinction throughout this write up.</p>
+</section>
+<section id="survey-design-and-data-collection" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="survey-design-and-data-collection"><span class="header-section-number">1.7</span> Survey Design and Data Collection</h2>
+<p>We developed this survey during the fall of 2024 and administered it through the winter of 2025.</p>
+<p>With support from the UN-CEBD and UNECE, we contacted NSOs around the world. We prioritized reaching out directly to individuals in the Price Statistics divisions at each NSO. Where no contact was known, we requested that the survey link be forwarded to the Price Statistics team of that organization. Each Price Statistics team submitted one response on behalf of their NSO. At the time of writing this interim report, 70 NSOs responded to our survey.</p>
+<p>Every major geographic region of the world is represented in the responses. NSOs that answered ranged from those advanced in their modernization efforts to those that are still focused on traditional methods.</p>
+<p>We do not make any claims about the statistical significance of results throughout this survey. Rather, the goal of this survey is to provide descriptive findings about system and team organization, and to relate these findings to prior knowledge in other disciplines such as Software Engineering.</p>
 <p>To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.</p>
-
-
+<p>Some amount of selection bias is possible, which could be in part due to factors such as the time commitment and the complexity of the survey. It is also possible that misinterpretation could have affected some responses.</p>
+<p>However, despite these possible shortcomings, we believe the data collected are still relevant. We also believe that the findings in this survey have high external validity with respect to other Complex Analytical Systems beyond CPI production systems.</p>
+<p>For readers who are interested, this survey was administered using <a href="https://www.limesurvey.org/">LimeSurvey</a>, and the questionnaire used can be found in the <a href="https://github.com/UN-Task-Team-for-Scanner-Data/production-systems-survey">Github repository for this survey</a>.</p>
 </section>
+<section id="how-this-report-is-organized" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="how-this-report-is-organized"><span class="header-section-number">1.8</span> How This Report Is Organized</h2>
+<p>This report is presented in the order that the survey was conducted, with findings presented along the way.</p>
+<ul>
+<li><p><a href="concepts.html"><span>Chapter&nbsp;2</span></a> covers the key conceptual models and terminology used to articulate concepts about system and team organization.</p></li>
+<li><p><a href="systems-teams-analysis.html"><span>Chapter&nbsp;3</span></a> analyzes our findings with respect to system and team organization.</p></li>
+<li><p><a href="tools-and-technology.html"><span>Chapter&nbsp;4</span></a> covers some high-level questions on the use of tools and technologies required to develop and maintain CPI Production Systems.</p></li>
+<li><p><a href="system-age-and-updates.html"><span>Chapter&nbsp;5</span></a> covers questions about the age and update frequency of systems.</p></li>
+<li><p><a href="number-of-individuals.html"><span>Chapter&nbsp;6</span></a> covers questions about the number of individuals required to participate in system changes.</p></li>
+<li><p><a href="change-lead-times.html"><span>Chapter&nbsp;7</span></a> covers questions about a concept called <a href="https://en.wikipedia.org/wiki/Lead_time">lead time</a>, which measures the end-to-end time required to implement a change to a software component.</p></li>
+<li><p><a href="alternative-data.html"><span>Chapter&nbsp;8</span></a> covers questions about the usage of alternative data in CPI Production Systems.</p></li>
+<li><p><a href="challenges.html"><span>Chapter&nbsp;9</span></a> covers the challenges CPI Production System teams face with respect to maintaining their systems.</p></li>
+<li><p><a href="findings-and-next-steps.html"><span>Chapter&nbsp;10</span></a> concludes with a summary of the most notable findings from the survey, some practical insights to address some common areas of struggle, and some areas of future work.</p></li>
+</ul>
+</section>
+<section id="note-on-confidentiality-and-privacy" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="note-on-confidentiality-and-privacy"><span class="header-section-number">1.9</span> Note on Confidentiality and Privacy</h2>
+<p>As part of the administration of this survey, we ensured respondents that their data will be treated confidentiality. Therefore, no individual response data are made available in this report; all results presented are aggregated over all respondents.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-dehghani2022data" class="csl-entry" role="listitem">
+Dehghani, Z. 2022. <em>Data Mesh: Delivering Data-Driven Value at Scale</em>. O’Reilly. <a href="https://books.google.ca/books?id=M5J5zgEACAAJ">https://books.google.ca/books?id=M5J5zgEACAAJ</a>.
+</div>
+<div id="ref-evans2004domain" class="csl-entry" role="listitem">
+Evans, E. 2004. <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em>. Addison-Wesley. <a href="https://books.google.ca/books?id=7dlaMs0SECsC">https://books.google.ca/books?id=7dlaMs0SECsC</a>.
+</div>
+<div id="ref-ford2021software" class="csl-entry" role="listitem">
+Ford, N., W. M. Richards, P. J. Sadalage, and Z. Dehghani. 2021. <em>Software Architecture: The Hard Parts : Modern Trade-Off Analysis for Distributed Architectures</em>. O’Reilly. <a href="https://books.google.ca/books?id=sWNozgEACAAJ">https://books.google.ca/books?id=sWNozgEACAAJ</a>.
+</div>
+<div id="ref-forsgren2018accelerate" class="csl-entry" role="listitem">
+Forsgren, N., J. Humble, and G. Kim. 2018. <em>Accelerate: The Science Behind DevOps : Building and Scaling High Performing Technology Organizations</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=85XHAQAACAAJ">https://books.google.ca/books?id=85XHAQAACAAJ</a>.
+</div>
+<div id="ref-RAPsite" class="csl-entry" role="listitem">
+NHS. 2017. <span>“Reproducible Analytical Pipelines (RAP).”</span> <a href="https://nhsdigital.github.io/rap-community-of-practice/" class="uri">https://nhsdigital.github.io/rap-community-of-practice/</a>.
+</div>
+<div id="ref-RAPTransformation" class="csl-entry" role="listitem">
+Price, M., and D. Marques. 2023. <span>“Developing Reproducible Analytical Pipelines for the Transformation of Consumer Price Statistics: Rail Fares.”</span> Office of National Statistics; "<a href="https://unece.org/sites/default/files/2023-05/7.4%20UK_un_systems_railfares_paper.pdf" class="uri">https://unece.org/sites/default/files/2023-05/7.4%20UK_un_systems_railfares_paper.pdf</a>".
+</div>
+<div id="ref-richards2020fundamentals" class="csl-entry" role="listitem">
+Richards, M., and N. Ford. 2020. <em>Fundamentals of Software Architecture: An Engineering Approach</em>. O’Reilly Media, Incorporated. <a href="https://books.google.ca/books?id=_pNdwgEACAAJ">https://books.google.ca/books?id=_pNdwgEACAAJ</a>.
+</div>
+<div id="ref-skelton2019team" class="csl-entry" role="listitem">
+Skelton, M., M. Pais, and R. Malan. 2019. <em>Team Topologies: Organizing Business and Technology Teams for Fast Flow</em>. G - Reference,information and Interdisciplinary Subjects Series. IT Revolution. <a href="https://books.google.ca/books?id=oFdRuAEACAAJ">https://books.google.ca/books?id=oFdRuAEACAAJ</a>.
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Most notable is the <a href="https://www.imf.org/en/Data/Statistics/cpi-manual">2020 CPI Manual</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See the <a href="https://unstats.un.org/wiki/spaces/GWGSD/pages/240910447/Handbook+on+utilising+new+data+sources+in+the+production+of+consumer+price+statistics">e-handbook</a>, developed and maintained by the UN Task Team on Scanner data, for guidance on various aspects of leveraging new data sources.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The most notable approach being recommended is Reproducible Analytical Pipelines (or RAPs), which are discussed in <a href="#sec-related-work"><span>Section&nbsp;1.6</span></a>. The <a href="https://unstats.un.org/wiki/spaces/GWGSD/pages/240910453/IT+system+requirements">IT system requirements section in the e-handbook</a> also summarizes several considerations and approaches for systems development.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>We are not implying that all “traditional” software systems have these characteristics. Rather, we are trying to draw contrast between aspects of Complex Analytical Systems that are most likely to be different from the kinds of systems a software engineer would often develop and maintain.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>In the context of CPI Production Systems, alternative data sources refer to data such as retailer scanner and web-scraped data that can be used to calculate the component price changes that are used in CPI calculations.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>We use slightly different terminology to refer to some of these concepts throughout the survey in order to use language that our target audience is most likely familiar with.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>For readers who want to learn more about RAP, see this <a href="https://escap-sd.github.io/ESCAP_RAP_class/docs/">training session on RAP for price statistics by ESCAP</a> which covers an application involving web scraping.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -475,8 +664,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./concepts.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Concepts</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
