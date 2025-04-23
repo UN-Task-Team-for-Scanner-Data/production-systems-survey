@@ -2,7 +2,7 @@ project:
   type: book
 
 book:
-  title: "Survey of CPI Production Systems"
+  title: "Interim Report: Survey of CPI Production Systems"
   author: "Collin Brown and Steve Martin"
   date: "2/3/2025"
   chapters:

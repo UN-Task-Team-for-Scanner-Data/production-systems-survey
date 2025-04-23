@@ -1,17 +1,22 @@
-# Preface {.unnumbered}
+## Preface {.unnumbered}
 
-This work showcases the findings and takeaways from surveying National Statistical Organizations (NSOs) around the world during the winter of 2025 on how each structures their Consumer Price Index (CPI) production systems and teams, as well as how each approaches technical topics.
+::: {layout-ncol=2}
 
-This is work done by the Workstream 4, CPI Systems and Architecture, part of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml), hence we would like to acknowledge all the members of the team who played an integral part of in the drafting of the survey questions, providing insights, and in supporting this empirical assessment.
-
-We would also like to thank and acknowledge the support of the Steering Group of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml), as well as the [UN Committee of Experts on Big Data and Data Science for Official Statistics (UN-CEBD)](https://unstats.un.org/bigdata/) team in making this work possible. Without the support of both, it would not have been possible to survey National Statistical Organizations (NSOs) around the world and evaluate the systems and architectures used.
+This work showcases the findings and takeaways from surveying National Statistical Organizations (NSOs) around the world during the winter of 2025. The survey primarily focused on how each NSO structures, develops, and maintains their Consumer Price Index (CPI) production systems and organizes the teams that are responsible for these systems.
 
 ![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
 
-# Survey Methodology Notes
+:::
 
-We follow a few standard practices for reporting on survey data.
+This work was done by Workstream 4 (CPI Systems and Architecture), which is part of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml). Hence, we would like to acknowledge the team members of Workstream 4 who provided insights, helped draft survey questions, and supported this empirical assessment.
 
-## Value Suppression
+We would also like to thank and acknowledge the support of the Steering Group of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml), as well as the [UN Committee of Experts on Big Data and Data Science for Official Statistics (UN-CEBD)](https://unstats.un.org/bigdata/) team in making this work possible. Without the support of both, it would not have been possible to survey NSOs around the world and evaluate their CPI production system architectures and team organizations.
 
-To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.
+
+## Survey Methodology Notes
+
+- 70 NSOs around the world responded to our survey by the time this interim report was released.
+
+- This survey was administered using [LimeSurvey](https://www.limesurvey.org/), and the questionnaire used can be found in the [Github repository for this survey](https://github.com/UN-Task-Team-for-Scanner-Data/production-systems-survey).
+
+- To preserve anonymity, we do not disclose any values if there are 2 or fewer respondents that take on the value. As a result, throughout the report, certain tables and figures may be presented in a way where certain categories are omitted or grouped together.
