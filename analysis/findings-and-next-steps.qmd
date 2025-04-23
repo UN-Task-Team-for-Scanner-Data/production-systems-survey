@@ -166,9 +166,3 @@ This report was created using [Quarto](https://quarto.org/). All figures and tab
 ## Acknowledgements
 
 We reiterate our appreciation and acknoledgements mentioned in @sec-preface to the various UN groups who supported this work. Without their support and guidance, administering this survey would not have been possible. 
-
-## Author Information
-
-- Collin Brown, Statistics Canada
-
-- Steve Martin, Statistics Canada
