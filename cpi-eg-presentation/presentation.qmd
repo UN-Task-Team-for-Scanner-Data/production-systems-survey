@@ -309,6 +309,7 @@ for (mat in crossings_Q2$steps) {
 ```{r, fig.width=10,fig.height=10}
 #| echo: false
 #| label: fig-comm-software
+#| fig-cap: Version Control Software Use
 
 library(dplyr)
 library(ggplot2)
@@ -710,7 +711,7 @@ GIT_OR_GITHUB = sum(df$vc_git == "Yes" | df$vc_github == "Yes")
 ```{r, fig.width=10,fig.height=10}
 #| echo: false
 #| label: fig-vcs
-
+#| fig-cap: Commercial Software Use
 
 # Version control
 dat <- data.frame(
@@ -2184,7 +2185,7 @@ Three main follow-questions from our survey.
 
 2. How to efficiently communicate software engineering knowledge to a business domain audience, and business domain knowledge to a software engineering audience? Effective system delivery requires imparting the relevant knowledge to both audiences.
 
-3. Does our survey have external validity? We have some evidence that it does, but more research is needed.
+3. Do our conclusions about CPI production systems have external validity? We have some evidence that they do, but more research is needed.
 
 ## Thanks for Listening!
 
