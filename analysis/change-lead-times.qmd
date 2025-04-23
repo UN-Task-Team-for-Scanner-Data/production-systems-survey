@@ -6,9 +6,9 @@ In the context of software systems, lead time measures the time it takes for a c
 
 Given that we are looking at Complex Analytical Systems rather than traditional software systems in this survey (see @sec-why-run-this-survey), we modify this definition slightly to refer to the total amount of time required to get an end-to-end change to a CPI Production System implemented, which could include activities in addition to code implementation such as data analysis, methodology research, and discussions with data providers.
 
-Lead time is generally regarded as a very important performance metric, and short lead times are generally considered better than long lead times[^1].
+Lead time is generally regarded as a very important performance metric, and short lead times are generally considered better than long lead times.[^lead-times-1]
 
-[^1]: One important point to note here is that short lead times are good as long as a certain minimum standard of quality is met. For instance, shorter lead times are not necessarily better if they are associated with a significant drop in the quality of the output.
+[^lead-times-1]: One important point to note here is that short lead times are good as long as a certain minimum standard of quality is met. For instance, shorter lead times are not necessarily better if they are associated with a significant drop in the quality of the output.
 
 We prompt the respondent with some examples of small and large changes before asking the lead time questions.
 
@@ -491,9 +491,9 @@ ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") 
 
 Overall, the lead time for large changes was very right skewed, with the most common response being that large changes happen "Within 1 month".
 
-It is interesting that, unlike with small changes, NSOs with Monolithic representative systems are more likely to report lead times of "Within 1 year" or "More than 1 year", and they are also more likely to report an answer of "Too complex" or "Can't be modified"[^3].
+It is interesting that, unlike with small changes, NSOs with Monolithic representative systems are more likely to report lead times of "Within 1 year" or "More than 1 year", and they are also more likely to report an answer of "Too complex" or "Can't be modified".[^lead-time-3]
 
-[^3]: For confidentiality reasons, we grouped "Too complex" and "Can't be modified" into one category in the figures on this page.
+[^lead-time-3]: For confidentiality reasons, we grouped "Too complex" and "Can't be modified" into one category in the figures on this page.
 
 This result is consistent with industry knowledge (@ford2021software, @richards2020fundamentals) as well as earlier findings in this report (e.g., sec-age). Monolithic systems are more likely to have components that are highly coupled (inter-connected) compared to modular systems. This high degree of coupling not only makes it more difficult to reason through changes to the system, but it also requires more rigorous testing to ensure that a large change doesn't break a seemingly unrelated component. Therefore, it is not surprising to observe that NSOs with monolithic representative systems are more likely to report higher lead times compared to NSOs with Modular representative systems.
 
@@ -547,10 +547,10 @@ When looking at the distribution of lead times for large changes by team type, t
 
 First, Stream-Aligned teams and Analyst-Only teams were more likely to report lead times of "Within 1 month" compared to any other answer. Stream-Aligned teams and Analyst-Only teams were a bit more likely to report shorter lead times compared to IT-Only teams, and were much more likely to report shorter lead times compared to Other Mix teams.
 
-This finding is consistent with the work of @skelton2019team, which suggests that Stream-Aligned teams organized around an end-to-end slice of a particular business domain tend to move faster[^2].
+This finding is consistent with the work of @skelton2019team, which suggests that Stream-Aligned teams organized around an end-to-end slice of a particular business domain tend to move faster.[^lead-time-2]
 
 It is also worth noting that "More than 1 year" is a somewhat common answer across **all** team types, suggesting that a fraction of NSOs probably struggle with high lead times for reasons other than team types.
 
 We hypothesize that the lack of shared domain context in Other Mix teams could explain why their reported lead times are much higher than the other 3 team types. As discussed in @sec-age, the lack of a shared domain context increases communication overhead as all parties involved need to spend additional time bridging knowledge gaps. This extra communication overhead could extend each step of the system development process, leading to longer lead times overall.
 
-[^2]: We are glossing over a lot of nuance here for simplicity. For readers who are interested in a more comprehensive overview of the work of @skelton2019team, we recommend reading the [Team Topologies Key Concepts](https://teamtopologies.com/key-concepts) page.
+[^lead-time-2]: We are glossing over a lot of nuance here for simplicity. For readers who are interested in a more comprehensive overview of the work of @skelton2019team, we recommend reading through the [Team Topologies Key Concepts](https://teamtopologies.com/key-concepts) website.

@@ -1,6 +1,6 @@
 ---
 title: CPI Production Systems
-subtitle: Survey Analysis
+subtitle: Interim Report with Survey Analysis
 
 author:
   - name: Collin Brown
@@ -12,14 +12,15 @@ author:
 ## Upfront Admin
 
 ::: {layout-ncol=2}
-Survey created on behalf of the [Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) under the [UN Committee of Experts on Big Data and Data Science for Official Statistics](https://unstats.un.org/bigdata/).
 
-Thank you for the helpful feedback and numerous contributions from our colleagues in the **Workstream on CPI Systems Architecture**
+Work was done by Workstream 4 (CPI Systems and Architecture), which is part of the [UN Task Team on Scanner Data](https://unstats.un.org/bigdata/task-teams/scanner/index.cshtml) under the [UN Committee of Experts on Big Data and Data Science for Official Statistics](https://unstats.un.org/bigdata/).
+
+We would like to acknowledge the team members of Workstream 4 who provided insights, helped draft survey questions, and supported this empirical assessment.
 :::
 
 ![](https://unstats.un.org/bigdata/assets/img/logo/logo_2021_long.png)
 
-**Note**: Please consider reading the [full report](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html) that accompanies this presentation.
+**Note**: Please consider reading the [full interim report](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html) that accompanies this presentation.
 
 
 ## CPI Production Systems Background
@@ -115,14 +116,23 @@ We define **4 team types** for the purposes of this survey.
 
 ## Results - Which Steps are Systems Coupled Across?
 
-![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png){width="40%"}
+:::: {.columns}
 
-**Question**: To what extent do distinct software modules depend on each other?
+::: {.column width="25%"}
 
-## Results - Which Steps are Systems Coupled Across?
+- **Hypothesis**: Monolithic architectures don't scale with the complexity introduced by ADS.
+
+- **ingestion-processing-elementary indexes** might be associated with a piece of a monolithic system "breaking off". 
+
+:::
+
+::: {.column width="75%"}
 ```{r}
 #| echo: false
 #| warning: false
+#| label: coupling-across-systems-teams
+
+
 # -------------------
 # Dataframe setup
 # -------------------
@@ -204,7 +214,7 @@ for (mat in crossings_Q1$steps) {
 # split(crossings_Q1$steps, clusters$cluster)
 ```
 
-| Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | Frequency |
+| Data ingestion | Data processing | Elementary indexes | Aggregation | Finalization | # |
 | ----- | ----- | ---- | ----- | ----- | ---- |
 | ✅ | ✅ | ❌ | ❌ | ❌ | `r ing_proc_crossings` |
 | ❌ | ✅ | ✅ | ❌ | ❌ | `r proc_elem_crossings` |
@@ -215,6 +225,10 @@ for (mat in crossings_Q1$steps) {
 | ❌ | ❌ | ✅ | ✅ | ✅ | `r elem_agg_fin_x` |
 | ❌ | ✅ | ✅ | ✅ | ✅ | `r last_4_x` |
 | ✅ | ✅ | ✅ | ✅ | ✅ | `r all_5_x` |
+
+:::
+
+::::
 
 ## Results - Which Team Combinations are Common Within the Flow of Change?
 
@@ -278,7 +292,7 @@ for (mat in crossings_Q2$steps) {
 
 ```
 
-| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | Frequency |
+| Corporate IT | Domain IT | Domain Analysts | Other Analysts | Consultants | # |
 | ----- | ----- | ---- | ----- | ----- | ---- |
 | ❌ | ❌ | ✅ | ❌ | ❌ | `r d_analyst_only` |
 | ❌ | ✅ | ✅ | ❌ | ❌ | `r stream_aligned` |
@@ -295,7 +309,7 @@ for (mat in crossings_Q2$steps) {
 ```{r, fig.width=10,fig.height=10}
 #| echo: false
 #| label: fig-comm-software
-#| fig-cap: VCS used by survey respondents
+#| fig-cap: Version Control Software Use
 
 library(dplyr)
 library(ggplot2)
@@ -668,7 +682,7 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=VCS, y=Frequency)) + geom_bar(stat="identity", fill="#F1502F") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Version Control Systems Used")
+ggplot(dat, aes(x=VCS, y=Frequency)) + geom_bar(stat="identity", fill="#F1502F") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Version Control Systems Used")
 
 NUM_NONE_OR_FILE_NAMING_CONVENTION = sum(df$vc_none == "Yes" | df$vc_naming_convention == "Yes")
 
@@ -684,6 +698,8 @@ GIT_OR_GITHUB = sum(df$vc_git == "Yes" | df$vc_github == "Yes")
     - `analysis_v6_FINAL_2025_03_edits.py`
 
 - `r GIT_OR_GITHUB` respondents reported using some combination of GitHub/GitLab, or just using Git locally.
+
+- **Recommendation**: Use Git to version code, documentation, and configuration (but **not** with Excel Workbooks)!
 :::
 
 ::::
@@ -695,15 +711,14 @@ GIT_OR_GITHUB = sum(df$vc_git == "Yes" | df$vc_github == "Yes")
 ```{r, fig.width=10,fig.height=10}
 #| echo: false
 #| label: fig-vcs
-#| fig-cap: VCS used by survey respondents
-
+#| fig-cap: Commercial Software Use
 
 # Version control
 dat <- data.frame(
   Frequency = c(df$cs_warehouse, df$cs_sas, df$cs_excel, df$cs_pbi, df$cs_access, df$cs_none),
   Software = c(
     rep("Data Warehouse", each=nrow(df)),
-    rep("SPSS", each=nrow(df)),
+    rep("SAS", each=nrow(df)),
     rep("Excel", each=nrow(df)),
     rep("Power BI", each=nrow(df)),
     rep("MS Access", each=nrow(df)),
@@ -713,13 +728,13 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#1d6f42") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Commercial Software Used")
+ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#1d6f42") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Commercial Software Used")
 ```
 :::
 ::: {.column width="50%"}
 - Over 2/3 of the respondents listed that Microsoft Excel was used in their CPI Production Systems.
 
-- Excel is useful for beginner-friendly tabular data analysis, however, not an ideal tool for expressing complex business logic.
+- Spreadsheets are useful for tabular data analysis, however, they are not ideal tool for expressing complex business logic.
 
 - Excel Workbooks encourage a high degree of coupling between business logic and data.
 :::
@@ -746,7 +761,7 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#0052CC") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Project Management Software Used")
+ggplot(dat, aes(x=Software, y=Frequency)) + geom_bar(stat="identity", fill="#0052CC") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Project Management Software Used")
 ```
 :::
 
@@ -866,7 +881,7 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Programming Languages Used")
+ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Programming Languages Used")
 
 NUM_SQL = sum(df$sql == "Yes")
 
@@ -885,76 +900,6 @@ NONE_LANGUAGE = sum(df$none == "Yes")
 - `r PYTHON_OR_R_NOT_SAS` reported using Python or R, but **not** SAS.
 
 - `r NONE_LANGUAGE` reported using no programming language.
-:::
-
-::::
-
-## Results - Programming Language Use (Monolith vs. Modular)
-
-:::: {.columns}
-
-::: {.column width="50%"}
-```{r, fig.width=10,fig.height=10}
-#| echo: false
-# Version control
-dat <- data.frame(
-  Frequency = c(
-    monolith_df$python,
-    monolith_df$r,
-    monolith_df$java,
-    monolith_df$csharp,
-    monolith_df$corcpp,
-    monolith_df$vb,
-    monolith_df$vba,
-    monolith_df$sas,
-    monolith_df$sql
-  ),
-  Language = c(
-    rep("Python", each=nrow(monolith_df)),
-    rep("R", each=nrow(monolith_df)),
-    rep("Java", each=nrow(monolith_df)),
-    rep("C#", each=nrow(monolith_df)),
-    rep("C/C++", each=nrow(monolith_df)),
-    rep("Visual Basic", each=nrow(monolith_df)),
-    rep("Visual Basic Applications", each=nrow(monolith_df)),
-    rep("SAS", each=nrow(monolith_df)),
-    rep("SQL", each=nrow(monolith_df))
-  )
-)
-
-# Fill NA with zero
-dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Monolith] Programming Languages Used")
-```
-:::
-
-::: {.column width="50%"}
-```{r, fig.width=10,fig.height=10}
-#| echo: false
-# Version control
-dat <- data.frame(
-  Frequency = c(
-    modular_df$python,
-    modular_df$r,
-    modular_df$vba,
-    modular_df$sas,
-    modular_df$sql,
-    modular_df$none
-  ),
-  Language = c(
-    rep("Python", each=nrow(modular_df)),
-    rep("R", each=nrow(modular_df)),
-    rep("Visual Basic Applications", each=nrow(modular_df)),
-    rep("SAS", each=nrow(modular_df)),
-    rep("SQL", each=nrow(modular_df)),
-    rep("None", each=nrow(modular_df))
-  )
-)
-
-# Fill NA with zero
-dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Modular] Programming Languages Used")
-```
 :::
 
 ::::
@@ -1002,7 +947,7 @@ dat <- data.frame(
 
 # Fill NA with zero
 dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
-ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Storage Systems Used")
+ggplot(dat, aes(x=Storage, y=Frequency)) + geom_bar(stat="identity", fill="#FF9900") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Storage Systems Used")
 
 
 OLAP_FMT = sum(df$olap_fmt == "Yes")
@@ -1025,6 +970,7 @@ OBJ_STOR = sum(df$obj_stor == "Yes")
 ```{r}
 #| echo: false
 #| warning: false
+#| label: system-age
 
 library(dplyr)
 library(ggplot2)
@@ -1295,7 +1241,7 @@ age_levels = c("<1 year", "2-5 years", "6-10 years", "11-20 years", ">20 years",
 overall_dat = make_age_table(df)
 overall_dat = factor(overall_dat, levels=age_levels)
 
-ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Overall)")
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Overall)") + theme(text = element_text(size = 20))
 ```
 :::
 
@@ -1309,30 +1255,6 @@ ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") 
 
 :::
 ::::
-
-## Results - System Age (Monolith vs. Modular)
-
-```{r, fig.height=10}
-#| echo: false
-#| warning: false
-#| layout-ncol: 2
-#| out-width: "100%"
-#| fig-cap:
-#| - System Age Distribution (Monolith)
-#| - System Age Distribution (Modular)
-
-monolith_dat = make_age_table(monolith_df)
-
-monolith_dat = factor(monolith_dat, levels=age_levels)
-
-ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Monolith)")
-
-modular_dat = make_age_table(modular_df)
-
-modular_dat = factor(modular_dat, levels=age_levels)
-
-ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Modular)")
-```
 
 ## Results - Update Frequency
 
@@ -1353,9 +1275,16 @@ overall_dat = make_update_freq_table(df)
 overall_dat = factor(overall_dat, levels=update_levels)
 # Value suppression
 overall_dat <- overall_dat[overall_dat != "Daily" & overall_dat != "Weekly" & overall_dat != "Quarterly"]
-ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Overall)")
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Overall)") + theme(text = element_text(size = 20))
 
 NEVER_UPDATE = sum(overall_dat == "Never updated")
+
+df <- df |> rename(
+    use_ads=colnames(df)[219])
+
+df_use_ads <- df[df$use_ads == "Yes",]
+
+dat_use_ads = make_update_freq_table(df_use_ads)
 ```
 :::
 
@@ -1369,82 +1298,15 @@ NEVER_UPDATE = sum(overall_dat == "Never updated")
 - Other Mix teams most likely to **never update or update very infrequently**.
 
 - **All team types** reported multiple `Never updated` answers.
+
+- NSOs that use ADS have 7 respondents who update at least every six months and 16 respondents who update once per year or less.
 :::
 
 ::::
 
-## Results - Update Frequency (Monolith vs. Modular)
-
-```{r, fig.height=10}
-#| echo: false
-#| warning: false
-#| layout-ncol: 2
-#| out-width: "100%"
-#| fig-cap:
-#| - Update Frequency Distribution (Monolith)
-#| - Update Frequency Distribution (Modular)
-
-# Order of the factor variable
-update_levels = c("Daily", "Weekly", "Monthly", "Quarterly", "Every six months", "Once per year", "Less than once per year", "Never updated", "No answer")
-
-monolith_dat = make_update_freq_table(monolith_df)
-monolith_dat = factor(monolith_dat, levels=update_levels)
-# Value suppression
-monolith_dat <- monolith_dat[monolith_dat != "Daily" & monolith_dat != "Weekly" & monolith_dat != "Quarterly" & monolith_dat != "Once per year" & monolith_dat != "Every six months"]
-ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Monolith)")
-
-modular_dat = make_update_freq_table(modular_df)
-modular_dat = factor(modular_dat, levels=update_levels)
-# Value suppression
-modular_dat <- modular_dat[modular_dat != "Daily" & modular_dat != "Weekly" & modular_dat != "Quarterly" & modular_dat != "Monthly" & modular_dat != "Never updated" & modular_dat != "Every six months"]
-ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Modular)")
-
-OVERALL_NEVER_UPDATE = sum(overall_dat == "Never updated")
-OVERALL_ROW_COUNT = length(overall_dat)  # Note that some respondents left this one blank, so the row count doesn't match the overall number of people who submitted the survey.
-```
-
-## Results - Update Frequency (4 Team Types)
-
-```{r, fig.height=4}
-#| echo: false
-#| warning: false
-#| layout-ncol: 2
-#| out-width: "100%"
-#| fig-cap:
-#| - Update Frequency Distribution (Stream-Aligned)
-#| - Update Frequency Distribution (IT-Only)
-#| - Update Frequency Distribution (Analyst-Only)
-#| - Update Frequency Distribution (Other Mix)
-
-stream_aligned_dat = make_update_freq_table(stream_aligned_df)
-stream_aligned_dat = factor(stream_aligned_dat, levels=update_levels)
-# Value suppression
-stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Daily" & stream_aligned_dat != "Weekly" & stream_aligned_dat != "Quarterly" & stream_aligned_dat != "Every six months"]
-ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Stream-Aligned)")
-
-it_only_dat = make_update_freq_table(it_only_df)
-it_only_dat = factor(it_only_dat, levels=update_levels)
-# Value suppression
-it_only_dat <- it_only_dat[it_only_dat != "Daily" & it_only_dat != "Weekly" & it_only_dat != "Quarterly" & it_only_dat != "Every six months" & it_only_dat != "Once per year"]
-
-ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (IT-Only)")
-
-analyst_only_dat = make_update_freq_table(analyst_only_df)
-analyst_only_dat = factor(analyst_only_dat, levels=update_levels)
-# Value suppression
-analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Daily" & analyst_only_dat != "Weekly" & analyst_only_dat != "Quarterly" & analyst_only_dat != "Every six months"]
-ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Analyst-Only)")
-
-other_mix_dat = make_update_freq_table(other_mix_df)
-other_mix_dat = factor(other_mix_dat, levels=update_levels)
-# Value suppression
-other_mix_dat <- other_mix_dat[other_mix_dat != "Every six months" & other_mix_dat != "Once per year"]
-ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Other Mix)")
-```
-
 ## Results - Number of Individuals
 
-- Most NSOs require 2-3 individuals to complete **small changes** to systems, and between 2-6 individuals to complete **large changes** to systems.
+- Large changes required more people.
 
 ```{r}
 #| echo: false
@@ -1737,7 +1599,7 @@ overall_dat = make_individuals_sm_table(df)
 overall_dat = factor(overall_dat, levels=individual_levels)
 # Suppress low count values
 overall_dat <- overall_dat[overall_dat != "10-15 individuals" & overall_dat != "25 or more individuals"]
-ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20))
 
 make_individuals_lg_table <- function(df) {
   factor_df = as.data.frame(lapply(df[, c('ind_ing_lg', "ind_proc_lg", 'ind_elem_lg', 'ind_agg_lg', 'ind_fin_lg')], factor, levels=individual_levels))
@@ -1757,7 +1619,7 @@ overall_dat = factor(overall_dat, levels=individual_levels)
 # Suppress low count values
 overall_dat <- overall_dat[overall_dat != "16-24 individuals"]
 
-ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20))
 ```
 
 ## Results - Lead Time
@@ -2083,7 +1945,7 @@ sm_overall_dat = factor(sm_overall_dat, levels=lead_time_levels)
 # Suppress low count values
 sm_overall_dat <- sm_overall_dat[sm_overall_dat != "Within 3 months"]
 
-ggplot() + aes(sm_overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="Lead Time for Small Changes (Overall)")
+ggplot() + aes(sm_overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="Lead Time for Small Changes (Overall)") + theme(text = element_text(size = 20))
 
 make_lead_times_lg_table <- function(df) {
   factor_df = as.data.frame(lapply(df[, c('lead_t_ing_lg', "lead_t_proc_lg", 'lead_t_elem_lg', 'lead_t_agg_lg', 'lead_t_fin_lg')], factor, levels=lead_time_levels))
@@ -2101,7 +1963,7 @@ overall_dat = factor(overall_dat, levels=lead_time_levels)
 overall_dat[overall_dat == "Too complex" | overall_dat == "Can't be modified"] = "Can't be modified"
 overall_dat <- overall_dat[overall_dat != "Within 1 day"]
 
-ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Overall)")
+ggplot() + aes(overall_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Overall)")
 
 SMALL_LEAD_T_1 = sum(sm_overall_dat == "Within 1 day" | sm_overall_dat == "Within 1 week")
 SMALL_LEAD_T_2 = sum(sm_overall_dat == "Within 1 month")
@@ -2116,109 +1978,11 @@ SMALL_LEAD_T_2 = sum(sm_overall_dat == "Within 1 month")
 - `r SMALL_LEAD_T_2` reported lead times of `Within 1 month` for **small changes**.
 
 - Lead time responses for **large changes** range anywhere from `Within 1 week` to `Can't be modified`.
+
+- **Takeaway**: Modest changes with short lead times are less risky than substantial changes with long lead times.
 :::
 
 ::::
-
-## Results - Lead Time (Monolith vs. Modular)
-:::: {.columns}
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| warning: false
-#| layout-ncol: 1
-#| out-width: "100%"
-
-make_lead_times_lg_table <- function(df) {
-  factor_df = as.data.frame(lapply(df[, c('lead_t_ing_lg', "lead_t_proc_lg", 'lead_t_elem_lg', 'lead_t_agg_lg', 'lead_t_fin_lg')], factor, levels=lead_time_levels))
-  mode_values = apply(factor_df, 1, Mode)
-  
-  mode_values[!is.na(mode_values)]
-}
-
-
-# Monolith
-monolith_dat = make_lead_times_lg_table(monolith_df)
-
-monolith_dat = factor(monolith_dat, levels=lead_time_levels)
-
-# Suppress low count values
-monolith_dat[monolith_dat == "Too complex" | monolith_dat == "Can't be modified"] = "Can't be modified"
-monolith_dat <- monolith_dat[monolith_dat != "Within 1 week" & monolith_dat != "Within 3 months" & monolith_dat != "Within 1 day"]
-
-
-ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Monolith)")
-
-# Modular
-
-modular_dat = make_lead_times_lg_table(modular_df)
-modular_dat = factor(modular_dat, levels=lead_time_levels)
-
-# Suppress low count values
-modular_dat <- modular_dat[modular_dat != "Within 1 year" & modular_dat != "More than 1 year"]
-
-ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Modular)")
-
-MONOLITH_UNMODIFIABLE = sum(monolith_dat == "Too complex" | monolith_dat == "Can't be modified")
-```
-:::
-
-::: {.column width="50%"}
-- Monolithic systems more likely to report `Within 1 year` or `More than 1 year` for **large changes** compared to modular systems.
-
-- Modular systems never reported `Can't be modified` or `Too complex` for the **large changes** lead time question, whereas Monolithic systems reported one of these values `r MONOLITH_UNMODIFIABLE` times.
-:::
-
-::::
-
-
-## Results - Lead Time (4 Team Types)
-
-```{r, fig.height=4}
-#| echo: false
-#| warning: false
-#| layout-ncol: 2
-#| out-width: "100%"
-#| fig-cap:
-#| - Lead Time for Large Changes (Stream-Aligned)
-#| - Lead Time for Large Changes (IT-Only)
-#| - Lead Time for Large Changes (Analyst-Only)
-#| - Lead Time for Large Changes (Other Mix)
-
-stream_aligned_dat = make_lead_times_lg_table(stream_aligned_df)
-stream_aligned_dat = factor(stream_aligned_dat, levels=lead_time_levels)
-
-# Suppress low count values
-stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Within 1 day" & stream_aligned_dat != "Too complex"]
-
-ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
-
-it_only_dat = make_lead_times_lg_table(it_only_df)
-it_only_dat = factor(it_only_dat, levels=lead_time_levels)
-
-# Suppress low count values
-it_only_dat <- it_only_dat[it_only_dat != "Within 1 year" & it_only_dat != "Too complex" & it_only_dat != "Can't be modified"]
-
-ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
-
-analyst_only_dat = make_lead_times_lg_table(analyst_only_df)
-analyst_only_dat = factor(analyst_only_dat, levels=lead_time_levels)
-
-# Suppress low count values
-analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Within 1 year" & analyst_only_dat != "Too complex" & analyst_only_dat != "Can't be modified" & analyst_only_dat != "Within 1 day"]
-
-ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
-
-other_mix_dat = make_lead_times_lg_table(other_mix_df)
-other_mix_dat = factor(other_mix_dat, levels=c(lead_time_levels, "1 month to 1 year", "> 1 year or unmodifiable"))
-
-# Suppress low count values
-other_mix_dat[other_mix_dat == "Within 1 month" | other_mix_dat == "Within 3 months" | other_mix_dat == "Within 1 year"] = "1 month to 1 year"
-other_mix_dat[other_mix_dat == "More than 1 year" | other_mix_dat == "Can't be modified"] = "> 1 year or unmodifiable"
-
-ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
-```
 
 ## Results - Alternative Data Source (ADS) Usage
 
@@ -2228,6 +1992,7 @@ ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white"
 ```{r}
 #| echo: false
 #| warning: false
+#| label: ads-usage
 #| layout-ncol: 1
 #| out-width: "100%"
 
@@ -2261,7 +2026,7 @@ pct_dat <- factor(df[df$pct_ads != "", 'pct_ads'], levels=c('Less than 10%.', 'B
 # Suppress low counts
 pct_dat <- pct_dat[pct_dat != "Between 50% and 70%." & pct_dat != "Between 70% and 90%."]
 
-ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Actual)")
+ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Actual)")
 
 NUM_USE_ADS = sum(df$use_ads == "Yes")
 NUM_NOT_USE_ADS = sum(nrow(df) - NUM_USE_ADS)
@@ -2272,154 +2037,18 @@ pct_dat <- factor(df[df$want_use_ads_pct != "", 'want_use_ads_pct'], levels=c('L
 # Suppress low counts
 pct_dat <- pct_dat[pct_dat != "Less than 10%." & pct_dat != "Between 70% and 90%." & pct_dat != "Over 90%."]
 
-ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Aspirational)")
+ggplot() + aes(pct_dat) + geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="ADS Usage (Aspirational)")
 
 ```
 :::
 
 ::: {.column width="50%"}
-- `r NUM_NOT_USE_ADS` respondents don't use Alternative Data Sources (ADS) at all.
+- Just under two thirds of respondents don't use Alternative Data Sources (ADS) at all.
 
 - Of those respondents who **do not use ADS**, most of them would like `Between 10% and 30%` or `Between 30% and 70%` of their CPIs to be comprised of ADS by expenditure weight.
 :::
 
 ::::
-
-## Results - Methods Applied to ADS
-
-:::: {.columns}
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| warning: false
-
-ads_methods <- matrix(nrow=7, ncol=2)
-
-ads_methods[1,1] = "GEKS"
-ads_methods[1,2] = sum(df$geks == "Yes")
-
-ads_methods[2,1] = "Time Dummy Hedonic"
-ads_methods[2,2] = sum(df$tdh == "Yes")
-
-ads_methods[3,1] = "Hedonic"
-ads_methods[3,2] = sum(df$hed == "Yes")
-
-ads_methods[4,1] = "Other Multilateral"
-ads_methods[4,2] = "< 3"
-
-ads_methods[5,1] = "Dynamic Sample"
-ads_methods[5,2] = sum(df$dyn_smpl == "Yes")
-
-ads_methods[6,1] = "Fixed Sample"
-ads_methods[6,2] = sum(df$fix_smpl == "Yes")
-
-ads_methods[7,1] = "Other"
-ads_methods[7,2] = sum(df$other != "")
-
-knitr::kable(ads_methods)
-```
-:::
-
-::: {.column width="50%"}
-
-- Fixed Sample is the most commonly used method.
-
-- GEKS and hedonic methods second most common.
-
-:::
-
-::::
-
-## Results - Challenges in Using ADS
-
-```{r, fig.width=10,fig.height=5}
-#| layout-ncol: 1
-#| echo: false
-#| warning: false
-#| out-width: "100%"
-
-make_challenges_table <- function(df) {
-  dat <- data.frame(
-    Challenges = c(
-      df$rank1,
-      df$rank2,
-      df$rank3,
-      df$rank4,
-      df$rank5
-    ),
-    Ranking = c(
-      rep("Rank 1", each=nrow(df)),
-      rep("Rank 2", each=nrow(df)),
-      rep("Rank 3", each=nrow(df)),
-      rep("Rank 4", each=nrow(df)),
-      rep("Rank 5", each=nrow(df))
-    )
-  )
-  
-  # Replace empty string with NA
-  dat <- dat[dat$Challenges != "",]
-  dat <- dat[!is.na(dat$Challenges),]
-  
-  dat
-}
-
-# ADS Challenges
-
-df <- df |> rename(
-  rank1=colnames(df)[230],
-  rank2=colnames(df)[231],
-  rank3=colnames(df)[232],
-  rank4=colnames(df)[233],
-  rank5=colnames(df)[234],
-  rank6=colnames(df)[235],
-  rank7=colnames(df)[236],
-  rank8=colnames(df)[237],
-  rank9=colnames(df)[238],
-  rank10=colnames(df)[239],
-  rank11=colnames(df)[240],
-  rank12=colnames(df)[241],
-)
-
-# Shorten value names
-df[df == "Lack of cooperation with owners of alternative data sources."] = "Lack of Provider Cooperation"
-
-df[df == "Lack of organizational capacity (e.g., corporate IT could assist, but there is no capacity)."] = "Insufficient Capacity"
-
-df[df == "So costly that it is not worth implementing."] = "Too Costly"
-
-df[df == "Concerns about data quality from alternative sources."] = "Data Quality Issues"
-
-df[df == "Lack of funding to procure alternative data."] = "Insufficient Funding"
-
-df[df == "None of these (we do not face any challenges)."] = "No Challenges"
-
-df[df == "Lack of availability of alternative data."] = "Data Availability"
-
-df[df == "Concerns about legal challenges to acquiring alternative data (e.g., lack of authority to web scrape prices)."] = "Insufficient Authority"
-
-df[df == "None of these (we do not face any challenges)."] = "No Challenges"
-
-df[df == "Lack of skills within the domain team to make use of alternative data."] = "Insufficient Skills"
-
-df[df ==  "No legal mechanism to require sharing data with your office, or no willingness to compel sharing data."] = "No Willingness"
-
-df[df == "Lack of availability of alternative data."] = "Insufficient Availability"
-
-df[df == "Lack of mandate (not a priority)."] = "Not a Priority"
-
-df[df == "Lack of methodological knowledge to calculate price statistics from alternative data."] = "Methodology Knowledge"
-
-overall_dat <- make_challenges_table(df)
-
-# Suppress low counts
-overall_dat <- overall_dat[overall_dat["Challenges"] != "No Challenges",]
-
-ggplot(overall_dat,aes(x=forcats::fct_infreq(Challenges))) +
-  geom_bar(alpha=1, position="stack", color="black") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Ranked Alternative Data Challenges")
-```
-
 
 ## Results - System Development Challenges (In General)
 
@@ -2517,7 +2146,7 @@ dat <- dat[dat["Challenges"] != "Version Control",]
 
 ggplot(dat,aes(x=forcats::fct_infreq(Challenges))) +
   geom_bar(alpha=1, position="stack", color="black") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Challenges Faced (Rank 1 through 5)")
+  theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Challenges Faced (Rank 1 through 5)")
 ```
 
 ## Practical Suggestions
@@ -2550,19 +2179,651 @@ ggplot(dat,aes(x=forcats::fct_infreq(Challenges))) +
 
 ## Future Work
 
-Two main follow-questions from our survey.
+Three main follow-questions from our survey.
 
-1. Effectively managing the complexity of CPI Production Systems **in practice** is **far from a solved problem**, despite viable solutions existing for all of the component problems. **How can this gap be bridged**?
+1. Which system structures and team organizations enable the best business outcomes? We have some hypotheses based on prior knowledge and the data in this survey, but more research is needed.
 
-2. Are lessons about **system architecture and team organization** from software engineering applicable to complex analytical systems like the CPI Production Systems studied in this survey?
+2. How to efficiently communicate software engineering knowledge to a business domain audience, and business domain knowledge to a software engineering audience? Effective system delivery requires imparting the relevant knowledge to both audiences.
+
+3. Do our conclusions about CPI production systems have external validity? We have some evidence that they do, but more research is needed.
 
 ## Thanks for Listening!
 
 <br/><br/><br/>
 
-Please consider reading the [full report](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html) that accompanies this presentation.
+Please consider reading the [full interim report](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html) that accompanies this presentation.
 
 ## References {.unnumbered}
 
 ::: {#refs}
 :::
+
+# Appendix
+
+## Results - Which Steps are Systems Coupled Across?
+
+![Conceptual diagram of loose and high coupling. Source: https://en.wikipedia.org/wiki/Coupling_(computer_programming)](https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/CouplingVsCohesion.svg/330px-CouplingVsCohesion.svg.png){width="40%"}
+
+**Question**: To what extent do distinct software modules depend on each other?
+
+## Results - Programming Language Use (Monolith vs. Modular)
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.width=10,fig.height=10}
+#| echo: false
+
+df <- read.csv("data/results.csv")  #[,67:116]
+# Drop any incomplete responses
+df <- df[df[,2] != "",]
+
+df <- df |> rename(
+  python=colnames(df)[151],
+  r=colnames(df)[152],
+  julia=colnames(df)[153],
+  scala=colnames(df)[154],
+  java=colnames(df)[155],
+  csharp=colnames(df)[156],
+  corcpp=colnames(df)[157],
+  vb=colnames(df)[158],
+  vba=colnames(df)[159],
+  sas=colnames(df)[160],
+  stata=colnames(df)[161],
+  spss=colnames(df)[162],
+  sql=colnames(df)[163],
+  none=colnames(df)[164],
+  other=colnames(df)[165]
+)
+
+# ---------------------
+# Add a column to indicate whether the organization has a monolith
+# ---------------------
+
+df$has_monolith = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the monolith condition (i.e, there is only one system group that does
+  # every GSBPM step).
+  cit_idx <- all(as.logical(sys_grps[1,1:5])) |
+             all(as.logical(sys_grps[2,1:5])) |
+             all(as.logical(sys_grps[3,1:5])) |
+             all(as.logical(sys_grps[4,1:5])) |
+             all(as.logical(sys_grps[5,1:5])) 
+  # If any system group is a monolith, add these counts to cumulative links and flag
+  # this row as an organization that has at least one monolith.
+  if (cit_idx & df[i, 15] != "No") {
+    df[i, "has_monolith"] = TRUE
+  }
+}
+
+
+# ---------------------
+# Add a column to indicate whether the organization has a hybrid architecture
+# ---------------------
+
+df$has_hybrid_arch = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the hybrid architecture condition (at least one GSBPM step defined in groups 1 and 2, all else zero)
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+              all(sys_grps[3:5, 1:5] == 0)
+  # If there are two system groups **and** these groups are not monoliths, then
+  # we consider these to be hybrid systems. The rationale here is that if a representative
+  # system has 2 system groups and each system group is a monolith, then this isn't really
+  # a hybrid system with a "boundary" between two groups.
+  if (cit_idx & !df[i, "has_monolith"]) {
+    df[i, "has_hybrid_arch"] = TRUE
+  }
+}
+
+# ---------------------
+# Add a column to indicate whether the organization has a "modular" architecture
+# ---------------------
+
+df$has_modular = FALSE
+
+for (i in 1:nrow(df)) {
+  obs <- df[i,]
+  # Get matrix of system groups and maintainers
+  sys_grps <- systems_matrix(obs)
+  maintainers <- maintainer_matrix(obs)
+  # Define the modular architecture
+  cit_idx <- (sys_grps[1,1] == 1 | sys_grps[1,2] == 1 | sys_grps[1,3] == 1 | sys_grps[1,4] == 1 | sys_grps[1,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1) &
+             (sys_grps[2,1] == 1 | sys_grps[2,2] == 1 | sys_grps[2,3] == 1 | sys_grps[2,4] == 1 | sys_grps[2,5] == 1)
+  if (cit_idx & !df[i, "has_monolith"] & !df[i, "has_hybrid_arch"]) {
+    df[i, "has_modular"] = TRUE
+  }
+}
+
+# Define separate dfs for each architecture type and team type
+monolith_df = df[df$has_monolith,]
+hybrid_df = df[df$has_hybrid_arch,]
+modular_df = df[df$has_modular,]
+
+modular_df <- modular_df |> rename(
+  python=colnames(modular_df)[151],
+  r=colnames(modular_df)[152],
+  julia=colnames(modular_df)[153],
+  scala=colnames(modular_df)[154],
+  java=colnames(modular_df)[155],
+  csharp=colnames(modular_df)[156],
+  corcpp=colnames(modular_df)[157],
+  vb=colnames(modular_df)[158],
+  vba=colnames(modular_df)[159],
+  sas=colnames(modular_df)[160],
+  stata=colnames(modular_df)[161],
+  spss=colnames(modular_df)[162],
+  sql=colnames(modular_df)[163],
+  none=colnames(modular_df)[164],
+  other=colnames(modular_df)[165]
+)
+
+monolith_df <- monolith_df |> rename(
+  python=colnames(monolith_df)[151],
+  r=colnames(monolith_df)[152],
+  julia=colnames(monolith_df)[153],
+  scala=colnames(monolith_df)[154],
+  java=colnames(monolith_df)[155],
+  csharp=colnames(monolith_df)[156],
+  corcpp=colnames(monolith_df)[157],
+  vb=colnames(monolith_df)[158],
+  vba=colnames(monolith_df)[159],
+  sas=colnames(monolith_df)[160],
+  stata=colnames(monolith_df)[161],
+  spss=colnames(monolith_df)[162],
+  sql=colnames(monolith_df)[163],
+  none=colnames(monolith_df)[164],
+  other=colnames(monolith_df)[165]
+)
+dat <- data.frame(
+  Frequency = c(
+    monolith_df$python,
+    monolith_df$r,
+    monolith_df$java,
+    monolith_df$csharp,
+    monolith_df$corcpp,
+    monolith_df$vb,
+    monolith_df$vba,
+    monolith_df$sas,
+    monolith_df$sql
+  ),
+  Language = c(
+    rep("Python", each=nrow(monolith_df)),
+    rep("R", each=nrow(monolith_df)),
+    rep("Java", each=nrow(monolith_df)),
+    rep("C#", each=nrow(monolith_df)),
+    rep("C/C++", each=nrow(monolith_df)),
+    rep("Visual Basic", each=nrow(monolith_df)),
+    rep("Visual Basic Applications", each=nrow(monolith_df)),
+    rep("SAS", each=nrow(monolith_df)),
+    rep("SQL", each=nrow(monolith_df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Monolith] Programming Languages Used")
+```
+:::
+
+::: {.column width="50%"}
+```{r, fig.width=10,fig.height=10}
+#| echo: false
+# Version control
+dat <- data.frame(
+  Frequency = c(
+    modular_df$python,
+    modular_df$r,
+    modular_df$vba,
+    modular_df$sas,
+    modular_df$sql,
+    modular_df$none
+  ),
+  Language = c(
+    rep("Python", each=nrow(modular_df)),
+    rep("R", each=nrow(modular_df)),
+    rep("Visual Basic Applications", each=nrow(modular_df)),
+    rep("SAS", each=nrow(modular_df)),
+    rep("SQL", each=nrow(modular_df)),
+    rep("None", each=nrow(modular_df))
+  )
+)
+
+# Fill NA with zero
+dat$Frequency = ifelse(dat$Frequency == "Yes", 1, 0)
+ggplot(dat, aes(x=Language, y=Frequency)) + geom_bar(stat="identity", fill="#FFE873") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="[Modular] Programming Languages Used")
+```
+:::
+
+::::
+
+## Results - System Age (Monolith vs. Modular)
+
+```{r, fig.height=10}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - System Age Distribution (Monolith)
+#| - System Age Distribution (Modular)
+modular_df <- modular_df |> rename(
+  age_ing=colnames(modular_df)[188],
+  age_proc=colnames(modular_df)[189],
+  age_elem=colnames(modular_df)[190],
+  age_agg=colnames(modular_df)[191],
+  age_fin=colnames(modular_df)[192],
+  share_cpi_sys=colnames(modular_df)[193],
+  update_ing=colnames(modular_df)[194],
+  update_proc=colnames(modular_df)[195],
+  update_elem=colnames(modular_df)[196],
+  update_agg=colnames(modular_df)[197],
+  update_fin=colnames(modular_df)[198]
+)
+
+monolith_df <- monolith_df |> rename(
+  age_ing=colnames(monolith_df)[188],
+  age_proc=colnames(monolith_df)[189],
+  age_elem=colnames(monolith_df)[190],
+  age_agg=colnames(monolith_df)[191],
+  age_fin=colnames(monolith_df)[192],
+  share_cpi_sys=colnames(monolith_df)[193],
+  update_ing=colnames(monolith_df)[194],
+  update_proc=colnames(monolith_df)[195],
+  update_elem=colnames(monolith_df)[196],
+  update_agg=colnames(monolith_df)[197],
+  update_fin=colnames(monolith_df)[198]
+)
+
+monolith_dat = make_age_table(monolith_df)
+
+monolith_dat = factor(monolith_dat, levels=age_levels)
+
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Monolith)") + theme(text = element_text(size = 20))
+
+modular_dat = make_age_table(modular_df)
+
+modular_dat = factor(modular_dat, levels=age_levels)
+
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + labs(title="System Age Distribution (Modular)") + theme(text = element_text(size = 20))
+```
+
+## Results - Update Frequency (Monolith vs. Modular)
+
+```{r, fig.height=10}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Update Frequency Distribution (Monolith)
+#| - Update Frequency Distribution (Modular)
+
+# Order of the factor variable
+update_levels = c("Daily", "Weekly", "Monthly", "Quarterly", "Every six months", "Once per year", "Less than once per year", "Never updated", "No answer")
+
+monolith_dat = make_update_freq_table(monolith_df)
+monolith_dat = factor(monolith_dat, levels=update_levels)
+# Value suppression
+monolith_dat <- monolith_dat[monolith_dat != "Daily" & monolith_dat != "Weekly" & monolith_dat != "Quarterly" & monolith_dat != "Once per year" & monolith_dat != "Every six months"]
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Monolith)")
+
+modular_dat = make_update_freq_table(modular_df)
+modular_dat = factor(modular_dat, levels=update_levels)
+# Value suppression
+modular_dat <- modular_dat[modular_dat != "Daily" & modular_dat != "Weekly" & modular_dat != "Quarterly" & modular_dat != "Monthly" & modular_dat != "Never updated" & modular_dat != "Every six months"]
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Modular)")
+
+OVERALL_NEVER_UPDATE = sum(overall_dat == "Never updated")
+OVERALL_ROW_COUNT = length(overall_dat)  # Note that some respondents left this one blank, so the row count doesn't match the overall number of people who submitted the survey.
+```
+
+## Results - Update Frequency (4 Team Types)
+
+```{r, fig.height=4}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Update Frequency Distribution (Stream-Aligned)
+#| - Update Frequency Distribution (IT-Only)
+#| - Update Frequency Distribution (Analyst-Only)
+#| - Update Frequency Distribution (Other Mix)
+
+stream_aligned_dat = make_update_freq_table(stream_aligned_df)
+stream_aligned_dat = factor(stream_aligned_dat, levels=update_levels)
+# Value suppression
+stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Daily" & stream_aligned_dat != "Weekly" & stream_aligned_dat != "Quarterly" & stream_aligned_dat != "Every six months"]
+ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Stream-Aligned)")
+
+it_only_dat = make_update_freq_table(it_only_df)
+it_only_dat = factor(it_only_dat, levels=update_levels)
+# Value suppression
+it_only_dat <- it_only_dat[it_only_dat != "Daily" & it_only_dat != "Weekly" & it_only_dat != "Quarterly" & it_only_dat != "Every six months" & it_only_dat != "Once per year"]
+
+ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (IT-Only)")
+
+analyst_only_dat = make_update_freq_table(analyst_only_df)
+analyst_only_dat = factor(analyst_only_dat, levels=update_levels)
+# Value suppression
+analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Daily" & analyst_only_dat != "Weekly" & analyst_only_dat != "Quarterly" & analyst_only_dat != "Every six months"]
+ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Analyst-Only)")
+
+other_mix_dat = make_update_freq_table(other_mix_df)
+other_mix_dat = factor(other_mix_dat, levels=update_levels)
+# Value suppression
+other_mix_dat <- other_mix_dat[other_mix_dat != "Every six months" & other_mix_dat != "Once per year"]
+ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Update Frequency Distribution (Other Mix)")
+```
+
+## Results - Lead Time (Monolith vs. Modular)
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 1
+#| out-width: "100%"
+
+make_lead_times_lg_table <- function(df) {
+  factor_df = as.data.frame(lapply(df[, c('lead_t_ing_lg', "lead_t_proc_lg", 'lead_t_elem_lg', 'lead_t_agg_lg', 'lead_t_fin_lg')], factor, levels=lead_time_levels))
+  mode_values = apply(factor_df, 1, Mode)
+  
+  mode_values[!is.na(mode_values)]
+}
+
+monolith_df <- monolith_df |> rename(
+  ind_ing_sm=colnames(monolith_df)[199],
+  ind_proc_sm=colnames(monolith_df)[200],
+  ind_elem_sm=colnames(monolith_df)[201],
+  ind_agg_sm=colnames(monolith_df)[202],
+  ind_fin_sm=colnames(monolith_df)[203],
+  ind_ing_lg=colnames(monolith_df)[204],
+  ind_proc_lg=colnames(monolith_df)[205],
+  ind_elem_lg=colnames(monolith_df)[206],
+  ind_agg_lg=colnames(monolith_df)[207],
+  ind_fin_lg=colnames(monolith_df)[208],
+  lead_t_ing_sm=colnames(monolith_df)[209],
+  lead_t_proc_sm=colnames(monolith_df)[210],
+  lead_t_elem_sm=colnames(monolith_df)[211],
+  lead_t_agg_sm=colnames(monolith_df)[212],
+  lead_t_fin_sm=colnames(monolith_df)[213],
+  lead_t_ing_lg=colnames(monolith_df)[214],
+  lead_t_proc_lg=colnames(monolith_df)[215],
+  lead_t_elem_lg=colnames(monolith_df)[216],
+  lead_t_agg_lg=colnames(monolith_df)[217],
+  lead_t_fin_lg=colnames(monolith_df)[218],
+)
+
+modular_df <- modular_df |> rename(
+  ind_ing_sm=colnames(modular_df)[199],
+  ind_proc_sm=colnames(modular_df)[200],
+  ind_elem_sm=colnames(modular_df)[201],
+  ind_agg_sm=colnames(modular_df)[202],
+  ind_fin_sm=colnames(modular_df)[203],
+  ind_ing_lg=colnames(modular_df)[204],
+  ind_proc_lg=colnames(modular_df)[205],
+  ind_elem_lg=colnames(modular_df)[206],
+  ind_agg_lg=colnames(modular_df)[207],
+  ind_fin_lg=colnames(modular_df)[208],
+  lead_t_ing_sm=colnames(modular_df)[209],
+  lead_t_proc_sm=colnames(modular_df)[210],
+  lead_t_elem_sm=colnames(modular_df)[211],
+  lead_t_agg_sm=colnames(modular_df)[212],
+  lead_t_fin_sm=colnames(modular_df)[213],
+  lead_t_ing_lg=colnames(modular_df)[214],
+  lead_t_proc_lg=colnames(modular_df)[215],
+  lead_t_elem_lg=colnames(modular_df)[216],
+  lead_t_agg_lg=colnames(modular_df)[217],
+  lead_t_fin_lg=colnames(modular_df)[218],
+)
+
+
+# Monolith
+monolith_dat = make_lead_times_lg_table(monolith_df)
+
+monolith_dat = factor(monolith_dat, levels=lead_time_levels)
+
+# Suppress low count values
+monolith_dat[monolith_dat == "Too complex" | monolith_dat == "Can't be modified"] = "Can't be modified"
+monolith_dat <- monolith_dat[monolith_dat != "Within 1 week" & monolith_dat != "Within 3 months" & monolith_dat != "Within 1 day"]
+
+
+ggplot() + aes(monolith_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Monolith)")
+
+# Modular
+
+modular_dat = make_lead_times_lg_table(modular_df)
+modular_dat = factor(modular_dat, levels=lead_time_levels)
+
+# Suppress low count values
+modular_dat <- modular_dat[modular_dat != "Within 1 year" & modular_dat != "More than 1 year"]
+
+ggplot() + aes(modular_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Lead Time for Large Changes (Modular)")
+
+MONOLITH_UNMODIFIABLE = sum(monolith_dat == "Too complex" | monolith_dat == "Can't be modified")
+```
+:::
+
+::: {.column width="50%"}
+- Monolithic systems more likely to report `Within 1 year` or `More than 1 year` for **large changes** compared to modular systems.
+
+- Modular systems never reported `Can't be modified` or `Too complex` for the **large changes** lead time question, whereas Monolithic systems reported one of these values `r MONOLITH_UNMODIFIABLE` times.
+:::
+
+::::
+
+## Results - Lead Time (4 Team Types)
+
+```{r, fig.height=4}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| out-width: "100%"
+#| fig-cap:
+#| - Lead Time for Large Changes (Stream-Aligned)
+#| - Lead Time for Large Changes (IT-Only)
+#| - Lead Time for Large Changes (Analyst-Only)
+#| - Lead Time for Large Changes (Other Mix)
+
+stream_aligned_dat = make_lead_times_lg_table(stream_aligned_df)
+stream_aligned_dat = factor(stream_aligned_dat, levels=lead_time_levels)
+
+# Suppress low count values
+stream_aligned_dat <- stream_aligned_dat[stream_aligned_dat != "Within 1 day" & stream_aligned_dat != "Too complex"]
+
+ggplot() + aes(stream_aligned_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20))
+
+it_only_dat = make_lead_times_lg_table(it_only_df)
+it_only_dat = factor(it_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+it_only_dat <- it_only_dat[it_only_dat != "Within 1 year" & it_only_dat != "Too complex" & it_only_dat != "Can't be modified"]
+
+ggplot() + aes(it_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20))
+
+analyst_only_dat = make_lead_times_lg_table(analyst_only_df)
+analyst_only_dat = factor(analyst_only_dat, levels=lead_time_levels)
+
+# Suppress low count values
+analyst_only_dat <- analyst_only_dat[analyst_only_dat != "Within 1 year" & analyst_only_dat != "Too complex" & analyst_only_dat != "Can't be modified" & analyst_only_dat != "Within 1 day"]
+
+ggplot() + aes(analyst_only_dat)+ geom_bar(binwidth=1, colour="black", fill="white") + theme(text = element_text(size = 20))
+
+other_mix_dat = make_lead_times_lg_table(other_mix_df)
+other_mix_dat = factor(other_mix_dat, levels=c(lead_time_levels, "1 month to 1 year", "> 1 year or unmodifiable"))
+
+# Suppress low count values
+other_mix_dat[other_mix_dat == "Within 1 month" | other_mix_dat == "Within 3 months" | other_mix_dat == "Within 1 year"] = "1 month to 1 year"
+other_mix_dat[other_mix_dat == "More than 1 year" | other_mix_dat == "Can't be modified"] = "> 1 year or unmodifiable"
+
+ggplot() + aes(other_mix_dat)+ geom_bar(binwidth=1, colour="black", fill="white")
+```
+
+## Results - Methods Applied to ADS
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| warning: false
+
+df <- df |> rename(
+  use_ads=colnames(df)[219],
+  geks=colnames(df)[220],
+  tdh=colnames(df)[221],
+  hedonic=colnames(df)[222],
+  oth_mlt=colnames(df)[223],
+  dyn_smpl=colnames(df)[224],
+  fix_smpl=colnames(df)[225],
+  other_method=colnames(df)[226],
+  pct_ads=colnames(df)[227],
+  want_use_ads_if_not_already=colnames(df)[228],
+  want_use_ads_pct=colnames(df)[229],
+)
+
+
+ads_methods <- matrix(nrow=7, ncol=2)
+
+ads_methods[1,1] = "GEKS"
+ads_methods[1,2] = sum(df$geks == "Yes")
+
+ads_methods[2,1] = "Time Dummy Hedonic"
+ads_methods[2,2] = sum(df$tdh == "Yes")
+
+ads_methods[3,1] = "Hedonic"
+ads_methods[3,2] = sum(df$hed == "Yes")
+
+ads_methods[4,1] = "Other Multilateral"
+ads_methods[4,2] = "< 3"
+
+ads_methods[5,1] = "Dynamic Sample"
+ads_methods[5,2] = sum(df$dyn_smpl == "Yes")
+
+ads_methods[6,1] = "Fixed Sample"
+ads_methods[6,2] = sum(df$fix_smpl == "Yes")
+
+ads_methods[7,1] = "Other"
+ads_methods[7,2] = sum(df$other_method != "")
+
+knitr::kable(ads_methods)
+```
+:::
+
+::: {.column width="50%"}
+
+- Fixed Sample is the most commonly used method.
+
+- GEKS and hedonic methods second most common.
+
+:::
+
+::::
+
+## Results - Challenges in Using ADS
+
+```{r, fig.width=10,fig.height=5}
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| out-width: "100%"
+
+
+df <- read.csv("data/results.csv")  #[,67:116]
+# Drop any incomplete responses
+df <- df[df[,2] != "",]
+
+make_challenges_table <- function(df) {
+  dat <- data.frame(
+    Challenges = c(
+      df$rank1,
+      df$rank2,
+      df$rank3,
+      df$rank4,
+      df$rank5
+    ),
+    Ranking = c(
+      rep("Rank 1", each=nrow(df)),
+      rep("Rank 2", each=nrow(df)),
+      rep("Rank 3", each=nrow(df)),
+      rep("Rank 4", each=nrow(df)),
+      rep("Rank 5", each=nrow(df))
+    )
+  )
+  
+  # Replace empty string with NA
+  dat <- dat[dat$Challenges != "",]
+  dat <- dat[!is.na(dat$Challenges),]
+  
+  dat
+}
+
+# ADS Challenges
+
+df <- df |> rename(
+  rank1=colnames(df)[230],
+  rank2=colnames(df)[231],
+  rank3=colnames(df)[232],
+  rank4=colnames(df)[233],
+  rank5=colnames(df)[234],
+  rank6=colnames(df)[235],
+  rank7=colnames(df)[236],
+  rank8=colnames(df)[237],
+  rank9=colnames(df)[238],
+  rank10=colnames(df)[239],
+  rank11=colnames(df)[240],
+  rank12=colnames(df)[241],
+)
+
+# Shorten value names
+df[df == "Lack of cooperation with owners of alternative data sources."] = "Lack of Provider Cooperation"
+
+df[df == "Lack of organizational capacity (e.g., corporate IT could assist, but there is no capacity)."] = "Insufficient Capacity"
+
+df[df == "So costly that it is not worth implementing."] = "Too Costly"
+
+df[df == "Concerns about data quality from alternative sources."] = "Data Quality Issues"
+
+df[df == "Lack of funding to procure alternative data."] = "Insufficient Funding"
+
+df[df == "None of these (we do not face any challenges)."] = "No Challenges"
+
+df[df == "Lack of availability of alternative data."] = "Data Availability"
+
+df[df == "Concerns about legal challenges to acquiring alternative data (e.g., lack of authority to web scrape prices)."] = "Insufficient Authority"
+
+df[df == "None of these (we do not face any challenges)."] = "No Challenges"
+
+df[df == "Lack of skills within the domain team to make use of alternative data."] = "Insufficient Skills"
+
+df[df ==  "No legal mechanism to require sharing data with your office, or no willingness to compel sharing data."] = "No Willingness"
+
+df[df == "Lack of availability of alternative data."] = "Insufficient Availability"
+
+df[df == "Lack of mandate (not a priority)."] = "Not a Priority"
+
+df[df == "Lack of methodological knowledge to calculate price statistics from alternative data."] = "Methodology Knowledge"
+
+overall_dat <- make_challenges_table(df)
+
+# Suppress low counts
+overall_dat <- overall_dat[overall_dat["Challenges"] != "No Challenges",]
+
+ggplot(overall_dat,aes(x=forcats::fct_infreq(Challenges))) +
+  geom_bar(alpha=1, position="stack", color="black") +
+  theme(text = element_text(size = 20), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="Ranked Alternative Data Challenges")
+```
