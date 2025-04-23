@@ -4,7 +4,7 @@ This repository contains a survey about the state of Consumer Price Index (CPI) 
 
 Please see below to access the following reports and presentations associated with this survey.
 
-- [Long Form Report (Web)](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/intro.html)
+- [Long Form Report (Web)](https://un-task-team-for-scanner-data.github.io/production-systems-survey/report-site/)
 
 - [CPI Expert Group Presentation](https://un-task-team-for-scanner-data.github.io/production-systems-survey/presentation/presentation.html)
 
